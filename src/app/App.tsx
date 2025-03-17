@@ -3,6 +3,16 @@ import { TonConnectUIProvider } from '@tonconnect/ui-react'
 import { useEffect, useState } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 // import EditCourse from '../pages/Create/EditCourse'
+import { VerificationForm } from 'src/entities/verification/ui/VerificationForm/VerificationForm'
+import ConnectCard from 'src/pages/ConnectCard/ConnectCard'
+import EditProfile from 'src/pages/EditProfile/EditProfile'
+import FeedbackPage from 'src/pages/FeedbackPage/FeedbackPage'
+import LandingPage from 'src/pages/LandingPage/LandingPage'
+import LegalPage from 'src/pages/LegalPage/LegalPage'
+import PaymentPage from 'src/pages/PaymentPage/PaymentPage'
+import RegistrationPage from 'src/pages/RegistrationPage/RegistrationPage'
+import SellerProfile from 'src/pages/UserProfile/ui/SellerProfile'
+import Wallet from 'src/pages/Wallet/Wallet'
 import Feed from '../pages/Feed/Feed'
 import useTheme from '../shared/hooks/useTheme'
 import './App.css'
@@ -24,6 +34,7 @@ function App() {
 		script.src = 'https://telegram.org/js/telegram-web-app.js'
 		script.async = true
 		document.body.appendChild(script)
+		console.log('script', script)
 
 		script.onload = () => {
 			console.log('Telegram Web App script loaded')
@@ -36,7 +47,9 @@ function App() {
 				webApp.expand()
 
 				if (
-					window.Telegram.WebView.initParams.tgWebAppPlatform !== 'tdesktop'
+					window.Telegram.WebView.initParams.tgWebAppPlatform !== 'tdesktop' &&
+					window.Telegram.WebView.initParams.tgWebAppPlatform !== 'macos' &&
+					window.Telegram.WebView.initParams.tgWebAppPlatform !== 'weba'
 				) {
 					postEvent('web_app_request_fullscreen')
 				}
@@ -121,7 +134,23 @@ function App() {
 							content='width=device-width, user-scalable=no'
 						></meta>
 						<Routes>
+							<Route path={'registration'} element={<RegistrationPage />} />
 							<Route index element={<Feed />} />
+							<Route path={'edit-profile/:id'} element={<EditProfile />} />
+							<Route
+								path={'user-feedback/:id'}
+								element={<FeedbackPage isFullCourses={true} />}
+							/>
+							<Route path={'user/:id'} element={<SellerProfile />} />
+							<Route path={'wallet'} element={<Wallet />} />
+							<Route path={'landing'} element={<LandingPage />} />
+							<Route path={'buy-course'} element={<PaymentPage />} />
+							<Route path={'legal'} element={<LegalPage />} />
+							<Route
+								path={'verification-form'}
+								element={<VerificationForm />}
+							/>
+							<Route path={'connect-payments-form'} element={<ConnectCard />} />
 						</Routes>
 					</div>
 				</div>
