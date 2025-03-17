@@ -2,7 +2,6 @@ import { Skeleton } from '@mui/material'
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
 import { calculateRating } from 'src/entities/course/lib/calculateRating'
-import { ICourse } from 'src/entities/course/model/types'
 import CourseCard from 'src/features/courses/components/CourseCard/CourseCard'
 import Feedback from 'src/shared/components/Feedback/Feedback'
 import NavBar from 'src/shared/components/NavBar/NavBar'
@@ -27,7 +26,7 @@ const UserProfile: FC = () => {
 	const { userData, coursesData, feedbacks } = useUserProfile()
 
 	const totalStudents = coursesData.reduce(
-		(sum: number, course: ICourse) => sum + course.amount_of_students,
+		(sum, course) => sum + course.amount_of_students,
 		0
 	)
 

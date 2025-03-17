@@ -15,8 +15,8 @@ import ModalNotification from 'src/shared/components/ModalNotification/ModalNoti
 import Sales from 'src/shared/components/Sales/Sales'
 import Credit_Card from '../../shared/assets/course/Credit_Card.svg'
 import Wallet_Card from '../../shared/assets/course/Wallet_Card.svg'
+import PaymentButton from '../CoursePage/ui/PaymentButton/PaymentButton'
 import styles from './PaymentPage.module.css'
-import PaymentButton from './ui/PaymentButton/PaymentButton'
 
 const PaymentPage: FC = () => {
 	window.scrollTo(0, 0)

@@ -9,8 +9,6 @@ import { store } from './providers/store'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
-console.log('root', root)
-
 root.render(
 	<React.StrictMode>
 		<Provider store={store}>
