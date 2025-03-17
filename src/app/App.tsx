@@ -30,20 +30,26 @@ function App() {
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		const script = document.createElement('script')
-		script.src = 'https://telegram.org/js/telegram-web-app.js'
-		script.async = true
-		document.body.appendChild(script)
-		console.log('script', script)
+		const loadTelegramWebAppScript = () => {
+			return new Promise<void>(resolve => {
+				if (window.Telegram?.WebApp) {
+					resolve()
+					return
+				}
 
-		script.onload = () => {
-			console.log('Telegram Web App script loaded')
+				const script = document.createElement('script')
+				script.src = 'https://telegram.org/js/telegram-web-app.js'
+				script.async = true
+				script.onload = () => resolve()
+				document.head.appendChild(script)
+			})
+		}
 
+		loadTelegramWebAppScript().then(() => {
 			if (window.Telegram?.WebApp) {
 				const webApp = window.Telegram.WebApp
 
 				webApp.ready()
-
 				webApp.expand()
 
 				if (
@@ -56,73 +62,32 @@ function App() {
 
 				if (webApp.isVerticalSwipesEnabled) {
 					webApp.disableVerticalSwipes()
-					console.log('Vertical swipes disabled')
-				} else {
-					console.log('Vertical swipes were already disabled')
 				}
 
 				webApp.enableClosingConfirmation()
-			}
-		}
 
-		return () => {
-			document.body.removeChild(script)
-		}
-	}, [])
+				// Handle redirection based on start_param
+				const urlParams = new URLSearchParams(webApp.initData)
+				const startParam = urlParams.get('start_param')
+
+				if (startParam && !hasRedirected) {
+					if (startParam.startsWith('course_')) {
+						const courseId = startParam.split('_')[1]
+						navigate(`/course/${courseId}`)
+					} else if (startParam === 'profile') {
+						navigate('/profile')
+					}
+					setHasRedirected(true)
+				}
+			}
+		})
+	}, [navigate, hasRedirected])
 
 	useEffect(() => {
 		document.body.classList.add('mobile-body')
 		document.getElementById('wrap')?.classList.add('mobile-wrap')
 		document.getElementById('content')?.classList.add('mobile-content')
 	}, [])
-
-	// useEffect(() => {
-	// 	const script = document.createElement('script')
-	// 	script.src = 'https://telegram.org/js/telegram-web-app.js'
-	// 	script.async = true
-	// 	document.body.appendChild(script)
-
-	// 	script.onload = () => {
-	// 		console.log('Telegram Web App script loaded')
-	// 		console.log(window.Telegram.WebApp)
-	// 	}
-
-	// 	return () => {
-	// 		document.body.removeChild(script)
-	// 	}
-	// }, [])
-
-	// useEffect(() => {
-	// 	if (window.Telegram?.WebApp) {
-	// 		const webApp = window.Telegram.WebApp
-
-	// 		window.Telegram.WebApp.ready()
-
-	// 		postEvent('web_app_request_fullscreen')
-
-	// 		if (webApp.isVerticalSwipesEnabled) {
-	// 			webApp.disableVerticalSwipes()
-	// 		}
-
-	// 		webApp.enableClosingConfirmation()
-	// 	}
-	// }, [])
-
-	useEffect(() => {
-		if (hasRedirected) return
-
-		const urlParams = new URLSearchParams(window.Telegram.WebApp.initData)
-		const startParam = urlParams.get('start_param')
-
-		if (startParam && startParam.startsWith('course_')) {
-			const courseId = startParam.split('_')[1]
-			navigate(`/course/${courseId}`)
-			setHasRedirected(true)
-		} else if (startParam && startParam === 'profile') {
-			navigate('/profile')
-			setHasRedirected(true)
-		}
-	}, [navigate, hasRedirected])
 
 	return (
 		<TonConnectUIProvider manifestUrl='https://comncourse.netlify.app/tonconnect-manifest.json'>
