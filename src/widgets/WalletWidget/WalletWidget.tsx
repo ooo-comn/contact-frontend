@@ -2,6 +2,7 @@ import { format, isToday, isYesterday, parseISO } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { FC, useEffect, useState } from 'react'
 import { ITransaction } from 'src/entities/course/model/types'
+import { fetchUserTransactions } from 'src/entities/wallet/model/fetchUserTransactions'
 import { TransactionsHistory } from 'src/features/TransactionsHistory/TransactionsHistory'
 import BottomSheet from 'src/shared/components/BottomSheet/BottomSheet'
 import NavBar from 'src/shared/components/NavBar/NavBar'
@@ -16,7 +17,18 @@ export const WalletWidget: FC = () => {
 		tType: string
 	} | null>(null)
 	const [isOpen, setIsOpen] = useState(false)
-	const [formattedBalance, setFormattedBalance] = useState<string>('0')
+	const [balance, setBalance] = useState<number>(0)
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const result = await fetchUserTransactions(id)
+			if (result?.balance !== undefined) {
+				const formatted = result.balance.toLocaleString('ru-RU')
+				setBalance(formatted)
+			}
+		}
+		fetchData()
+	}, [id])
 
 	useEffect(() => {
 		if (selectedTransaction) {
@@ -115,7 +127,7 @@ export const WalletWidget: FC = () => {
 									<p
 										className={styles['wallet-widget__balance-details-numbers']}
 									>
-										{formattedBalance} ₽
+										{balance} ₽
 									</p>
 								</div>
 							</div>
