@@ -2,10 +2,7 @@ import { format, isToday, isYesterday, parseISO } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { FC, useEffect, useState } from 'react'
 import { ITransaction } from 'src/entities/course/model/types'
-import PaymentLimits from 'src/features/PaymentLimits/PaymentLimits'
 import { TransactionsHistory } from 'src/features/TransactionsHistory/TransactionsHistory'
-import { WalletBalance } from 'src/features/WalletBalance/WalletBalance'
-import { WalletVerification } from 'src/features/WalletVerification/WalletVerification'
 import BottomSheet from 'src/shared/components/BottomSheet/BottomSheet'
 import NavBar from 'src/shared/components/NavBar/NavBar'
 import Credit_Card from '../../shared/assets/course/Credit_Card.svg'
@@ -38,10 +35,6 @@ export const WalletWidget: FC = () => {
 
 	return (
 		<div className={styles['wallet']}>
-			<h1 className={styles['wallet__title']}>Кошелёк</h1>
-			<WalletBalance onBalanceChange={setFormattedBalance} />
-			<WalletVerification />
-			<PaymentLimits />
 			<TransactionsHistory
 				onSelectTransaction={data => {
 					if (data.transaction) {
