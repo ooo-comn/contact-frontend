@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import PhoneIcon from '../../../shared/assets/course/Phone.svg'
+import PhoneIcon from '../../../../shared/assets/course/Phone.svg'
 import styles from './SubscriptionCard.module.css'
 
 interface ISubscriptionCard {
