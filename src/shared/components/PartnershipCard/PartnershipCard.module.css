@@ -53,6 +53,7 @@
 }
 
 .partnershipCard__button {
+	cursor: pointer;
 	display: flex;
 	padding: 2.051vw 0vw;
 	justify-content: center;
@@ -67,4 +68,5 @@
 	font-style: normal;
 	font-weight: 500;
 	line-height: normal;
+	background-color: transparent;
 }

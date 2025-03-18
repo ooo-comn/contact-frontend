@@ -75,7 +75,7 @@
 .user-profile__stats {
 	display: flex;
 	gap: 2.051vw;
-	padding: 4.103vw 0 6.154vw 0;
+	padding-top: 4.103vw;
 }
 
 .user-profile__content {
@@ -175,6 +175,7 @@
 }
 
 .user-profile__button-publish {
+	cursor: pointer;
 	display: flex;
 	width: 91.282vw;
 	padding: 3.846vw 2.564vw;
