@@ -16,11 +16,14 @@ const SubscriptionButton: FC<ISubscriptionButton> = ({
 	onClick,
 }) => {
 	return (
-		<button className={styles['subscription-button']} onClick={onClick}>
+		<button
+			className={cn(styles['subscription-button'], {
+				[styles['subscription-button__wrapper_isActive']]: isActive,
+			})}
+			onClick={onClick}
+		>
 			<img
-				className={cn(styles['subscription-button__icon'], {
-					[styles['subscription-button__icon_isActive']]: isActive,
-				})}
+				className={styles['subscription-button__icon']}
 				src={imagePath}
 				alt='Способ оплаты'
 			/>

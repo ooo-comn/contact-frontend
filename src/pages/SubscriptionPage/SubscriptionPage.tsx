@@ -6,6 +6,15 @@ import SubscriptionButton from './ui/SubscriptionButton/SubscriptionButton'
 import SubscriptionCard from './ui/SubscriptionCard/SubscriptionCard'
 
 const SubscriptionPage: FC = () => {
+	var BackButton = window.Telegram.WebApp.BackButton
+	BackButton.show()
+	BackButton.onClick(function () {
+		BackButton.hide()
+	})
+	window.Telegram.WebApp.onEvent('backButtonClicked', function () {
+		window.history.back()
+	})
+
 	const [activeButton, setActiveButton] = useState<'card' | 'telegram'>('card')
 
 	const handleButtonClick = (buttonType: 'card' | 'telegram') => {
@@ -18,7 +27,7 @@ const SubscriptionPage: FC = () => {
 			<div className={styles['subscription-page__cards-container']}>
 				<SubscriptionCard contactsCount='1 контакт' price={59} />
 				<SubscriptionCard contactsCount='5 контактов' price={159} />
-				<SubscriptionCard contactsCount='10 контакт' price={259} />
+				<SubscriptionCard contactsCount='10 контактов' price={259} />
 				<p className={styles['subscription-page__disclaimer']}>
 					Ты покупаешь контакты на месяц, по истечении этого времени контакты
 					сгорают.
@@ -43,6 +52,10 @@ const SubscriptionPage: FC = () => {
 					/>
 				</div>
 			</div>
+
+			<button className={styles['subscription-page__payment-button']}>
+				Оплатить
+			</button>
 		</div>
 	)
 }
