@@ -19,11 +19,11 @@ const CardList: React.FC<{ courses: ICourse[] }> = ({ courses }) => {
 						<ContactCard
 							key={index}
 							itemCard={item}
-							userPhoto={item.user.photo_url ?? ''}
+							userPhoto={item.user?.photo_url ?? ''}
 							amountOfSales={item.amount_of_students ?? 0}
 							averageRate={averageRate}
-							userName={item.user.first_name ?? ''}
-							userSecondName={item.user.last_name ?? ''}
+							userName={item.user?.first_name ?? ''}
+							userSecondName={item.user?.last_name ?? ''}
 							university={item.university ?? ''}
 							count={item.feedback?.length}
 						/>
