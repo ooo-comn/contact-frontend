@@ -12,7 +12,6 @@ import Bulb from '../../shared/assets/profile/Bulb.svg'
 import Error from '../../shared/assets/profile/Error.svg'
 import Faq from '../../shared/assets/profile/Faq.svg'
 import MarkedExist from '../../shared/assets/profile/MarkedExist.svg'
-import Naming from '../../shared/assets/profile/Naming.svg'
 import Warning from '../../shared/assets/profile/Warning.svg'
 import CloseImg from '../../shared/assets/wallet/CloseImg.svg'
 import { BASE_URL } from '../../shared/config/api'
@@ -374,10 +373,6 @@ const EditProfile: FC = () => {
 							text='Предложить идею'
 						/>
 					</Link>
-				</div>
-
-				<div className={styles['edit-profile__section']}>
-					<h3 className={styles['edit-profile__subtitle']}>О проекте</h3>
 					<Link
 						to='https://common-course-1.gitbook.io/common-course-app/'
 						target='_blank'
@@ -393,22 +388,6 @@ const EditProfile: FC = () => {
 							path={Faq}
 							isNotify={isNotify}
 							text='Ответы на вопросы'
-						/>
-					</Link>
-					<Link
-						to='https://t.me/ComnCourse'
-						target='_blank'
-						onClick={event => {
-							event.preventDefault()
-							window.open('https://t.me/ComnCourse')
-						}}
-					>
-						<LinksFAQ
-							isSubmit={true}
-							path={Naming}
-							isNotify={isNotify}
-							text='Наш телеграм канал'
-							className={styles['edit-profile__section-img']}
 						/>
 					</Link>
 				</div>

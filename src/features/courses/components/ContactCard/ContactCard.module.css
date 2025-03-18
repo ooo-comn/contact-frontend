@@ -74,6 +74,7 @@
 }
 
 .contact-card__action-button {
+	cursor: pointer;
 	display: flex;
 	width: 7.179vw;
 	height: 7.179vw;
@@ -81,6 +82,8 @@
 	align-items: center;
 	border-radius: 100%;
 	background: var(--create-course-button);
+	border: none;
+	outline: none;
 }
 
 .contact-card__action-icon {
@@ -122,9 +125,12 @@
 }
 
 .contact-card__buy-button {
+	cursor: pointer;
 	display: flex;
 	height: 9.744vw;
 	padding: 2.564vw 0vw;
+	width: 100%;
+	background: transparent;
 	justify-content: center;
 	align-items: center;
 	border-radius: 1.538vw;

@@ -3,7 +3,6 @@ import { TonConnectUIProvider } from '@tonconnect/ui-react'
 import { useEffect, useState } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { VerificationForm } from 'src/entities/verification/ui/VerificationForm/VerificationForm'
-import ConnectBotPage from 'src/pages/ConnectBotPage/ConnectBotPage'
 import EditProfile from 'src/pages/EditProfile/EditProfile'
 import FeedbackPage from 'src/pages/FeedbackPage/FeedbackPage'
 import LegalPage from 'src/pages/LegalPage/LegalPage'
@@ -153,7 +152,6 @@ function App() {
 							/>
 							<Route path={'user/:id'} element={<SellerProfile />} />
 							<Route path={'wallet'} element={<Wallet />} />
-							<Route path={'connect-bot'} element={<ConnectBotPage />} />
 							<Route path={'registration'} element={<RegistrationPage />} />
 							<Route path={'landing'} element={<LandingPage />} />
 							<Route path={'transaction/:tid'} element={<Transaction />} />

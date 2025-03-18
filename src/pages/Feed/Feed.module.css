@@ -34,7 +34,7 @@
 }
 
 .feed__create-button-count {
-	color: var(--active-colors);
+	color: var(--active-color);
 	font-family: 'Geologica';
 	font-size: 3.59vw;
 	font-style: normal;

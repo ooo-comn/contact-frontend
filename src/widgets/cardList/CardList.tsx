@@ -15,6 +15,8 @@ const CardList: React.FC<{ courses: ICourse[] }> = ({ courses }) => {
 						? calculateRating(item.feedback)
 						: 0
 
+					console.log('item.user', item.user)
+
 					return (
 						<ContactCard
 							key={index}

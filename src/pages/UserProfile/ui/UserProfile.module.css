@@ -83,6 +83,7 @@
 	flex-direction: column;
 	gap: 4.103vw;
 	width: 91.282vw;
+	margin-top: 3.846vw;
 }
 
 .user-profile__section {
@@ -177,6 +178,7 @@
 	display: flex;
 	width: 91.282vw;
 	padding: 3.846vw 2.564vw;
+	margin-top: 4.615vw;
 	justify-content: center;
 	align-items: center;
 	border-radius: 1.538vw;
@@ -187,4 +189,6 @@
 	font-style: normal;
 	font-weight: 500;
 	line-height: normal;
+	border: none;
+	outline: none;
 }
