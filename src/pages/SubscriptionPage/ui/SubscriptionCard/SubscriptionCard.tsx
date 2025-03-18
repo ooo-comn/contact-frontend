@@ -26,8 +26,8 @@ const SubscriptionCard: FC<ISubscriptionCard> = ({
 			<div className={styles['subscription-card__info']}>
 				<p className={styles['subscription-card__contacts-count']}>
 					{contactsCount}
-				</p>{' '}
-				{priceType == 'card' ? (
+				</p>
+				{priceType === 'card' ? (
 					<p className={styles['subscription-card__price']}>
 						{price} рублей на месяц
 					</p>
