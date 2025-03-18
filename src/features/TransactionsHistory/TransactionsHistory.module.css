@@ -9,8 +9,10 @@
 .transactions-history__title {
 	color: var(--main-text);
 	font-family: 'Geologica';
-	font-size: 3.59vw;
+	font-size: 4.615vw;
 	font-style: normal;
-	font-weight: 400;
+	font-weight: 500;
 	line-height: normal;
+	width: 91.282vw;
+	margin-bottom: -2.051vw;
 }

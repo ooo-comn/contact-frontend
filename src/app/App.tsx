@@ -4,18 +4,15 @@ import { useEffect, useState } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { VerificationForm } from 'src/entities/verification/ui/VerificationForm/VerificationForm'
 import ConnectBotPage from 'src/pages/ConnectBotPage/ConnectBotPage'
-import CoursePage from 'src/pages/CoursePage/CoursePage'
 import EditProfile from 'src/pages/EditProfile/EditProfile'
 import FeedbackPage from 'src/pages/FeedbackPage/FeedbackPage'
 import LegalPage from 'src/pages/LegalPage/LegalPage'
-import PaymentPage from 'src/pages/PaymentPage/PaymentPage'
 import UserProfile from 'src/pages/UserProfile/ui/UserProfile'
 import ConnectWallet from 'src/pages/Wallet/ConnectWallet'
 import ConnectWalletN from 'src/pages/Wallet/ConnectWalletN'
 import Create from '../pages/Create/Create'
 // import EditCourse from '../pages/Create/EditCourse'
 import ConnectCard from 'src/pages/ConnectCard/ConnectCard'
-import CreateCourse from 'src/pages/CreateCourse/CreateCourse'
 import EditCourse from 'src/pages/EditCourse/EditCourse'
 import LandingPage from 'src/pages/LandingPage/LandingPage'
 import RegistrationPage from 'src/pages/RegistrationPage/RegistrationPage'
@@ -139,8 +136,6 @@ function App() {
 								}
 							/>
 							<Route path={'profile'} element={<UserProfile />} />
-							<Route path={'course/:cid'} element={<CoursePage />} />
-							<Route path={'create-course'} element={<CreateCourse />} />
 							<Route path={'send-feedback/:id'} element={<SendFeedback />} />
 							<Route path={'edit-profile/:id'} element={<EditProfile />} />
 							<Route path={'edit-bio/:id'} element={<Bio />} />
@@ -161,7 +156,6 @@ function App() {
 							<Route path={'connect-bot'} element={<ConnectBotPage />} />
 							<Route path={'registration'} element={<RegistrationPage />} />
 							<Route path={'landing'} element={<LandingPage />} />
-							<Route path={'buy-course'} element={<PaymentPage />} />
 							<Route path={'transaction/:tid'} element={<Transaction />} />
 							<Route path={'verification'} element={<Verification />} />
 							<Route path={'connect-wallet'} element={<ConnectWallet />} />

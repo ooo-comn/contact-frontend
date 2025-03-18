@@ -1,0 +1,139 @@
+.contact-card {
+	display: flex;
+	width: 91.795vw;
+	padding: 2.051vw;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 4.103vw;
+	border-radius: 1.538vw;
+	background: var(--mini-background);
+}
+
+.contact-card__header {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.contact-card__user-info {
+	display: flex;
+	align-items: center;
+	gap: 2.051vw;
+}
+
+.contact-card__user-avatar {
+	width: 11.795vw;
+	height: 11.795vw;
+	border-radius: 100%;
+}
+
+.contact-card__user-details {
+	display: flex;
+	flex-direction: column;
+	gap: 1.026vw;
+}
+
+.contact-card__user-name {
+	color: var(--main-text);
+	font-family: 'Geologica';
+	font-size: 3.59vw;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+}
+
+.contact-card__stats {
+	display: flex;
+	gap: 2.051vw;
+}
+
+.contact-card__stat-item {
+	display: flex;
+	align-items: center;
+	gap: 1.026vw;
+}
+
+.contact-card__stat-icon {
+	width: 4.103vw;
+	height: 4.103vw;
+}
+
+.contact-card__stat-text {
+	color: var(--main-text);
+	font-family: 'Geologica';
+	font-size: 2.564vw;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+}
+
+.contact-card__actions {
+	display: flex;
+	align-items: center;
+	gap: 2.051vw;
+}
+
+.contact-card__action-button {
+	display: flex;
+	width: 7.179vw;
+	height: 7.179vw;
+	justify-content: center;
+	align-items: center;
+	border-radius: 100%;
+	background: var(--create-course-button);
+}
+
+.contact-card__action-icon {
+	width: 4.872vw;
+	height: 4.872vw;
+}
+
+.contact-card__university {
+	color: var(--main-text);
+	font-family: 'Geologica';
+	font-size: 3.59vw;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+}
+
+.contact-card__subjects {
+	display: flex;
+	flex-direction: column;
+	gap: 2.051vw;
+}
+
+.contact-card__subjects-title {
+	color: var(--second-text);
+	font-family: 'Geologica';
+	font-size: 3.077vw;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+}
+
+.contact-card__subjects-list {
+	display: flex;
+	align-items: center;
+	align-content: center;
+	gap: 2.051vw;
+	align-self: stretch;
+	flex-wrap: wrap;
+}
+
+.contact-card__buy-button {
+	display: flex;
+	height: 9.744vw;
+	padding: 2.564vw 0vw;
+	justify-content: center;
+	align-items: center;
+	border-radius: 1.538vw;
+	border: 0.256vw solid var(--active-color);
+	color: var(--active-color);
+	text-align: center;
+	font-family: 'Geologica';
+	font-size: 3.59vw;
+	font-style: normal;
+	font-weight: 500;
+	line-height: normal;
+}

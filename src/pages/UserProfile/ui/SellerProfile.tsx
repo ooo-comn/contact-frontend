@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom'
 import { calculateRating } from 'src/entities/course/lib/calculateRating'
 import { ICourse, ITelegramUser } from 'src/entities/course/model/types'
 import { fetchUser } from 'src/entities/user/model/fetchUser'
-import CourseCard from 'src/features/courses/components/CourseCard/CourseCard'
 import Feedback from 'src/shared/components/Feedback/Feedback'
 import NavBar from 'src/shared/components/NavBar/NavBar'
 import Sales from 'src/shared/components/Sales/Sales'
@@ -62,24 +61,6 @@ const SellerProfile: FC = () => {
 	}, [id])
 
 	const isAuthor = Boolean(id) && Number(id) === user?.id
-
-	const userCourses =
-		coursesData?.map(item => (
-			<CourseCard
-				amountOfStudents={item.amount_of_students}
-				averageRate={calculateRating(item.feedback || [])}
-				chanelName={item.name}
-				chanelPhoto={item.image}
-				itemCard={item}
-				price={item.price}
-				university={item.university}
-				key={item.id}
-				isCoursePage={false}
-				cid={String(item.id)}
-				count={item.feedback.length}
-				isAuthor={isAuthor}
-			/>
-		)) || []
 
 	const averageRate =
 		feedbacks && feedbacks.length > 0 ? calculateRating(feedbacks) : 0
@@ -187,23 +168,6 @@ const SellerProfile: FC = () => {
 					<p className={styles['user-profile__section-description']}>
 						{userData?.description || 'Расскажите о себе'}
 					</p>
-				</div>
-				<div className={styles['user-profile__line']} />
-				<div className={styles['user-profile__section']}>
-					<h3 className={styles['user-profile__section-title']}>Курсы</h3>
-					{userCourses.length > 0 ? (
-						<div className={styles['user-profile__all-cards']}>
-							{userCourses}
-						</div>
-					) : (
-						<div className={styles['user-profile__empty-cards']}>
-							<p className={styles['user-profile__empty-cards-text']}>
-								Пока у тебя нет ни одного созданного курса. Чтобы опубликовать
-								свой первый курс, перейди на страницу «Курсы» и нажми на плюсик
-								в правом верхнем углу экрана
-							</p>
-						</div>
-					)}
 				</div>
 			</section>
 			<NavBar />

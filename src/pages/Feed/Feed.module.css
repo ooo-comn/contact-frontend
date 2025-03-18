@@ -24,20 +24,27 @@
 }
 
 .feed__create-button {
-	cursor: pointer;
-	width: 7.179vw;
-	height: 7.179vw;
 	display: flex;
-	justify-content: center;
+	padding: 1.282vw 2.051vw;
 	align-items: center;
-	border-radius: 19.943vw;
+	gap: 1.026vw;
+	border-radius: 1.538vw;
 	background: var(--create-course-button);
 	border: none;
 }
 
+.feed__create-button-count {
+	color: var(--active-colors);
+	font-family: 'Geologica';
+	font-size: 3.59vw;
+	font-style: normal;
+	font-weight: 500;
+	line-height: normal;
+}
+
 .feed__create-button-img {
-	width: 3.191vw;
-	height: 3.191vw;
+	width: 4.103vw;
+	height: 4.103vw;
 }
 
 .feed__top-panel {

@@ -1,6 +1,6 @@
 import { calculateRating } from '../../entities/course/lib/calculateRating'
 import { ICourse } from '../../entities/course/model/types'
-import CourseCard from '../../features/courses/components/CourseCard/CourseCard'
+import ContactCard from '../../features/courses/components/ContactCard/ContactCard'
 import styles from './CardList.module.css'
 
 const CardList: React.FC<{ courses: ICourse[] }> = ({ courses }) => {
@@ -16,19 +16,16 @@ const CardList: React.FC<{ courses: ICourse[] }> = ({ courses }) => {
 						: 0
 
 					return (
-						<CourseCard
+						<ContactCard
 							key={index}
 							itemCard={item}
-							amountOfStudents={item.amount_of_students ?? 0}
+							userPhoto={item.user.photo_url ?? ''}
+							amountOfSales={item.amount_of_students ?? 0}
 							averageRate={averageRate}
-							chanelName={item.name ?? ''}
-							chanelPhoto={item.image ?? ''}
-							price={item.price ?? 0}
+							userName={item.user.first_name ?? ''}
+							userSecondName={item.user.last_name ?? ''}
 							university={item.university ?? ''}
-							isCoursePage={false}
-							cid={String(item.id)}
 							count={item.feedback?.length}
-							isFeedPage={true}
 						/>
 					)
 				})
@@ -36,7 +33,7 @@ const CardList: React.FC<{ courses: ICourse[] }> = ({ courses }) => {
 				<div className={styles['card-list__main-wrapper-empty-courses']}>
 					<div className={styles['card-list__wrapper-empty-courses-texts']}>
 						<h2 className={styles['card-list__empty-courses-title']}>
-							Такого курса нет :(
+							Такого контакта нет :(
 						</h2>
 						<p className={styles['card-list__empty-courses-text']}>
 							Попробуй написать по-другому
