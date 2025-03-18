@@ -134,3 +134,22 @@
 	background: var(--active-color);
 	color: var(--active-text);
 }
+
+.feed__create-subscription {
+	position: fixed;
+	bottom: 21.282vw;
+	display: flex;
+	width: 91.795vw;
+	padding: 3.846vw 2.564vw;
+	justify-content: space-between;
+	align-items: center;
+	border-radius: 1.538vw;
+	background: var(--active-color);
+	color: var(--active-text);
+	text-align: center;
+	font-family: 'Geologica';
+	font-size: 3.59vw;
+	font-style: normal;
+	font-weight: 500;
+	line-height: normal;
+}

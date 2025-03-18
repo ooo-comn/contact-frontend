@@ -15,6 +15,7 @@ import ConnectCard from 'src/pages/ConnectCard/ConnectCard'
 import EditCourse from 'src/pages/EditCourse/EditCourse'
 import LandingPage from 'src/pages/LandingPage/LandingPage'
 import RegistrationPage from 'src/pages/RegistrationPage/RegistrationPage'
+import SubscriptionPage from 'src/pages/SubscriptionPage/SubscriptionPage'
 import SellerProfile from 'src/pages/UserProfile/ui/SellerProfile'
 import Feed from '../pages/Feed/Feed'
 import SendFeedback from '../pages/Feedback/SendFeedback'
@@ -136,6 +137,7 @@ function App() {
 							/>
 							<Route path={'profile'} element={<UserProfile />} />
 							<Route path={'send-feedback/:id'} element={<SendFeedback />} />
+							<Route path={'subscription'} element={<SubscriptionPage />} />
 							<Route path={'edit-profile/:id'} element={<EditProfile />} />
 							<Route path={'edit-bio/:id'} element={<Bio />} />
 							<Route path={'edit-ecourse/:id'} element={<ECourse />} />
