@@ -25,9 +25,21 @@ const SubscriptionPage: FC = () => {
 		<div className={styles['subscription-page']}>
 			<h1 className={styles['subscription-page__title']}>Подписки</h1>
 			<div className={styles['subscription-page__cards-container']}>
-				<SubscriptionCard contactsCount='1 контакт' price={59} />
-				<SubscriptionCard contactsCount='5 контактов' price={159} />
-				<SubscriptionCard contactsCount='10 контактов' price={259} />
+				<SubscriptionCard
+					contactsCount='1 контакт'
+					price={activeButton === 'card' ? 59 : 550000}
+					priceType={activeButton}
+				/>
+				<SubscriptionCard
+					contactsCount='5 контактов'
+					price={activeButton === 'card' ? 159 : 550000}
+					priceType={activeButton}
+				/>
+				<SubscriptionCard
+					contactsCount='10 контактов'
+					price={activeButton === 'card' ? 259 : 550000}
+					priceType={activeButton}
+				/>
 				<p className={styles['subscription-page__disclaimer']}>
 					Ты покупаешь контакты на месяц, по истечении этого времени контакты
 					сгорают.

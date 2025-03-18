@@ -45,3 +45,24 @@
 	font-weight: 400;
 	line-height: normal;
 }
+
+.subscription-card__wrapper-stars {
+	display: flex;
+	align-items: center;
+	gap: 1.026vw;
+	align-self: stretch;
+}
+
+.subscription-card__star-icon {
+	width: 4.103vw;
+	height: 4.103vw;
+}
+
+.subscription-card__stars-price {
+	color: #ffaf40;
+	font-family: 'Geologica';
+	font-size: 3.077vw;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+}

@@ -144,6 +144,9 @@
 	display: flex;
 	width: 91.795vw;
 	padding: 3.846vw 2.564vw;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	justify-content: space-between;
 	align-items: center;
 	border-radius: 1.538vw;

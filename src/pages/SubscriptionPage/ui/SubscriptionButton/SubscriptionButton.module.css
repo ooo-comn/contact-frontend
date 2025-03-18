@@ -3,7 +3,7 @@
 	height: 11.026vw;
 	width: 91.795vw;
 	padding: 2.564vw 2.051vw;
-	justify-content: center;
+	justify-content: flex-start;
 	align-items: center;
 	gap: 2.051vw;
 	align-self: stretch;
@@ -27,24 +27,5 @@
 	font-size: 3.077vw;
 	font-style: normal;
 	font-weight: 400;
-	line-height: normal;
-}
-
-.subscription-page__payment-button {
-	position: fixed;
-	bottom: 15.385vw;
-	display: flex;
-	width: 91.795vw;
-	padding: 3.846vw 2.564vw;
-	justify-content: space-between;
-	align-items: center;
-	border-radius: 1.538vw;
-	background: var(--active-color);
-	color: var(--mini-background);
-	text-align: center;
-	font-family: 'Geologica';
-	font-size: 3.59vw;
-	font-style: normal;
-	font-weight: 500;
 	line-height: normal;
 }
