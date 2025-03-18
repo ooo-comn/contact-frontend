@@ -42,7 +42,10 @@ const Feed = () => {
 			/>
 			<FeedFilters onFilterChange={setActiveFilter} />
 			<FeedList filteredCourses={filteredData} isPending={isPending} />
-			<Link to='/subscription'>
+			<Link
+				to='/subscription'
+				className={styles['feed__link-create-subscription']}
+			>
 				<button className={styles['feed__create-subscription']}>
 					Оформить подписку
 				</button>

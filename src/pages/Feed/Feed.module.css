@@ -135,9 +135,12 @@
 	color: var(--active-text);
 }
 
-.feed__create-subscription {
+.feed__link-create-subscription {
 	position: fixed;
 	bottom: 21.282vw;
+}
+
+.feed__create-subscription {
 	display: flex;
 	width: 91.795vw;
 	padding: 3.846vw 2.564vw;
@@ -152,4 +155,6 @@
 	font-style: normal;
 	font-weight: 500;
 	line-height: normal;
+	border: none;
+	outline: none;
 }
