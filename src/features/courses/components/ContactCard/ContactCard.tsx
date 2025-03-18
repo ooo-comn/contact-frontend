@@ -6,7 +6,7 @@ import BuyersIcon from 'src/shared/assets/course/Buyers.svg'
 import StarFeedbackIcon from 'src/shared/assets/course/StarFeedback.svg'
 import { BASE_URL } from 'src/shared/config/api'
 import { IContactCard } from '../../types/IContactCard'
-import styles from './CourseCard.module.css'
+import styles from './ContactCard.module.css'
 
 const ContactCard: FC<IContactCard> = ({
 	itemCard,
