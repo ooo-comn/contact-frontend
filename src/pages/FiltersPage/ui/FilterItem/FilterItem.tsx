@@ -47,8 +47,8 @@ const FilterItem: FC<IFilterItem> = ({
 						className={styles['filter-item__toggle-input']}
 						type='checkbox'
 						id='toggle'
-						checked={isNotify}
-						onChange={isNotifyFAQ}
+						checked={checked}
+						onChange={handleCheckboxChange}
 					/>
 					<label
 						className={styles['filter-item__toggle-label']}
@@ -59,8 +59,8 @@ const FilterItem: FC<IFilterItem> = ({
 				<label className={styles['filter-item__checkbox-label']}>
 					<input
 						type='checkbox'
-						checked={checked}
-						onChange={handleCheckboxChange}
+						checked={isNotify}
+						onChange={isNotifyFAQ}
 						className={styles['filter-item__checkbox-input']}
 					/>
 					<span

@@ -43,16 +43,27 @@ const FiltersPage: FC = () => {
 				}))
 				break
 			case 'sort':
-				setSortFilters(prev => ({ ...prev, [filterName]: !prev[filterName] }))
+				setSortFilters(prev => {
+					const resetSort = Object.keys(prev).reduce((acc, key) => {
+						acc[key] = false
+						return acc
+					}, {} as { [key: string]: boolean })
+
+					return { ...resetSort, [filterName]: true }
+				})
 				break
 		}
 	}
 
 	const handleApplyFilters = () => {
 		const appliedFilters = {
-			workType: workTypeFilters,
-			university: universityFilters,
-			sort: sortFilters,
+			workType: Object.keys(workTypeFilters).filter(
+				key => workTypeFilters[key]
+			),
+			university: Object.keys(universityFilters).filter(
+				key => universityFilters[key]
+			),
+			sort: Object.keys(sortFilters).find(key => sortFilters[key]) || '',
 			rating: checked,
 		}
 
