@@ -24,8 +24,16 @@ const FilterItem: FC<IFilterItem> = ({
 	handleCheckboxChange,
 	path,
 }) => {
+	const handleClick = () => {
+		if (filterItemType === 'checkbox') {
+			isNotifyFAQ && isNotifyFAQ()
+		} else if (filterItemType === 'button') {
+			handleCheckboxChange && handleCheckboxChange()
+		}
+	}
+
 	const content = (
-		<div className={styles['filter-item']}>
+		<div className={styles['filter-item']} onClick={handleClick}>
 			{filterItemType === 'button' && (
 				<div className={styles['filter-item__button-content']}>
 					<img
@@ -48,7 +56,7 @@ const FilterItem: FC<IFilterItem> = ({
 						type='checkbox'
 						id='toggle'
 						checked={checked}
-						onChange={handleCheckboxChange}
+						readOnly
 					/>
 					<label
 						className={styles['filter-item__toggle-label']}
@@ -60,7 +68,7 @@ const FilterItem: FC<IFilterItem> = ({
 					<input
 						type='checkbox'
 						checked={isNotify}
-						onChange={isNotifyFAQ}
+						readOnly
 						className={styles['filter-item__checkbox-input']}
 					/>
 					<span
