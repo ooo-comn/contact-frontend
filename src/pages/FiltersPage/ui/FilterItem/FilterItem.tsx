@@ -65,10 +65,10 @@ const FilterItem: FC<IFilterItem> = ({
 					/>
 					<span
 						className={`${styles['filter-item__checkbox-custom']} ${
-							checked ? styles['filter-item__checkbox-custom--checked'] : ''
+							isNotify ? styles['filter-item__checkbox-custom--checked'] : ''
 						}`}
 					>
-						{checked && (
+						{isNotify && (
 							<img
 								className={styles['filter-item__checkbox-icon']}
 								src={CheckIcon}
