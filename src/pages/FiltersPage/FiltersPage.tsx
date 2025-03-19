@@ -48,12 +48,23 @@ const FiltersPage: FC = () => {
 		}
 	}
 
-	const handleReset = () => {
-		setWorkTypeFilters({})
-		setUniversityFilters({})
-		setSortFilters({})
-		setChecked(false)
+	const handleApplyFilters = () => {
+		const appliedFilters = {
+			workType: workTypeFilters,
+			university: universityFilters,
+			sort: sortFilters,
+			rating: checked,
+		}
+
+		console.log('Applied filters:', appliedFilters)
 	}
+
+	// const handleReset = () => {
+	// 	setWorkTypeFilters({})
+	// 	setUniversityFilters({})
+	// 	setSortFilters({})
+	// 	setChecked(false)
+	// }
 
 	return (
 		<div className={styles['filters-page']}>
@@ -61,7 +72,7 @@ const FiltersPage: FC = () => {
 				<h1 className={styles['filters-page__title']}>Фильтры</h1>
 				<button
 					className={styles['filters-page__reset-button']}
-					onClick={handleReset}
+					onClick={handleApplyFilters}
 				>
 					Сбросить
 				</button>

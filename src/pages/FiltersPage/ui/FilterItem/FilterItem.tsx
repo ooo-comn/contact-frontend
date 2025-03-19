@@ -76,7 +76,6 @@ const FilterItem: FC<IFilterItem> = ({
 							/>
 						)}
 					</span>
-					<p className={styles['filter-item__checkbox-text']}>Нет отчества</p>
 				</label>
 			) : (
 				<img

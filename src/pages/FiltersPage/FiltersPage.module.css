@@ -81,6 +81,7 @@
 
 .filters-page__button-save {
 	display: flex;
+	margin-top: 3.333vw;
 	width: 91.282vw;
 	padding: 3.846vw 2.564vw;
 	justify-content: center;

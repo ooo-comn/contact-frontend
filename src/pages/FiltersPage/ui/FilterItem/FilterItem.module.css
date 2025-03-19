@@ -100,7 +100,6 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin-right: 1.026vw;
 	transition: all 0.3s ease;
 }
 
@@ -112,15 +111,6 @@
 .filter-item__checkbox-input-custom img {
 	width: 1.795vw;
 	height: 1.795vw;
-}
-
-.filter-item__checkbox-text {
-	color: var(--second-text);
-	font-family: 'Geologica';
-	font-size: 3.077vw;
-	font-style: normal;
-	font-weight: 300;
-	line-height: normal;
 }
 
 .filter-item__link-icon {
