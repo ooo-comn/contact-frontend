@@ -108,7 +108,7 @@
 	border-color: var(--active-color);
 }
 
-.filter-item__checkbox-input-custom img {
+.filter-item__checkbox-icon {
 	width: 1.795vw;
 	height: 1.795vw;
 }

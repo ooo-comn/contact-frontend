@@ -1,18 +1,25 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import styles from './FiltersPage.module.css'
 import FilterItem from './ui/FilterItem/FilterItem'
 
 const FiltersPage: FC = () => {
-	window.scrollTo(0, 0)
+	useEffect(() => {
+		window.scrollTo(0, 0)
 
-	var BackButton = window.Telegram.WebApp.BackButton
-	BackButton.show()
-	BackButton.onClick(function () {
-		BackButton.hide()
-	})
-	window.Telegram.WebApp.onEvent('backButtonClicked', function () {
-		window.history.back()
-	})
+		const BackButton = window.Telegram.WebApp.BackButton
+		BackButton.show()
+
+		const backHandler = () => BackButton.hide()
+		BackButton.onClick(backHandler)
+
+		const historyBackHandler = () => window.history.back()
+		window.Telegram.WebApp.onEvent('backButtonClicked', historyBackHandler)
+
+		return () => {
+			BackButton.offClick(backHandler)
+			window.Telegram.WebApp.offEvent('backButtonClicked', historyBackHandler)
+		}
+	}, [])
 
 	const [workTypeFilters, setWorkTypeFilters] = useState<{
 		[key: string]: boolean
@@ -55,27 +62,27 @@ const FiltersPage: FC = () => {
 		}
 	}
 
-	const handleApplyFilters = () => {
-		const appliedFilters = {
-			workType: Object.keys(workTypeFilters).filter(
-				key => workTypeFilters[key]
-			),
-			university: Object.keys(universityFilters).filter(
-				key => universityFilters[key]
-			),
-			sort: Object.keys(sortFilters).find(key => sortFilters[key]) || '',
-			rating: checked,
-		}
+	// const handleApplyFilters = () => {
+	// 	const appliedFilters = {
+	// 		workType: Object.keys(workTypeFilters).filter(
+	// 			key => workTypeFilters[key]
+	// 		),
+	// 		university: Object.keys(universityFilters).filter(
+	// 			key => universityFilters[key]
+	// 		),
+	// 		sort: Object.keys(sortFilters).find(key => sortFilters[key]) || '',
+	// 		rating: checked,
+	// 	}
 
-		console.log('Applied filters:', appliedFilters)
-	}
-
-	// const handleReset = () => {
-	// 	setWorkTypeFilters({})
-	// 	setUniversityFilters({})
-	// 	setSortFilters({})
-	// 	setChecked(false)
+	// 	console.log('Applied filters:', appliedFilters)
 	// }
+
+	const handleReset = () => {
+		setWorkTypeFilters({})
+		setUniversityFilters({})
+		setSortFilters({})
+		setChecked(false)
+	}
 
 	return (
 		<div className={styles['filters-page']}>
@@ -83,7 +90,7 @@ const FiltersPage: FC = () => {
 				<h1 className={styles['filters-page__title']}>Фильтры</h1>
 				<button
 					className={styles['filters-page__reset-button']}
-					onClick={handleApplyFilters}
+					onClick={handleReset}
 				>
 					Сбросить
 				</button>
