@@ -1,4 +1,6 @@
 import { ChangeEvent } from 'react'
+import { Link } from 'react-router-dom'
+import FilterIcon from '../../../shared/assets/feed/FilterIcon.svg'
 import styles from '../Feed.module.css'
 
 interface FeedSearchProps {
@@ -28,13 +30,15 @@ const FeedSearch = ({ inputValue, onChange }: FeedSearchProps) => {
 					fill='#FBFBFB'
 				/>
 			</svg>
-			{/* <button className={styles['feed__filter-button']}>
-				<img
-					src={FilterIcon}
-					alt='Кнопка фильтра'
-					className={styles['feed__filter-button-img']}
-				/>
-			</button> */}
+			<Link to='/filters'>
+				<button className={styles['feed__filter-button']}>
+					<img
+						src={FilterIcon}
+						alt='Кнопка фильтра'
+						className={styles['feed__filter-button-img']}
+					/>
+				</button>
+			</Link>
 		</div>
 	)
 }

@@ -66,7 +66,7 @@
 	line-height: normal;
 	border-radius: 1.538vw;
 	background: var(--mini-background);
-	width: 91.795vw;
+	width: 83.59vw;
 	border: none;
 	outline: none;
 }
@@ -85,7 +85,7 @@
 
 .feed__filter-button {
 	display: flex;
-	padding: 1.571vw 0.449vw;
+	width: fit-content;
 	justify-content: center;
 	align-items: center;
 	background: transparent;
@@ -94,8 +94,8 @@
 }
 
 .feed__filter-button-img {
-	height: 4.038vw;
-	width: 6.282vw;
+	width: 6.154vw;
+	height: 6.154vw;
 }
 
 .feed__loading {
@@ -141,14 +141,11 @@
 }
 
 .feed__create-subscription {
-	display: flex;
 	width: 91.795vw;
 	padding: 3.846vw 2.564vw;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	justify-content: space-between;
-	align-items: center;
 	border-radius: 1.538vw;
 	background: var(--active-color);
 	color: var(--active-text);

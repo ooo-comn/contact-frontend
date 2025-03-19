@@ -13,6 +13,7 @@ import Create from '../pages/Create/Create'
 // import EditCourse from '../pages/Create/EditCourse'
 import ConnectCard from 'src/pages/ConnectCard/ConnectCard'
 import EditCourse from 'src/pages/EditCourse/EditCourse'
+import FiltersPage from 'src/pages/FiltersPage/FiltersPage'
 import LandingPage from 'src/pages/LandingPage/LandingPage'
 import RegistrationPage from 'src/pages/RegistrationPage/RegistrationPage'
 import SubscriptionPage from 'src/pages/SubscriptionPage/SubscriptionPage'
@@ -138,6 +139,7 @@ function App() {
 							<Route path={'profile'} element={<UserProfile />} />
 							<Route path={'send-feedback/:id'} element={<SendFeedback />} />
 							<Route path={'subscription'} element={<SubscriptionPage />} />
+							<Route path={'filters'} element={<FiltersPage />} />
 							<Route path={'edit-profile/:id'} element={<EditProfile />} />
 							<Route path={'edit-bio/:id'} element={<Bio />} />
 							<Route path={'edit-ecourse/:id'} element={<ECourse />} />
