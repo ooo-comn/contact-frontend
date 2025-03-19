@@ -16,6 +16,7 @@ import EditCourse from 'src/pages/EditCourse/EditCourse'
 import FiltersPage from 'src/pages/FiltersPage/FiltersPage'
 import LandingPage from 'src/pages/LandingPage/LandingPage'
 import RegistrationPage from 'src/pages/RegistrationPage/RegistrationPage'
+import SubjectsPage from 'src/pages/SubjectsPage/SubjectsPage'
 import SubscriptionPage from 'src/pages/SubscriptionPage/SubscriptionPage'
 import SellerProfile from 'src/pages/UserProfile/ui/SellerProfile'
 import Feed from '../pages/Feed/Feed'
@@ -164,6 +165,7 @@ function App() {
 							<Route path={'verificationN'} element={<VerificationN />} />
 							<Route path={'connect-walletN'} element={<ConnectWalletN />} />
 							<Route path={'legal'} element={<LegalPage />} />
+							<Route path={'subjects'} element={<SubjectsPage />} />
 							<Route
 								path={'verification-form'}
 								element={<VerificationForm />}

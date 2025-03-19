@@ -3,6 +3,17 @@ import styles from './FiltersPage.module.css'
 import FilterItem from './ui/FilterItem/FilterItem'
 
 const FiltersPage: FC = () => {
+	window.scrollTo(0, 0)
+
+	var BackButton = window.Telegram.WebApp.BackButton
+	BackButton.show()
+	BackButton.onClick(function () {
+		BackButton.hide()
+	})
+	window.Telegram.WebApp.onEvent('backButtonClicked', function () {
+		window.history.back()
+	})
+
 	const [workTypeFilters, setWorkTypeFilters] = useState<{
 		[key: string]: boolean
 	}>({})
@@ -37,11 +48,21 @@ const FiltersPage: FC = () => {
 		}
 	}
 
+	const handleReset = () => {
+		setWorkTypeFilters({})
+		setUniversityFilters({})
+		setSortFilters({})
+		setChecked(false)
+	}
+
 	return (
 		<div className={styles['filters-page']}>
 			<div className={styles['filters-page__header']}>
 				<h1 className={styles['filters-page__title']}>Фильтры</h1>
-				<button className={styles['filters-page__reset-button']}>
+				<button
+					className={styles['filters-page__reset-button']}
+					onClick={handleReset}
+				>
 					Сбросить
 				</button>
 			</div>

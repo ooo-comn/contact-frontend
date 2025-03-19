@@ -3,6 +3,7 @@
 	flex-direction: column;
 	align-items: center;
 	gap: 4.103vw;
+	padding-bottom: 14.615vw;
 }
 
 .filters-page__header {

@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import { Link } from 'react-router-dom'
 import StarFeedbackIcon from '../../../../shared/assets/course/StarFeedback.svg'
 import CheckIcon from '../../../../shared/assets/wallet/CheckIcon.svg'
 import LinkArrow from '../../../../shared/assets/wallet/LinkArrow.svg'
@@ -21,8 +22,9 @@ const FilterItem: FC<IFilterItem> = ({
 	isNotifyFAQ,
 	checked,
 	handleCheckboxChange,
+	path,
 }) => {
-	return (
+	const content = (
 		<div className={styles['filter-item']}>
 			{filterItemType === 'button' && (
 				<div className={styles['filter-item__button-content']}>
@@ -85,6 +87,8 @@ const FilterItem: FC<IFilterItem> = ({
 			)}
 		</div>
 	)
+
+	return path ? <Link to={path}>{content}</Link> : content
 }
 
 export default FilterItem

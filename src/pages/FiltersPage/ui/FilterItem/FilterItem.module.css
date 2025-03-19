@@ -1,5 +1,6 @@
 .filter-item {
 	display: flex;
+	position: relative;
 	height: 11.282vw;
 	padding: 2.564vw 2.051vw;
 	width: 91.795vw;
@@ -90,10 +91,10 @@
 	display: none;
 }
 
-.filter-item__checkbox-input-custom {
+.filter-item__checkbox-custom {
 	width: 4.103vw;
 	height: 4.103vw;
-	background-color: var(--background);
+	background-color: var(--mini-background);
 	border: 1px solid var(--second-text);
 	border-radius: 50%;
 	display: flex;
@@ -103,7 +104,7 @@
 	transition: all 0.3s ease;
 }
 
-.filter-item__checkbox-input-custom.filter-item__checkbox-custom--checked {
+.filter-item__checkbox-custom.filter-item__checkbox-custom--checked {
 	background-color: var(--active-color);
 	border-color: var(--active-color);
 }
