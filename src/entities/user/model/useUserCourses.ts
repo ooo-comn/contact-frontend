@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ICourse } from '../../../entities/course/model/types'
+import { ITelegramUser } from '../../../entities/course/model/types'
 import { API_BASE_URL } from '../../../shared/config/api'
-
-interface UserCoursesData {
-	bought_courses: ICourse[]
-}
 
 const useUserCoursesData = (
 	id: number,
 	navigate: ReturnType<typeof useNavigate>
 ): {
-	userCourses: ICourse[] | null
+	userCourses: ITelegramUser[] | null
 	isLoading: boolean
 	error: string | null
 } => {
-	const [userCourses, setUserCourses] = useState<ICourse[] | null>(null)
+	const [userCourses, setUserCourses] = useState<ITelegramUser[] | null>(null)
 	const [isLoading, setIsLoading] = useState(true)
 	const [error, setError] = useState<string | null>(null)
 
@@ -25,24 +21,26 @@ const useUserCoursesData = (
 			setError(null)
 
 			try {
-				const response = await fetch(`${API_BASE_URL}/users/`, {
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `tma ${window.Telegram.WebApp.initData}`,
-					},
-				})
+				const response = await fetch(
+					`${API_BASE_URL}/users/?telegram_id=${id}`,
+					{
+						method: 'GET',
+						headers: {
+							'Content-Type': 'application/json',
+							Authorization: `tma ${window.Telegram.WebApp.initData}`,
+						},
+					}
+				)
 
-				const result: UserCoursesData = await response.json()
+				const result: ITelegramUser[] = await response.json()
 
 				console.log('result', result)
 
-				if (response.status === 201) {
-					// Если сервер требует перенаправления на /landing
+				if (result.length === 0) {
 					sessionStorage.setItem('userCourses', JSON.stringify(result))
 					navigate('/landing')
 				} else {
-					setUserCourses(result.bought_courses)
+					setUserCourses(result)
 				}
 			} catch (error) {
 				console.error('Ошибка загрузки курсов:', error)
