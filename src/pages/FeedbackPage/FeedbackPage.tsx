@@ -47,7 +47,7 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
 		const fetchData = async () => {
 			try {
 				if (isFullCourses) {
-					const feedbackData = await fetchFeedbacks()
+					const feedbackData = await fetchFeedbacks(id || '')
 					setFeedbacks(feedbackData)
 				} else {
 					console.log(1)
