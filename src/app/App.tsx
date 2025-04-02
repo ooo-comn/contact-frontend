@@ -24,8 +24,6 @@ import SendFeedback from '../pages/Feedback/SendFeedback'
 import NavBar from '../pages/Navbar/Navbar'
 import Bio from '../pages/Profile/Bio'
 import ECourse from '../pages/Profile/ECourse'
-import Subj from '../pages/Profile/Subj'
-import Univ from '../pages/Profile/Univ'
 import Verification from '../pages/Profile/Verification'
 import ConnectPayments from '../pages/Wallet/ConnectPayments'
 import ReturnForm from '../pages/Wallet/ReturnForm'
@@ -144,8 +142,6 @@ function App() {
 							<Route path={'edit-profile/:id'} element={<EditProfile />} />
 							<Route path={'edit-bio/:id'} element={<Bio />} />
 							<Route path={'edit-ecourse/:id'} element={<ECourse />} />
-							<Route path={'edit-subj/:id'} element={<Subj />} />
-							<Route path={'edit-univ/:id'} element={<Univ />} />
 							<Route path={'edit-course/:cid'} element={<EditCourse />} />
 							<Route
 								path={'course-feedback/:id'}

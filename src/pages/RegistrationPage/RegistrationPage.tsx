@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { fetchUpdateUser } from 'src/entities/user/model/fetchUpdateUser'
 import handleBioChangeMinus from 'src/features/bio-change/handleBioChangeMinus'
 import { filterOptions } from 'src/features/filterOptions'
+import { fetchSubjects } from 'src/features/get-subjects/model/fetchWorkTypes'
+import { fetchUniversities } from 'src/features/get-universities/model/fetchUniversities'
 import MainButton from 'src/shared/components/MainButton/MainButton'
 import VerificationInput from 'src/shared/components/VerificationInput/VerificationInput'
 import Bell from '../../shared/assets/profile/Bell.svg'
@@ -15,12 +17,39 @@ import CloseImg from '../../shared/assets/wallet/CloseImg.svg'
 import { BASE_URL } from '../../shared/config/api'
 import InputWithVariants from '../EditProfile/ui/InputWithVariants/InputWithVariants'
 import LinksFAQ from '../EditProfile/ui/LinksFAQ/LinksFAQ'
-import { optionsSubject } from '../optionsSubject'
-import { optionsUniv } from '../optionsUniv'
 import styles from './RegistrationPage.module.css'
 
 const RegistrationPage: FC = () => {
 	const navigate = useNavigate()
+
+	const [optionsSubject, setOptionsSubject] = useState<string[]>([])
+	const [optionsUniv, setOptionsUniv] = useState<string[]>([])
+
+	useEffect(() => {
+		const loadSubjects = async () => {
+			try {
+				const subjects = await fetchSubjects()
+				setOptionsSubject(subjects)
+			} catch (error) {
+				console.log('Не удалось загрузить список предметов')
+			}
+		}
+
+		loadSubjects()
+	}, [])
+
+	useEffect(() => {
+		const loadUniversities = async () => {
+			try {
+				const universities = await fetchUniversities()
+				setOptionsUniv(universities)
+			} catch (error) {
+				console.log('Не удалось загрузить список предметов')
+			}
+		}
+
+		loadUniversities()
+	}, [])
 
 	const storedData = sessionStorage.getItem('userCourses')
 	console.log('storedData', storedData)

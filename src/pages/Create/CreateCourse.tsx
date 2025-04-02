@@ -1,24 +1,51 @@
 import { useTonAddress } from '@tonconnect/ui-react'
 import MainButton from '@twa-dev/mainbutton'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { fetchSubjects } from 'src/features/get-subjects/model/fetchWorkTypes'
+import { fetchUniversities } from 'src/features/get-universities/model/fetchUniversities'
 import { fetchCreateCourse } from '../../entities/course/model/fetchCreateCourse'
 import { deleteCourse } from '../../entities/course/model/fetchDeleteCourse'
 import handleBioChangeMinus from '../../features/bio-change/handleBioChangeMinus'
 import emptyHorizontalImage from '../../shared/assets/course/horizontalEmptyCourseImage.webp'
 import plus from '../../shared/assets/course/plus.svg'
 import krest from '../../shared/assets/create/ckrest.svg'
-import { optionsSubject } from '../optionsSubject'
-import { optionsUniv } from '../optionsUniv'
-import './CreateCourse.css'
-
 import { BASE_URL } from '../../shared/config/api'
+import './CreateCourse.css'
 
 function CreateCourse() {
 	const location = useLocation()
 	const data = location.state?.data || {}
 
+	const [optionsSubject, setOptionsSubject] = useState<string[]>([])
+	const [optionsUniv, setOptionsUniv] = useState<string[]>([])
+
 	const navigate = useNavigate()
+
+	useEffect(() => {
+		const loadSubjects = async () => {
+			try {
+				const subjects = await fetchSubjects()
+				setOptionsSubject(subjects)
+			} catch (error) {
+				console.log('Не удалось загрузить список предметов')
+			}
+		}
+
+		loadSubjects()
+	}, [])
+	useEffect(() => {
+		const loadUniversities = async () => {
+			try {
+				const universities = await fetchUniversities()
+				setOptionsUniv(universities)
+			} catch (error) {
+				console.log('Не удалось загрузить список предметов')
+			}
+		}
+
+		loadUniversities()
+	}, [])
 
 	const [formData, setFormData] = useState<{
 		Name: string

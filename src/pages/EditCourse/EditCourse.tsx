@@ -1,6 +1,8 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { publishCourse } from 'src/entities/course/model/fetchEditCourse'
+import { fetchSubjects } from 'src/features/get-subjects/model/fetchWorkTypes'
+import { fetchUniversities } from 'src/features/get-universities/model/fetchUniversities'
 import MainButton from 'src/shared/components/MainButton/MainButton'
 import ModalNotification from 'src/shared/components/ModalNotification/ModalNotification'
 import Camera from '../../shared/assets/feedback/Camera.svg'
@@ -9,8 +11,6 @@ import TrashEmpty from '../../shared/assets/profile/Trash_Empty.svg'
 import CloseImg from '../../shared/assets/wallet/CloseImg.svg'
 import { API_BASE_URL, BASE_URL } from '../../shared/config/api'
 import InputWithVariants from '../EditProfile/ui/InputWithVariants/InputWithVariants'
-import { optionsSubject } from '../optionsSubject'
-import { optionsUniv } from '../optionsUniv'
 import styles from './EditCourse.module.css'
 
 interface FormData {
@@ -28,6 +28,35 @@ interface FormData {
 const EditCourse: FC = () => {
 	const { cid } = useParams()
 	const navigate = useNavigate()
+
+	const [optionsSubject, setOptionsSubject] = useState<string[]>([])
+	const [optionsUniv, setOptionsUniv] = useState<string[]>([])
+
+	useEffect(() => {
+		const loadSubjects = async () => {
+			try {
+				const subjects = await fetchSubjects()
+				setOptionsSubject(subjects)
+			} catch (error) {
+				console.log('Не удалось загрузить список предметов')
+			}
+		}
+
+		loadSubjects()
+	}, [])
+
+	useEffect(() => {
+		const loadUniversities = async () => {
+			try {
+				const universities = await fetchUniversities()
+				setOptionsUniv(universities)
+			} catch (error) {
+				console.log('Не удалось загрузить список предметов')
+			}
+		}
+
+		loadUniversities()
+	}, [])
 
 	const [formData, setFormData] = useState<FormData>({
 		Name: '',

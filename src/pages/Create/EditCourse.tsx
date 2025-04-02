@@ -1,14 +1,14 @@
 import MainButton from '@twa-dev/mainbutton'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { fetchSubjects } from 'src/features/get-subjects/model/fetchWorkTypes'
+import { fetchUniversities } from 'src/features/get-universities/model/fetchUniversities'
 import { deleteCourse } from '../../entities/course/model/fetchDeleteCourse'
 import { publishCourse } from '../../entities/course/model/fetchEditCourse'
 import plus from '../../shared/assets/course/plus.svg'
 import emptyHorizontalImage from '../../shared/assets/course/squareEmptyCourseImage.webp'
 import krest from '../../shared/assets/create/ckrest.svg'
 import { API_BASE_URL } from '../../shared/config/api'
-import { optionsSubject } from '../optionsSubject'
-import { optionsUniv } from '../optionsUniv'
 import './EditCourse.css'
 
 import { BASE_URL } from '../../shared/config/api'
@@ -28,6 +28,35 @@ interface FormData {
 function EditCourse() {
 	const { cid } = useParams()
 	const navigate = useNavigate()
+
+	const [optionsSubject, setOptionsSubject] = useState<string[]>([])
+	const [optionsUniv, setOptionsUniv] = useState<string[]>([])
+
+	useEffect(() => {
+		const loadSubjects = async () => {
+			try {
+				const subjects = await fetchSubjects()
+				setOptionsSubject(subjects)
+			} catch (error) {
+				console.log('Не удалось загрузить список предметов')
+			}
+		}
+
+		loadSubjects()
+	}, [])
+
+	useEffect(() => {
+		const loadUniversities = async () => {
+			try {
+				const universities = await fetchUniversities()
+				setOptionsUniv(universities)
+			} catch (error) {
+				console.log('Не удалось загрузить список предметов')
+			}
+		}
+
+		loadUniversities()
+	}, [])
 
 	const [formData, setFormData] = useState<FormData>({
 		Name: '',

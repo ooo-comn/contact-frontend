@@ -1,6 +1,8 @@
 import MainButton from '@twa-dev/mainbutton'
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { fetchSubjects } from 'src/features/get-subjects/model/fetchWorkTypes'
+import { fetchUniversities } from 'src/features/get-universities/model/fetchUniversities'
 import { fetchUpdateUser } from '../../entities/user/model/fetchUpdateUser'
 import handleBioChangeMinus from '../../features/bio-change/handleBioChangeMinus'
 import { filterOptions } from '../../features/filterOptions'
@@ -8,14 +10,41 @@ import plus from '../../shared/assets/course/plus.svg'
 import lminus from '../../shared/assets/create-course/lminus.png'
 import toggle from '../../shared/assets/profile/toggle.svg'
 import { BASE_URL } from '../../shared/config/api'
-import { optionsSubject } from '../optionsSubject'
-import { optionsUniv } from '../optionsUniv'
 
 function Registration() {
 	const navigate = useNavigate()
 
 	const location = useLocation()
 	const { data } = location.state || {}
+
+	const [optionsSubject, setOptionsSubject] = useState<string[]>([])
+	const [optionsUniv, setOptionsUniv] = useState<string[]>([])
+
+	useEffect(() => {
+		const loadSubjects = async () => {
+			try {
+				const subjects = await fetchSubjects()
+				setOptionsSubject(subjects)
+			} catch (error) {
+				console.log('Не удалось загрузить список предметов')
+			}
+		}
+
+		loadSubjects()
+	}, [])
+
+	useEffect(() => {
+		const loadUniversities = async () => {
+			try {
+				const universities = await fetchUniversities()
+				setOptionsUniv(universities)
+			} catch (error) {
+				console.log('Не удалось загрузить список предметов')
+			}
+		}
+
+		loadUniversities()
+	}, [])
 
 	const [imageSrc, setImageSrc] = useState(data.photo_url)
 	const [isNotify, setIsNotify] = useState(true)

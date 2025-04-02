@@ -1,10 +1,10 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { calculateRating } from 'src/entities/course/lib/calculateRating'
-import { ICourse, IFeedback } from 'src/entities/course/model/types'
-import fetchCourses from 'src/entities/feedback/model/fetchCourses'
+import { IFeedback, ITelegramUser } from 'src/entities/course/model/types'
 import { fetchFeedbacks } from 'src/entities/feedback/model/fetchFeedback'
 import handlePublish from 'src/entities/feedback/model/handlePublish'
+import { fetchUser } from 'src/entities/user/model/fetchUser'
 import StarFeedbackIcon from 'src/shared/assets/course/StarFeedback.svg'
 import BottomSheet from 'src/shared/components/BottomSheet/BottomSheet'
 import MainButton from 'src/shared/components/MainButton/MainButton'
@@ -26,7 +26,7 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
 	const navigate = useNavigate()
 	const { id } = useParams()
 	const [feedbacks, setFeedbacks] = useState<IFeedback[]>([])
-	const [course, setCourse] = useState<ICourse>()
+	const [users, setUsers] = useState<ITelegramUser>()
 	const [isOpen, setIsOpen] = useState(false)
 	const [userRating, setUserRating] = useState(0)
 	const [revValue, setRevValue] = useState('')
@@ -47,13 +47,10 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
 		const fetchData = async () => {
 			try {
 				if (isFullCourses) {
-					const feedbackData = await fetchFeedbacks(id || '')
+					const feedbackData = await fetchFeedbacks()
 					setFeedbacks(feedbackData)
 				} else {
-					const courseData = await fetchCourses(id || 'defaultId')
-					setFeedbacks(courseData.feedback)
-					setCourse(courseData)
-					console.log('courseData.image', courseData.image)
+					console.log(1)
 				}
 			} catch (error) {
 				console.error('Error loading courses or feedbacks:', error)
@@ -63,7 +60,22 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
 		fetchData()
 	}, [id, isFullCourses])
 
-	console.log(feedbacks)
+	useEffect(() => {
+		const fetchUsers = async () => {
+			try {
+				if (isFullCourses) {
+					const userData = await fetchUser(id || '')
+					setUsers(userData)
+				} else {
+					console.log(1)
+				}
+			} catch (error) {
+				console.error('Error loading courses or feedbacks:', error)
+			}
+		}
+
+		fetchUsers()
+	}, [])
 
 	const averageRate = useMemo(() => {
 		return feedbacks.length > 0 ? calculateRating(feedbacks) : 0
@@ -176,31 +188,29 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
 								<div className={styles['feedback-page__modal-user']}>
 									<img
 										className={styles['feedback-page__modal-avatar']}
-										src={
-											`https://${BASE_URL}.ru${course?.user.photo_url}` || ''
-										}
+										src={`https://${BASE_URL}.ru${users?.photo_url}` || ''}
 										alt='Аватар пользователя'
 									/>
 									<h3 className={styles['feedback-page__modal-name']}>
-										{course?.user.first_name + ' ' + course?.user.last_name}
+										{users?.first_name + ' ' + users?.last_name}
 									</h3>
 								</div>
 								<div className={styles['feedback-page__modal-course']}>
 									<p className={styles['feedback-page__modal-course-name']}>
-										{course?.channel.name}
+										{users?.last_name}
 									</p>
 									<p
 										className={styles['feedback-page__modal-course-university']}
 									>
-										{course?.user.university}
+										{users?.university}
 									</p>
 								</div>
 							</div>
 
 							<div className={styles['feedback-page__modal-image']}>
-								{course?.channel.photo ? (
+								{users?.photo_url ? (
 									<img
-										src={`https://${BASE_URL}.ru${course?.channel.photo || ''}`}
+										src={`https://${BASE_URL}.ru${users?.photo_url || ''}`}
 										alt='Аватар курса'
 										className={styles['feedback-page__modal-image-img']}
 									/>

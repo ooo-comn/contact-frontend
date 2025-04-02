@@ -4,6 +4,8 @@ import { useUserCourses } from 'src/entities/course/model/useUserCourses'
 import { fetchUpdateUser } from 'src/entities/user/model/fetchUpdateUser'
 import handleBioChangeMinus from 'src/features/bio-change/handleBioChangeMinus'
 import { filterOptions } from 'src/features/filterOptions'
+import { fetchSubjects } from 'src/features/get-subjects/model/fetchWorkTypes'
+import { fetchUniversities } from 'src/features/get-universities/model/fetchUniversities'
 import { useUserProfile } from 'src/pages/UserProfile/model/useUserProfile'
 import MainButton from 'src/shared/components/MainButton/MainButton'
 import VerificationInput from 'src/shared/components/VerificationInput/VerificationInput'
@@ -15,14 +17,41 @@ import MarkedExist from '../../shared/assets/profile/MarkedExist.svg'
 import Warning from '../../shared/assets/profile/Warning.svg'
 import CloseImg from '../../shared/assets/wallet/CloseImg.svg'
 import { BASE_URL } from '../../shared/config/api'
-import { optionsSubject } from '../optionsSubject'
-import { optionsUniv } from '../optionsUniv'
 import styles from './EditProfile.module.css'
 import InputWithVariants from './ui/InputWithVariants/InputWithVariants'
 import LinksFAQ from './ui/LinksFAQ/LinksFAQ'
 
 const EditProfile: FC = () => {
 	const { userData, selectedOptionsProfile, uniValueProfile } = useUserProfile()
+
+	const [optionsSubject, setOptionsSubject] = useState<string[]>([])
+	const [optionsUniv, setOptionsUniv] = useState<string[]>([])
+
+	useEffect(() => {
+		const loadSubjects = async () => {
+			try {
+				const subjects = await fetchSubjects()
+				setOptionsSubject(subjects)
+			} catch (error) {
+				console.log('Не удалось загрузить список предметов')
+			}
+		}
+
+		loadSubjects()
+	}, [])
+
+	useEffect(() => {
+		const loadUniversities = async () => {
+			try {
+				const universities = await fetchUniversities()
+				setOptionsUniv(universities)
+			} catch (error) {
+				console.log('Не удалось загрузить список предметов')
+			}
+		}
+
+		loadUniversities()
+	}, [])
 
 	const userCourses = useUserCourses(window.Telegram.WebApp.initData)
 	console.log('selectedOptionsProfile', selectedOptionsProfile)

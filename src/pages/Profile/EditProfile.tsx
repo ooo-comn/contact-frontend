@@ -1,6 +1,8 @@
 import MainButton from '@twa-dev/mainbutton'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { fetchSubjects } from 'src/features/get-subjects/model/fetchWorkTypes'
+import { fetchUniversities } from 'src/features/get-universities/model/fetchUniversities'
 import { useUserCourses } from '../../entities/course/model/useUserCourses'
 import { fetchUpdateUser } from '../../entities/user/model/fetchUpdateUser'
 import handleBioChangeMinus from '../../features/bio-change/handleBioChangeMinus'
@@ -14,8 +16,6 @@ import chat from '../../shared/assets/profile/chat.webp'
 import magic from '../../shared/assets/profile/magic.webp'
 import sun from '../../shared/assets/profile/sun.webp'
 import { BASE_URL } from '../../shared/config/api'
-import { optionsSubject } from '../optionsSubject'
-import { optionsUniv } from '../optionsUniv'
 import './EditProfile.css'
 
 function EditProfile() {
@@ -30,6 +30,35 @@ function EditProfile() {
 	const [inputValueSubject, setInputValueSubject] = useState('')
 	const [boxIsVisibleUniv, setBoxIsVisibleUniv] = useState(false)
 	const [inputValueUniv, setInputValueUniv] = useState('')
+
+	const [optionsSubject, setOptionsSubject] = useState<string[]>([])
+	const [optionsUniv, setOptionsUniv] = useState<string[]>([])
+
+	useEffect(() => {
+		const loadSubjects = async () => {
+			try {
+				const subjects = await fetchSubjects()
+				setOptionsSubject(subjects)
+			} catch (error) {
+				console.log('Не удалось загрузить список предметов')
+			}
+		}
+
+		loadSubjects()
+	}, [])
+
+	useEffect(() => {
+		const loadUniversities = async () => {
+			try {
+				const universities = await fetchUniversities()
+				setOptionsUniv(universities)
+			} catch (error) {
+				console.log('Не удалось загрузить список предметов')
+			}
+		}
+
+		loadUniversities()
+	}, [])
 
 	const navigate = useNavigate()
 
