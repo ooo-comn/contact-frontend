@@ -1,14 +1,14 @@
 import { FC, useEffect, useState } from 'react'
 import styles from '../Feed.module.css'
 
-const filterOptions = ['Все курсы', 'Недавние', 'Купленные']
+const filterOptions = ['Все контакты', 'Недавние', 'Купленные']
 
 interface FeedFiltersProps {
 	onFilterChange: (filter: string) => void
 }
 
 const FeedFilters: FC<FeedFiltersProps> = ({ onFilterChange }) => {
-	const [activeFilter, setActiveFilter] = useState('Все курсы')
+	const [activeFilter, setActiveFilter] = useState('Все контакты')
 
 	const handleFilterClick = (filter: string) => {
 		if (activeFilter !== filter) {

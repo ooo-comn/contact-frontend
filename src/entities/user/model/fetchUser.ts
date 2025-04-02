@@ -1,7 +1,7 @@
 import { API_BASE_URL } from '../../../shared/config/api'
 
 export const fetchUser = async (id: string) => {
-	const response = await fetch(`${API_BASE_URL}/get-user/?id=${id}`, {
+	const response = await fetch(`${API_BASE_URL}/users/${id}`, {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',

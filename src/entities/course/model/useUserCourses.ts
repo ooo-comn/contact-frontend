@@ -12,8 +12,8 @@ export const useUserCourses = (
 	useEffect(() => {
 		const fetchUserData = async () => {
 			try {
-				const response = await fetch(`${API_BASE_URL}/user-data/`, {
-					method: 'POST',
+				const response = await fetch(`${API_BASE_URL}/users/`, {
+					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',
 						Authorization: `tma ${authToken}`,

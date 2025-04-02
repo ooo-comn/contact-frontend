@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, MouseEvent } from 'react'
 import { Link } from 'react-router-dom'
 import StarFeedbackIcon from '../../../../shared/assets/course/StarFeedback.svg'
 import CheckIcon from '../../../../shared/assets/wallet/CheckIcon.svg'
@@ -24,7 +24,12 @@ const FilterItem: FC<IFilterItem> = ({
 	handleCheckboxChange,
 	path,
 }) => {
-	const handleClick = () => {
+	const handleClick = (e: MouseEvent) => {
+		if (e.target instanceof HTMLInputElement) {
+			e.stopPropagation()
+			return
+		}
+
 		if (filterItemType === 'checkbox') {
 			isNotifyFAQ && isNotifyFAQ()
 		} else if (filterItemType === 'button') {
@@ -56,7 +61,7 @@ const FilterItem: FC<IFilterItem> = ({
 						type='checkbox'
 						id='toggle'
 						checked={checked}
-						readOnly
+						onChange={handleCheckboxChange}
 					/>
 					<label
 						className={styles['filter-item__toggle-label']}
@@ -68,7 +73,7 @@ const FilterItem: FC<IFilterItem> = ({
 					<input
 						type='checkbox'
 						checked={isNotify}
-						readOnly
+						onChange={isNotifyFAQ}
 						className={styles['filter-item__checkbox-input']}
 					/>
 					<span

@@ -17,7 +17,7 @@ const Feed = () => {
 	}
 
 	const navigate = useNavigate()
-	const [activeFilter, setActiveFilter] = useState('Все курсы')
+	const [activeFilter, setActiveFilter] = useState('Все контакты')
 
 	const userId = window.Telegram.WebApp.initDataUnsafe.user.id
 	const { userCourses } = useUserCoursesData(userId, navigate)
