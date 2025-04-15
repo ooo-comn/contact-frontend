@@ -218,6 +218,7 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
 												? `https://${BASE_URL}.ru${currentUser.photo_url}`
 												: ''
 										}
+										alt=''
 									/>
 									<h3 className={styles['feedback-page__modal-name']}>
 										{currentUser?.first_name || ''}{' '}
