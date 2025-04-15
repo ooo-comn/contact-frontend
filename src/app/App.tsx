@@ -18,7 +18,7 @@ import LandingPage from 'src/pages/LandingPage/LandingPage'
 import RegistrationPage from 'src/pages/RegistrationPage/RegistrationPage'
 import SubjectsPage from 'src/pages/SubjectsPage/SubjectsPage'
 import SubscriptionPage from 'src/pages/SubscriptionPage/SubscriptionPage'
-import SellerProfile from 'src/pages/UserProfile/ui/SellerProfile'
+// import SellerProfile from 'src/pages/UserProfile/ui/SellerProfile'
 import Feed from '../pages/Feed/Feed'
 import SendFeedback from '../pages/Feedback/SendFeedback'
 import NavBar from '../pages/Navbar/Navbar'
@@ -151,7 +151,7 @@ function App() {
 								path={'user-feedback/:id'}
 								element={<FeedbackPage isFullCourses={true} />}
 							/>
-							<Route path={'user/:id'} element={<SellerProfile />} />
+							{/* <Route path={'user/:id'} element={<SellerProfile />} /> */}
 							<Route path={'wallet'} element={<Wallet />} />
 							<Route path={'registration'} element={<RegistrationPage />} />
 							<Route path={'landing'} element={<LandingPage />} />
