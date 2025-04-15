@@ -1,10 +1,10 @@
 import { API_BASE_URL } from '../../../shared/config/api'
 
 import { useEffect, useState } from 'react'
-import { ICourse } from './types'
+import { IContact } from './types'
 
 export const useCourseData = (cid: string) => {
-	const [data, setData] = useState<ICourse | null>(null)
+	const [data, setData] = useState<IContact | null>(null)
 	const [isLoading, setIsLoading] = useState(true)
 	const [error, setError] = useState<string | null>(null)
 

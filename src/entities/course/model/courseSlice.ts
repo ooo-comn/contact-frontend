@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ICourse } from './types'
+import { IContact } from './types'
 
 interface CourseState {
-	data: ICourse | null
+	data: IContact | null
 }
 
 const initialState: CourseState = {
@@ -13,7 +13,7 @@ export const courseSlice = createSlice({
 	name: 'course',
 	initialState,
 	reducers: {
-		setCourseData: (state, action: PayloadAction<ICourse>) => {
+		setCourseData: (state, action: PayloadAction<IContact>) => {
 			state.data = action.payload
 		},
 	},

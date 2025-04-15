@@ -1,7 +1,7 @@
-import { ICourse } from '../../../entities/course/model/types'
+import { IContact } from '../../../entities/course/model/types'
 
 export interface IContactCard {
-	itemCard: ICourse
+	itemCard: IContact
 	userPhoto: string | null
 	amountOfSales?: number
 	userName: string | null

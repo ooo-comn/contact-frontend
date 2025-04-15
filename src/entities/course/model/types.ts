@@ -12,6 +12,16 @@ export interface ITopic {
 	desc: string
 }
 
+export interface IReview {
+	id: string
+	created_at: string
+	updated_at: string
+	author_id: number
+	contact_id: number
+	rating: number
+	comment: string
+}
+
 export interface ITelegramUser {
 	id: number
 	telegram_id: number
@@ -32,9 +42,9 @@ export interface ITelegramUser {
 export interface IContact {
 	id: number | null
 	user_id: number
-	subjects: string[]
-	work_types: string[]
-	date: any
+	subjects: String[]
+	work_types: String[]
+	customer_count: number
 }
 
 export interface IChannel {

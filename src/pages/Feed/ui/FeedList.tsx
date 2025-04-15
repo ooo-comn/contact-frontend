@@ -1,12 +1,12 @@
 import { lazy, Suspense } from 'react'
 import LoadingCard from 'src/shared/card/LoadingCard'
-import { ICourse } from '../../../entities/course/model/types'
+import { IContact } from '../../../entities/course/model/types'
 import styles from '../Feed.module.css'
 
 const CardList = lazy(() => import('../../../widgets/cardList/CardList'))
 
 interface FeedListProps {
-	filteredCourses: ICourse[]
+	filteredCourses: IContact[]
 	isPending: boolean
 }
 
@@ -30,7 +30,7 @@ const FeedList = ({ filteredCourses, isPending }: FeedListProps) => {
 					<LoadingCard />
 				</div>
 			) : (
-				<CardList courses={filteredCourses} />
+				<CardList contacts={filteredCourses} />
 			)}
 		</Suspense>
 	)

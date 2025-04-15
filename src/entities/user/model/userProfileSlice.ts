@@ -2,14 +2,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from 'src/app/providers/store'
 import {
-	ICourse,
+	IContact,
 	IFeedback,
 	ITelegramUser,
 } from 'src/entities/course/model/types'
 
 interface UserProfileState {
 	userData: ITelegramUser | null
-	coursesData: ICourse[]
+	coursesData: IContact[]
 	feedbacks: IFeedback[]
 	isNotify: boolean
 	selectedOptionsProfile: string[]

@@ -1,6 +1,6 @@
-import { ICourse } from '../model/types'
+import { IContact } from '../model/types'
 
-export const filterCourses = (filteredData: ICourse[]) => {
+export const filterCourses = (filteredData: IContact[]) => {
 	return filteredData.reduce((acc, obj) => {
 		if (obj.id === 79) {
 			acc.unshift(obj)
@@ -8,5 +8,5 @@ export const filterCourses = (filteredData: ICourse[]) => {
 			acc.push(obj)
 		}
 		return acc
-	}, [] as ICourse[])
+	}, [] as IContact[])
 }
