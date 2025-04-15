@@ -1,10 +1,10 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { calculateRating } from 'src/entities/course/lib/calculateRating'
-import { IFeedback, ITelegramUser } from 'src/entities/course/model/types'
+import { IReview, ITelegramUser } from 'src/entities/course/model/types'
 import { fetchFeedbacks } from 'src/entities/feedback/model/fetchFeedback'
 import handlePublish from 'src/entities/feedback/model/handlePublish'
-import { fetchUser } from 'src/entities/user/model/fetchUser'
+import { fetchUserById } from 'src/entities/user/model/fetchUserById'
 import StarFeedbackIcon from 'src/shared/assets/course/StarFeedback.svg'
 import BottomSheet from 'src/shared/components/BottomSheet/BottomSheet'
 import MainButton from 'src/shared/components/MainButton/MainButton'
@@ -25,12 +25,13 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
 
 	const navigate = useNavigate()
 	const { id } = useParams()
-	const [feedbacks, setFeedbacks] = useState<IFeedback[]>([])
-	const [users, setUsers] = useState<ITelegramUser>()
+	const [feedbacks, setFeedbacks] = useState<IReview[]>([])
+	const [users, setUsers] = useState<Record<number, ITelegramUser>>({})
 	const [isOpen, setIsOpen] = useState(false)
 	const [userRating, setUserRating] = useState(0)
 	const [revValue, setRevValue] = useState('')
 	const [modalFillOpen, setModalFillOpen] = useState(false)
+	const [currentUser, setCurrentUser] = useState<ITelegramUser | null>(null)
 
 	console.log('userRating', userRating)
 	var BackButton = window.Telegram.WebApp.BackButton
@@ -49,11 +50,24 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
 				if (isFullCourses) {
 					const feedbackData = await fetchFeedbacks(id || '')
 					setFeedbacks(feedbackData)
-				} else {
-					console.log(1)
+
+					const authorIds = feedbackData
+						.map(review => review.author_id)
+						.filter((id): id is number => typeof id === 'number')
+
+					const usersData = await Promise.all(
+						authorIds.map(authorId => fetchUserById(authorId))
+					)
+
+					const usersMap = usersData.reduce((acc, user) => {
+						acc[user.id] = user
+						return acc
+					}, {} as Record<number, ITelegramUser>)
+
+					setUsers(usersMap)
 				}
 			} catch (error) {
-				console.error('Error loading courses or feedbacks:', error)
+				console.error('Error loading data:', error)
 			}
 		}
 
@@ -61,20 +75,26 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
 	}, [id, isFullCourses])
 
 	useEffect(() => {
-		const fetchUsers = async () => {
-			try {
-				if (isFullCourses) {
-					const userData = await fetchUser(id || '')
-					setUsers(userData)
-				} else {
-					console.log(1)
-				}
-			} catch (error) {
-				console.error('Error loading courses or feedbacks:', error)
-			}
+		const tg = window.Telegram.WebApp
+		const user = tg.initDataUnsafe?.user
+		if (user) {
+			setCurrentUser({
+				id: user.id,
+				first_name: user.first_name,
+				last_name: user.last_name,
+				photo_url: user.photo_url,
+				balance: user.balance,
+				description: user.description,
+				is_active: user.is_active,
+				is_staff: user.is_staff,
+				notify: user.notify,
+				registrated: user.registrated,
+				telegram_id: user.telegram_id,
+				university: user.university,
+				username: user.username,
+				verified: user.verified,
+			})
 		}
-
-		fetchUsers()
 	}, [])
 
 	const averageRate = useMemo(() => {
@@ -135,12 +155,18 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
 				{feedbacks.length > 0 ? (
 					feedbacks.map((item, index) => (
 						<FeedbackCard
-							date={item.date}
-							path={`https://${BASE_URL}.ru${item.user.photo_url}` || ''}
-							text={item.review || ''}
-							university={item.user.university || ''}
-							username={item.user.first_name + ' ' + item.user.last_name}
-							rating={item.rate}
+							date={item.created_at}
+							path={
+								users[item.author_id]?.photo_url
+									? `https://${BASE_URL}.ru${users[item.author_id]?.photo_url}`
+									: ''
+							}
+							text={item.comment || ''}
+							university={users[item.author_id]?.university || ''}
+							username={`${users[item.author_id]?.first_name || ''} ${
+								users[item.author_id]?.last_name || ''
+							}`}
+							rating={item.rating}
 							key={index}
 						/>
 					))
@@ -187,30 +213,35 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
 							<div className={styles['feedback-page__modal-info']}>
 								<div className={styles['feedback-page__modal-user']}>
 									<img
-										className={styles['feedback-page__modal-avatar']}
-										src={`https://${BASE_URL}.ru${users?.photo_url}` || ''}
-										alt='Аватар пользователя'
+										src={
+											currentUser?.photo_url
+												? `https://${BASE_URL}.ru${currentUser.photo_url}`
+												: ''
+										}
 									/>
 									<h3 className={styles['feedback-page__modal-name']}>
-										{users?.first_name + ' ' + users?.last_name}
+										{currentUser?.first_name || ''}{' '}
+										{currentUser?.last_name || ''}
 									</h3>
 								</div>
 								<div className={styles['feedback-page__modal-course']}>
 									<p className={styles['feedback-page__modal-course-name']}>
-										{users?.last_name}
+										{currentUser?.last_name || 'Не указано'}
 									</p>
 									<p
 										className={styles['feedback-page__modal-course-university']}
 									>
-										{users?.university}
+										{currentUser?.university || 'Не указано'}
 									</p>
 								</div>
 							</div>
 
 							<div className={styles['feedback-page__modal-image']}>
-								{users?.photo_url ? (
+								{currentUser?.photo_url ? (
 									<img
-										src={`https://${BASE_URL}.ru${users?.photo_url || ''}`}
+										src={`https://${BASE_URL}.ru${
+											currentUser?.photo_url || ''
+										}`}
 										alt='Аватар курса'
 										className={styles['feedback-page__modal-image-img']}
 									/>
