@@ -1,16 +1,15 @@
-// src/features/userProfile/model/userProfileSlice.ts
 import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from 'src/app/providers/store'
 import {
 	IContact,
-	IFeedback,
+	IReview,
 	ITelegramUser,
 } from 'src/entities/course/model/types'
 
 interface UserProfileState {
 	userData: ITelegramUser | null
-	coursesData: IContact[]
-	feedbacks: IFeedback[]
+	coursesData: IContact | null
+	feedbacks: IReview[]
 	isNotify: boolean
 	selectedOptionsProfile: string[]
 	uniValueProfile: string
@@ -20,7 +19,7 @@ interface UserProfileState {
 
 const initialState: UserProfileState = {
 	userData: null,
-	coursesData: [],
+	coursesData: null,
 	feedbacks: [],
 	isNotify: true,
 	selectedOptionsProfile: [],

@@ -28,7 +28,7 @@ const UserProfile: FC = () => {
 
 	const [verifyed, setVerifyed] = useState<string | null>(null)
 
-	const { userData, coursesData, feedbacks } = useUserProfile()
+	const { userData, coursesData, feedbacks, contactData } = useUserProfile()
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -40,10 +40,7 @@ const UserProfile: FC = () => {
 		fetchData()
 	}, [id])
 
-	const totalStudents = coursesData.reduce(
-		(sum, course) => sum + course.amount_of_students,
-		0
-	)
+	const totalStudents = coursesData?.customer_count
 
 	const averageRate = feedbacks.length > 0 ? calculateRating(feedbacks) : 0
 
@@ -103,7 +100,7 @@ const UserProfile: FC = () => {
 					</>
 				)}
 
-				<Link to={`/edit-profile/${userData?.user_id}`}>
+				<Link to={`/edit-profile/${userData?.id}`}>
 					<button className={styles['user-profile__settings']}>
 						Настроить профиль
 					</button>
@@ -111,11 +108,11 @@ const UserProfile: FC = () => {
 			</header>
 
 			<section className={styles['user-profile__stats']}>
-				<Sales count={totalStudents} />
+				<Sales count={totalStudents || 0} />
 				<Feedback
 					averageRate={averageRate}
 					isCoursePage={false}
-					path={`/user-feedback/${userData?.user_id}`}
+					path={`/user-feedback/${userData?.id}`}
 					count={feedbacks.length}
 				/>
 			</section>
@@ -138,12 +135,16 @@ const UserProfile: FC = () => {
 					</p>
 				</div>
 				<div className={styles['user-profile__line']} />
+				// Измененные секции с subjects и work_types
 				<div className={styles['user-profile__section']}>
 					<h3 className={styles['user-profile__section-title']}>Предметы</h3>
 					<div className={styles['user-profile__wrapper-subjects']}>
-						{userData?.subjects?.length ? (
-							userData.subjects.map(option => (
-								<div key={option} className={styles['user-profile__subject']}>
+						{contactData?.subjects?.length ? (
+							contactData.subjects.map(option => (
+								<div
+									key={String(option)}
+									className={styles['user-profile__subject']}
+								>
 									{option}
 								</div>
 							))
@@ -158,15 +159,18 @@ const UserProfile: FC = () => {
 				<div className={styles['user-profile__section']}>
 					<h3 className={styles['user-profile__section-title']}>Типы работ</h3>
 					<div className={styles['user-profile__wrapper-subjects']}>
-						{userData?.subjects?.length ? (
-							userData.subjects.map(option => (
-								<div key={option} className={styles['user-profile__subject']}>
+						{contactData?.work_types?.length ? (
+							contactData.work_types.map(option => (
+								<div
+									key={String(option)}
+									className={styles['user-profile__subject']}
+								>
 									{option}
 								</div>
 							))
 						) : (
 							<p className={styles['user-profile__section-description']}>
-								Предметы не указаны
+								Типы работ не указаны
 							</p>
 						)}
 					</div>
