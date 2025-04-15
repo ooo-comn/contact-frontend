@@ -20,7 +20,7 @@ import SubjectsPage from 'src/pages/SubjectsPage/SubjectsPage'
 import SubscriptionPage from 'src/pages/SubscriptionPage/SubscriptionPage'
 // import SellerProfile from 'src/pages/UserProfile/ui/SellerProfile'
 import Feed from '../pages/Feed/Feed'
-import SendFeedback from '../pages/Feedback/SendFeedback'
+// import SendFeedback from '../pages/Feedback/SendFeedback'
 import NavBar from '../pages/Navbar/Navbar'
 import Bio from '../pages/Profile/Bio'
 import ECourse from '../pages/Profile/ECourse'
@@ -136,7 +136,7 @@ function App() {
 								}
 							/>
 							<Route path={'profile'} element={<UserProfile />} />
-							<Route path={'send-feedback/:id'} element={<SendFeedback />} />
+							{/* <Route path={'send-feedback/:id'} element={<SendFeedback />} /> */}
 							<Route path={'subscription'} element={<SubscriptionPage />} />
 							<Route path={'filters'} element={<FiltersPage />} />
 							<Route path={'edit-profile/:id'} element={<EditProfile />} />
