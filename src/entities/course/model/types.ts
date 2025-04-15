@@ -13,44 +13,28 @@ export interface ITopic {
 }
 
 export interface ITelegramUser {
-	user_id: number
-	username: string | null
-	first_name: string | null
-	last_name: string | null
-	university: string | null
-	description: string | null
-	subjects: string[]
-	feedback: IFeedback[]
+	id: number
+	telegram_id: number
+	username: string
+	first_name: string
+	last_name: string
+	university: string
+	description: string
 	notify: boolean
-	photo_url: string | null
-	created_courses: ICourse[]
-	bought_courses: ICourse[]
+	photo_url: string
 	registrated: boolean
-	verifyed: string
-	connected_payments: boolean
-	comn: number
-	balance: string
+	verified: string
+	balance: number
 	is_staff: boolean
 	is_active: boolean
 }
 
-export interface ICourse {
-	id: number
-	university: string | null
-	subject: string | null
-	description: string | null
-	topics: ITopic[]
-	feedback: IFeedback[]
-	date: string | null
-	user: ITelegramUser
-	price: number | null
-	channel: IChannel
-	amount_of_students: number
-	is_draft: boolean
-	on_moderation: boolean
-	ton_address: string | null
-	name: string
-	image: string
+export interface IContact {
+	id: number | null
+	user_id: number
+	subjects: string[]
+	work_types: string[]
+	date: any
 }
 
 export interface IChannel {
@@ -64,51 +48,37 @@ export interface IChannel {
 	connected_course: number | null
 }
 
-export interface ITransaction {
-	id: number
-	course: ICourse
-	buyer: number
-	seller: number
-	date: string
-	price: number
-	method: string | null
-	send: boolean
-	state: string | null
-	return_status: number
-	buyer_address: string | null
-	seller_address: string | null
-}
+// export interface ITransaction {
+// 	id: number
+// 	course: ICourse
+// 	buyer: number
+// 	seller: number
+// 	date: string
+// 	price: number
+// 	method: string | null
+// 	send: boolean
+// 	state: string | null
+// 	return_status: number
+// 	buyer_address: string | null
+// 	seller_address: string | null
+// }
 
-export interface IPassportData {
-	user: number
-	passport_scan: string
-	registration_scan: string
-	name: string
-	surname: string
-	second_name: string
-	birth_place: string
-	birth_date: string
-	passport_date: string
-	id_num: string
-	code: string
-	provided: string
-	registration_address: string
-	inn: string
-	phone: string
-	email: string
-	approved: boolean
-}
-
-export interface IReturnRequest {
-	transaction: number
-	reason: string
-	email: string
-	receipt: string
-	approved: boolean
-}
-
-export interface CourseRatingProps {
-	amountOfStudents: number
-	averageRate: number | null
-	count: number
-}
+// export interface IPassportData {
+// 	user: number
+// 	passport_scan: string
+// 	registration_scan: string
+// 	name: string
+// 	surname: string
+// 	second_name: string
+// 	birth_place: string
+// 	birth_date: string
+// 	passport_date: string
+// 	id_num: string
+// 	code: string
+// 	provided: string
+// 	registration_address: string
+// 	inn: string
+// 	phone: string
+// 	email: string
+// 	approved: boolean
+// }

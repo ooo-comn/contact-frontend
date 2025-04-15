@@ -3,11 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import useUserCoursesData from '../../entities/user/model/useUserCourses'
 import NavBar from '../../shared/components/NavBar/NavBar'
 import styles from './Feed.module.css'
-import { useFeed } from './model/useFeed'
 import FeedFilters from './ui/FeedFilters'
 import FeedHeader from './ui/FeedHeader'
-import FeedList from './ui/FeedList'
-import FeedSearch from './ui/FeedSearch'
 
 const Feed = () => {
 	var BackButton = window.Telegram.WebApp.BackButton
@@ -22,13 +19,13 @@ const Feed = () => {
 	const userId = window.Telegram.WebApp.initDataUnsafe.user.id
 	const { userCourses } = useUserCoursesData(userId, navigate)
 
-	const {
-		inputValue,
-		setInputValue,
-		filteredData,
-		isPending,
-		startTransition,
-	} = useFeed(activeFilter, userCourses)
+	// const {
+	// 	inputValue,
+	// 	setInputValue,
+	// 	filteredData,
+	// 	isPending,
+	// 	startTransition,
+	// } = useFeed(activeFilter, userCourses)
 
 	console.log('userCoursesFeed', userCourses)
 	console.log(activeFilter)
@@ -36,12 +33,12 @@ const Feed = () => {
 	return (
 		<div className={styles['feed']}>
 			<FeedHeader />
-			<FeedSearch
+			{/* <FeedSearch
 				inputValue={inputValue}
 				onChange={e => startTransition(() => setInputValue(e.target.value))}
-			/>
+			/> */}
 			<FeedFilters onFilterChange={setActiveFilter} />
-			<FeedList filteredCourses={filteredData} isPending={isPending} />
+			{/* <FeedList filteredCourses={filteredData} isPending={isPending} /> */}
 			<Link
 				to='/subscription'
 				className={styles['feed__link-create-subscription']}

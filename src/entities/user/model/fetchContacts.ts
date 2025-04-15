@@ -1,0 +1,23 @@
+import { IContact } from 'src/entities/course/model/types'
+import { API_BASE_URL } from '../../../shared/config/api'
+
+export const fetchContacts = async (): Promise<IContact[]> => {
+	try {
+		const response = await fetch(`${API_BASE_URL}/contacts/`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+
+		if (!response.ok) {
+			throw new Error(`Ошибка HTTP: ${response.status}`)
+		}
+
+		const data = await response.json()
+		return data
+	} catch (error) {
+		console.error('Ошибка при запросе к серверу:', error)
+		throw error
+	}
+}

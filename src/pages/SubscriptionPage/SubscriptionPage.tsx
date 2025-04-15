@@ -27,17 +27,17 @@ const SubscriptionPage: FC = () => {
 			<div className={styles['subscription-page__cards-container']}>
 				<SubscriptionCard
 					contactsCount='1 контакт'
-					price={activeButton === 'card' ? 59 : 550000}
+					price={activeButton === 'card' ? 29 : 20}
 					priceType={activeButton}
 				/>
 				<SubscriptionCard
 					contactsCount='5 контактов'
-					price={activeButton === 'card' ? 159 : 550000}
+					price={activeButton === 'card' ? 49 : 40}
 					priceType={activeButton}
 				/>
 				<SubscriptionCard
 					contactsCount='10 контактов'
-					price={activeButton === 'card' ? 259 : 550000}
+					price={activeButton === 'card' ? 99 : 60}
 					priceType={activeButton}
 				/>
 				<p className={styles['subscription-page__disclaimer']}>
