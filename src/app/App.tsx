@@ -27,9 +27,9 @@ import ECourse from '../pages/Profile/ECourse'
 import Verification from '../pages/Profile/Verification'
 import ConnectPayments from '../pages/Wallet/ConnectPayments'
 import ReturnForm from '../pages/Wallet/ReturnForm'
-import Transaction from '../pages/Wallet/Transaction'
+// import Transaction from '../pages/Wallet/Transaction'
 import VerificationN from '../pages/Wallet/VerificationN'
-import Wallet from '../pages/Wallet/Wallet'
+// import Wallet from '../pages/Wallet/Wallet'
 import useTheme from '../shared/hooks/useTheme'
 import './App.css'
 
@@ -152,10 +152,10 @@ function App() {
 								element={<FeedbackPage isFullCourses={true} />}
 							/>
 							{/* <Route path={'user/:id'} element={<SellerProfile />} /> */}
-							<Route path={'wallet'} element={<Wallet />} />
+							{/* <Route path={'wallet'} element={<Wallet />} /> */}
 							<Route path={'registration'} element={<RegistrationPage />} />
 							<Route path={'landing'} element={<LandingPage />} />
-							<Route path={'transaction/:tid'} element={<Transaction />} />
+							{/* <Route path={'transaction/:tid'} element={<Transaction />} /> */}
 							<Route path={'verification'} element={<Verification />} />
 							<Route path={'connect-wallet'} element={<ConnectWallet />} />
 							<Route path={'verificationN'} element={<VerificationN />} />
