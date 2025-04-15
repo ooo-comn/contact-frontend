@@ -1,10 +1,15 @@
 import { FC } from 'react'
 import BuyersIcon from '../../../shared/assets/course/Buyers.svg'
 import StarFeedbackIcon from '../../../shared/assets/course/StarFeedback.svg'
-import { CourseRatingProps } from '../model/types'
 import styles from './CourseRating.module.css'
 
-const CourseRating: FC<CourseRatingProps> = ({
+interface ICourseRating {
+	amountOfStudents: number
+	averageRate: number
+	count: number
+}
+
+const CourseRating: FC<ICourseRating> = ({
 	amountOfStudents,
 	averageRate,
 	count,
