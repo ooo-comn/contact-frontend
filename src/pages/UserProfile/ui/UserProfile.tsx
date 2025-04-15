@@ -135,7 +135,6 @@ const UserProfile: FC = () => {
 					</p>
 				</div>
 				<div className={styles['user-profile__line']} />
-				// Измененные секции с subjects и work_types
 				<div className={styles['user-profile__section']}>
 					<h3 className={styles['user-profile__section-title']}>Предметы</h3>
 					<div className={styles['user-profile__wrapper-subjects']}>
