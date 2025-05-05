@@ -163,12 +163,22 @@ const EditProfile: FC = () => {
   const filteredOptionsUniv = filterOptions(optionsUniv, inputValueUniv);
 
   const handleSave = async () => {
+    console.log("EditProfile handleSave:", {
+      selectedOptions,
+      workTypes: [], // Empty array since this page doesn't have work types selection
+      initData: window.Telegram.WebApp.initData ? "present" : "missing",
+      userId: userData?.id || 0,
+      userData,
+    });
+
     await fetchUpdateUser(
       selectedOptions,
       [],
       window.Telegram.WebApp.initData,
       userData?.id || 0
     );
+
+    console.log("EditProfile data sent successfully");
 
     navigate(`/profile`);
   };

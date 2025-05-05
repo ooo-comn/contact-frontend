@@ -187,12 +187,22 @@ const RegistrationPage: FC = () => {
   );
 
   const handleSave = async () => {
+    console.log("RegistrationPage handleSave:", {
+      selectedOptions,
+      selectedWorkTypes,
+      initData: window.Telegram.WebApp.initData ? "present" : "missing",
+      userId: data.id || 0,
+      userData: data,
+    });
+
     await fetchUpdateUser(
       selectedOptions,
       selectedWorkTypes,
       window.Telegram.WebApp.initData,
       data.id || 0
     );
+
+    console.log("selectedOptions send");
 
     navigate(`/`);
 
