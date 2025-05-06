@@ -1,2 +1,2 @@
-export const API_BASE_URL = 'https://icefcrew.ru'
-export const BASE_URL = 'icefcrew'
+export const API_BASE_URL = "https://comncontact.ru";
+export const BASE_URL = "comncontact";
