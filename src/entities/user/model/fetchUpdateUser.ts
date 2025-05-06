@@ -12,6 +12,12 @@ export const fetchUpdateUser = async (
     work_types: workTypes,
   };
 
+  const proxyBody = {
+    path: "/contacts/",
+    body: requestBody,
+    authorization: `tma ${initData}`,
+  };
+
   console.log("fetchUpdateUser request:", {
     endpoint: `${API_BASE_URL}/contacts/`,
     body: requestBody,
@@ -20,6 +26,8 @@ export const fetchUpdateUser = async (
     workTypes: workTypes,
   });
 
+  console.log("Proxy request body:", proxyBody);
+
   try {
     // Use proxy endpoint instead of direct API call
     const response = await fetch(PROXY_URL, {
@@ -27,19 +35,46 @@ export const fetchUpdateUser = async (
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        path: "/contacts/",
-        body: requestBody,
-        authorization: `tma ${initData}`,
-      }),
+      body: JSON.stringify(proxyBody),
     });
 
-    const responseData = await response.json().catch(() => null);
+    console.log(
+      "Response status:",
+      response.status,
+      "Status text:",
+      response.statusText
+    );
+    console.log(
+      "Response headers:",
+      Object.fromEntries([...response.headers.entries()])
+    );
+
+    // Try to get the response body as text first
+    const responseText = await response.text();
+    console.log("Raw response text:", responseText);
+
+    // Then try to parse it as JSON
+    let responseData = null;
+    try {
+      responseData = responseText ? JSON.parse(responseText) : null;
+    } catch (jsonError) {
+      console.error("Error parsing JSON:", jsonError);
+    }
+
     console.log("fetchUpdateUser response:", {
       status: response.status,
       ok: response.ok,
       data: responseData,
     });
+
+    // If we got a 500 error, something went wrong in the proxy or backend
+    if (!response.ok) {
+      throw new Error(
+        `Server error (${response.status}): ${
+          responseText || "No response body"
+        }`
+      );
+    }
 
     return responseData;
   } catch (error) {
