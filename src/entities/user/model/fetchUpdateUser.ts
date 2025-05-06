@@ -1,20 +1,49 @@
 import { API_BASE_URL, PROXY_URL } from "../../../shared/config/api";
 
+// Helper function to extract user ID from Telegram init data
+const extractTelegramId = (initData: string): number => {
+  if (initData === "present") {
+    return 1054927360; // Default telegram ID for testing when using 'present'
+  }
+
+  try {
+    // Parse URL-encoded parameters from the initData string
+    const params = new URLSearchParams(initData);
+    const userDataStr = params.get("user");
+
+    if (userDataStr) {
+      const userData = JSON.parse(decodeURIComponent(userDataStr));
+      if (userData && userData.id) {
+        return userData.id; // Return the Telegram user ID
+      }
+    }
+  } catch (error) {
+    console.error("Error extracting Telegram ID:", error);
+  }
+
+  // Default fallback
+  return 0;
+};
+
 export const fetchUpdateUser = async (
   selectedOptions: string[],
   workTypes: string[],
   initData: string,
   userId: number
 ) => {
+  // Extract the Telegram ID from the initData
+  const telegramId = extractTelegramId(initData);
+
+  console.log("Using Telegram ID:", telegramId, "instead of user ID:", userId);
+
   const requestBody = {
-    user_id: userId,
+    user_id: telegramId, // Use telegram ID here instead of userId
     subjects: selectedOptions,
     work_types: workTypes,
   };
 
-  // Format the authorization correctly
-  // If initData is 'present', we're in development mode
-  const authHeader = initData === "present" ? "tma present" : initData; // In production, just pass the raw initData as is
+  // Format the authorization correctly for the backend
+  const authHeader = initData === "present" ? "tma present" : initData; // In production, pass the raw initData
 
   const proxyBody = {
     path: "/contacts/",
@@ -25,7 +54,7 @@ export const fetchUpdateUser = async (
   console.log("fetchUpdateUser request:", {
     endpoint: `${API_BASE_URL}/contacts/`,
     body: requestBody,
-    userId: userId,
+    telegramId: telegramId,
     subjects: selectedOptions,
     workTypes: workTypes,
   });

@@ -1,5 +1,33 @@
 const fetch = require("node-fetch");
 
+// Helper function to extract Telegram data from init data
+const extractTelegramData = (initData) => {
+  try {
+    if (initData === "present") {
+      return {
+        id: 1054927360,
+        username: "KonstUd",
+      };
+    }
+
+    if (!initData || typeof initData !== "string") {
+      return null;
+    }
+
+    const params = new URLSearchParams(initData);
+    const userStr = params.get("user");
+
+    if (userStr) {
+      const userData = JSON.parse(decodeURIComponent(userStr));
+      return userData;
+    }
+  } catch (error) {
+    console.error("Error extracting Telegram data:", error);
+  }
+
+  return null;
+};
+
 exports.handler = async function (event, context) {
   // Add CORS headers to all responses
   const corsHeaders = {
@@ -38,28 +66,53 @@ exports.handler = async function (event, context) {
       "Content-Type": "application/json",
     };
 
-    // If authorization was passed, use it as X-Telegram-Init-Data header instead
-    // This may be more compatible with backend expectations
+    // Add Telegram data to the request for the backend
+    let telegramUser = null;
+
+    // If authorization was passed, extract Telegram data and use it
     if (authorization) {
-      if (authorization.startsWith("tma ")) {
-        // Extract the actual data part if it starts with 'tma '
-        headers["X-Telegram-Init-Data"] = authorization.substring(4);
+      // Extract init data content if prefixed with 'tma '
+      const initData = authorization.startsWith("tma ")
+        ? authorization.substring(4)
+        : authorization;
+
+      // Extract Telegram user data
+      telegramUser = extractTelegramData(initData);
+
+      if (telegramUser) {
+        console.log("Extracted Telegram user:", JSON.stringify(telegramUser));
+
+        // Add Telegram data to headers
+        headers["X-Telegram-Init-Data"] = initData;
+        headers["X-Telegram-User-ID"] = telegramUser.id;
+        if (telegramUser.username) {
+          headers["X-Telegram-Username"] = telegramUser.username;
+        }
       } else {
-        // Otherwise use as-is
-        headers["X-Telegram-Init-Data"] = authorization;
+        console.log("No Telegram user data extracted");
       }
-      console.log("Using Telegram header instead of Authorization");
+    }
+
+    // Create a copy of the body to modify if needed
+    const requestBody = { ...body };
+
+    // Ensure user_id is either from extracted telegram data or from original body
+    if (telegramUser && telegramUser.id && requestBody.user_id === 0) {
+      console.log(`Updating user_id from 0 to Telegram ID ${telegramUser.id}`);
+      requestBody.user_id = telegramUser.id;
+      requestBody.telegram_id = telegramUser.id; // Also include as telegram_id field
     }
 
     // Log some debugging info about the request
     console.log("Request headers:", JSON.stringify(headers));
-    console.log("Request body:", JSON.stringify(body));
+    console.log("Original body:", JSON.stringify(body));
+    console.log("Modified body:", JSON.stringify(requestBody));
 
     try {
       const response = await fetch(url, {
         method: "POST",
         headers: headers,
-        body: JSON.stringify(body),
+        body: JSON.stringify(requestBody),
       });
 
       console.log("Response status:", response.status);
