@@ -1,49 +1,21 @@
 import { API_BASE_URL, PROXY_URL } from "../../../shared/config/api";
 
-// Helper function to extract user ID from Telegram init data
-const extractTelegramId = (initData: string): number => {
-  if (initData === "present") {
-    return 1054927360; // Default telegram ID for testing when using 'present'
-  }
-
-  try {
-    // Parse URL-encoded parameters from the initData string
-    const params = new URLSearchParams(initData);
-    const userDataStr = params.get("user");
-
-    if (userDataStr) {
-      const userData = JSON.parse(decodeURIComponent(userDataStr));
-      if (userData && userData.id) {
-        return userData.id; // Return the Telegram user ID
-      }
-    }
-  } catch (error) {
-    console.error("Error extracting Telegram ID:", error);
-  }
-
-  // Default fallback
-  return 0;
-};
-
 export const fetchUpdateUser = async (
   selectedOptions: string[],
   workTypes: string[],
   initData: string,
   userId: number
 ) => {
-  // Extract the Telegram ID from the initData
-  const telegramId = extractTelegramId(initData);
-
-  console.log("Using Telegram ID:", telegramId, "instead of user ID:", userId);
-
+  // Просто передаем telegram_id, который был извлечен на клиенте
+  // Прокси будет делать запрос к API для получения настоящего user_id
   const requestBody = {
-    user_id: telegramId, // Use telegram ID here instead of userId
+    user_id: userId, // это поле заменит прокси на настоящий user_id
     subjects: selectedOptions,
     work_types: workTypes,
   };
 
-  // Format the authorization correctly for the backend
-  const authHeader = initData === "present" ? "tma present" : initData; // In production, pass the raw initData
+  // Формируем заголовок авторизации для серверной части
+  const authHeader = initData === "present" ? "tma present" : initData; // В продакшене передаем initData как есть
 
   const proxyBody = {
     path: "/contacts/",
@@ -54,7 +26,6 @@ export const fetchUpdateUser = async (
   console.log("fetchUpdateUser request:", {
     endpoint: `${API_BASE_URL}/contacts/`,
     body: requestBody,
-    telegramId: telegramId,
     subjects: selectedOptions,
     workTypes: workTypes,
   });
@@ -62,7 +33,7 @@ export const fetchUpdateUser = async (
   console.log("Proxy request body:", proxyBody);
 
   try {
-    // Use proxy endpoint instead of direct API call
+    // Используем прокси-эндпоинт вместо прямого вызова API
     const response = await fetch(PROXY_URL, {
       method: "POST",
       headers: {
@@ -78,20 +49,20 @@ export const fetchUpdateUser = async (
       response.statusText
     );
 
-    // Create a properly typed header object
+    // Создаем типизированный объект для заголовков
     const responseHeaders: Record<string, string> = {};
     response.headers.forEach((value, key) => {
       responseHeaders[key] = value;
     });
     console.log("Response headers:", responseHeaders);
 
-    // Get the raw text first for debugging
+    // Получаем сначала текст ответа для отладки
     const responseText = await response.text();
     console.log("Raw response text:", responseText);
 
     let responseData;
     try {
-      // Try to parse as JSON if possible
+      // Пытаемся распарсить как JSON если возможно
       responseData = responseText ? JSON.parse(responseText) : null;
     } catch (e) {
       console.error("Error parsing response JSON:", e);

@@ -28,6 +28,57 @@ const extractTelegramData = (initData) => {
   return null;
 };
 
+// Function to get user ID from telegram ID
+const getUserIdByTelegramId = async (telegramId, apiBaseUrl) => {
+  try {
+    // Make request to /users/ endpoint with telegram_id parameter
+    const getUserUrl = `${apiBaseUrl}/users/?telegram_id=${telegramId}`;
+    console.log(`Fetching user data from: ${getUserUrl}`);
+
+    const response = await fetch(getUserUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+      const userData = await response.json();
+      console.log("User data response:", JSON.stringify(userData));
+
+      // API might return an array of users - we need the first one with matching telegram_id
+      if (Array.isArray(userData) && userData.length > 0) {
+        const matchingUser = userData.find(
+          (user) => user.telegram_id === telegramId.toString()
+        );
+        if (matchingUser) {
+          console.log(
+            `Found user with ID ${matchingUser.id} for Telegram ID ${telegramId}`
+          );
+          return matchingUser.id;
+        }
+
+        // If no exact match but we have results, take the first one
+        if (userData[0] && userData[0].id) {
+          console.log(
+            `Using first user with ID ${userData[0].id} for Telegram ID ${telegramId}`
+          );
+          return userData[0].id;
+        }
+      }
+    } else {
+      console.error(`Error getting user data: ${response.status}`);
+      const errorText = await response.text();
+      console.error(`Error response: ${errorText}`);
+    }
+  } catch (error) {
+    console.error(`Error fetching user data: ${error.message}`);
+  }
+
+  // Return null if we can't get the user ID
+  return null;
+};
+
 exports.handler = async function (event, context) {
   // Add CORS headers to all responses
   const corsHeaders = {
@@ -58,7 +109,8 @@ exports.handler = async function (event, context) {
   try {
     const { path, body, authorization } = JSON.parse(event.body);
 
-    const url = `https://comncontact.ru${path}`;
+    const apiBaseUrl = "https://comncontact.ru";
+    const url = `${apiBaseUrl}${path}`;
     console.log("Proxy request to:", url);
 
     // Create headers for the proxied request
@@ -93,14 +145,24 @@ exports.handler = async function (event, context) {
       }
     }
 
-    // Create a copy of the body to modify if needed
+    // Create a copy of the body to modify
     const requestBody = { ...body };
 
-    // Ensure user_id is either from extracted telegram data or from original body
-    if (telegramUser && telegramUser.id && requestBody.user_id === 0) {
-      console.log(`Updating user_id from 0 to Telegram ID ${telegramUser.id}`);
-      requestBody.user_id = telegramUser.id;
-      requestBody.telegram_id = telegramUser.id; // Also include as telegram_id field
+    // If we have a Telegram ID and we're working with contacts endpoint,
+    // try to get the user ID from the API
+    if (telegramUser && telegramUser.id && path === "/contacts/") {
+      const userId = await getUserIdByTelegramId(telegramUser.id, apiBaseUrl);
+
+      if (userId) {
+        console.log(
+          `Found user ID ${userId} for Telegram ID ${telegramUser.id}`
+        );
+        requestBody.user_id = userId;
+      } else {
+        console.log(
+          `No user ID found for Telegram ID ${telegramUser.id}, keeping original user_id: ${requestBody.user_id}`
+        );
+      }
     }
 
     // Log some debugging info about the request
