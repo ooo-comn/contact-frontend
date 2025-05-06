@@ -67,6 +67,7 @@
 		"@types/css-modules": "^1.0.5",
 		"@types/react": "^18.3.18",
 		"@types/react-dom": "^18.3.5",
+		"node-fetch": "^2.7.0",
 		"typescript": "^4.9.5",
 		"vite-plugin-node-polyfills": "^0.22.0",
 		"vite-plugin-node-stdlib-browser": "^0.2.1",
