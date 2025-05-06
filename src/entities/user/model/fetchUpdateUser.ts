@@ -12,10 +12,14 @@ export const fetchUpdateUser = async (
     work_types: workTypes,
   };
 
+  // Format the authorization correctly
+  // If initData is 'present', we're in development mode
+  const authHeader = initData === "present" ? "tma present" : initData; // In production, just pass the raw initData as is
+
   const proxyBody = {
     path: "/contacts/",
     body: requestBody,
-    authorization: `tma ${initData}`,
+    authorization: authHeader,
   };
 
   console.log("fetchUpdateUser request:", {
@@ -44,39 +48,54 @@ export const fetchUpdateUser = async (
       "Status text:",
       response.statusText
     );
-    console.log(
-      "Response headers:",
-      Object.fromEntries([...response.headers.entries()])
-    );
 
-    // Try to get the response body as text first
+    // Create a properly typed header object
+    const responseHeaders: Record<string, string> = {};
+    response.headers.forEach((value, key) => {
+      responseHeaders[key] = value;
+    });
+    console.log("Response headers:", responseHeaders);
+
+    // Get the raw text first for debugging
     const responseText = await response.text();
     console.log("Raw response text:", responseText);
 
-    // Then try to parse it as JSON
-    let responseData = null;
+    let responseData;
     try {
+      // Try to parse as JSON if possible
       responseData = responseText ? JSON.parse(responseText) : null;
-    } catch (jsonError) {
-      console.error("Error parsing JSON:", jsonError);
+    } catch (e) {
+      console.error("Error parsing response JSON:", e);
+      responseData = {
+        error: "Failed to parse JSON response",
+        rawResponse: responseText,
+      };
     }
 
-    console.log("fetchUpdateUser response:", {
+    const result = {
       status: response.status,
       ok: response.ok,
       data: responseData,
-    });
+    };
 
-    // If we got a 500 error, something went wrong in the proxy or backend
+    console.log("fetchUpdateUser response:", result);
+
     if (!response.ok) {
+      let errorMessage = "Server error";
+      if (responseData && responseData.error) {
+        errorMessage = `${errorMessage}: ${responseData.error}`;
+      }
+      if (responseData && responseData.details) {
+        errorMessage = `${errorMessage} - ${responseData.details}`;
+      }
+
+      console.error("fetchUpdateUser error:", new Error(errorMessage));
       throw new Error(
-        `Server error (${response.status}): ${
-          responseText || "No response body"
-        }`
+        `Server error (${response.status}): ${JSON.stringify(responseData)}`
       );
     }
 
-    return responseData;
+    return result;
   } catch (error) {
     console.error("fetchUpdateUser error:", error);
     throw error;

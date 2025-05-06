@@ -4,7 +4,8 @@ exports.handler = async function (event, context) {
   // Add CORS headers to all responses
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Allow-Headers":
+      "Content-Type, Authorization, X-Telegram-Init-Data",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   };
 
@@ -31,78 +32,104 @@ exports.handler = async function (event, context) {
 
     const url = `https://comncontact.ru${path}`;
     console.log("Proxy request to:", url);
-    console.log("Request body:", body);
-
-    // Handle Telegram Mini App authorization format
-    // The format is: "tma <initData>"
-    console.log(
-      "Authorization header received:",
-      authorization ? "Present" : "Missing"
-    );
 
     // Create headers for the proxied request
     const headers = {
       "Content-Type": "application/json",
     };
 
-    // If authorization was passed, forward it exactly as is
+    // If authorization was passed, use it as X-Telegram-Init-Data header instead
+    // This may be more compatible with backend expectations
     if (authorization) {
-      headers["Authorization"] = authorization;
+      if (authorization.startsWith("tma ")) {
+        // Extract the actual data part if it starts with 'tma '
+        headers["X-Telegram-Init-Data"] = authorization.substring(4);
+      } else {
+        // Otherwise use as-is
+        headers["X-Telegram-Init-Data"] = authorization;
+      }
+      console.log("Using Telegram header instead of Authorization");
     }
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: headers,
-      body: JSON.stringify(body),
-    });
+    // Log some debugging info about the request
+    console.log("Request headers:", JSON.stringify(headers));
+    console.log("Request body:", JSON.stringify(body));
 
-    console.log("Response status:", response.status);
-
-    // Parse response body
-    let data;
     try {
-      const text = await response.text();
-      console.log("Raw response text:", text);
+      const response = await fetch(url, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(body),
+      });
 
-      try {
-        data = text ? JSON.parse(text) : null;
-        console.log("Parsed response data:", data);
-      } catch (jsonError) {
-        console.error("JSON parsing error:", jsonError);
+      console.log("Response status:", response.status);
+
+      // Check if we got a successful response
+      if (response.status >= 200 && response.status < 300) {
+        // Try to get response as text first
+        const text = await response.text();
+        console.log("Raw response text length:", text.length);
+
+        let data;
+        if (text.trim()) {
+          try {
+            data = JSON.parse(text);
+          } catch (jsonError) {
+            console.error("JSON parsing error:", jsonError.message);
+            // Return the raw text if we can't parse JSON
+            return {
+              statusCode: 200,
+              headers: corsHeaders,
+              body: JSON.stringify({
+                rawResponse: text,
+                parseError: jsonError.message,
+              }),
+            };
+          }
+        } else {
+          // Empty response
+          data = { message: "Empty response from server" };
+        }
+
+        // Return the successfully parsed data
+        return {
+          statusCode: response.status,
+          headers: corsHeaders,
+          body: JSON.stringify(data),
+        };
+      } else {
+        // Error response from the target API
+        const errorText = await response.text();
+        console.log("Error response text:", errorText);
+
         return {
           statusCode: response.status,
           headers: corsHeaders,
           body: JSON.stringify({
-            error: "Failed to parse JSON response",
-            rawResponse: text,
+            error: `API returned ${response.status}`,
+            details: errorText,
           }),
         };
       }
-    } catch (textError) {
-      console.error("Text reading error:", textError);
+    } catch (fetchError) {
+      console.error("Fetch error:", fetchError.message);
       return {
-        statusCode: response.status,
+        statusCode: 500,
         headers: corsHeaders,
         body: JSON.stringify({
-          error: "Failed to read response text",
-          message: textError.message,
+          error: "Failed to communicate with API server",
+          message: fetchError.message,
         }),
       };
     }
-
-    return {
-      statusCode: response.status,
-      headers: corsHeaders,
-      body: JSON.stringify(data),
-    };
   } catch (error) {
-    console.error("Proxy error:", error);
+    console.error("Proxy error:", error.message);
     return {
       statusCode: 500,
       headers: corsHeaders,
       body: JSON.stringify({
-        error: error.message,
-        stack: error.stack,
+        error: "Internal proxy error",
+        message: error.message,
       }),
     };
   }
