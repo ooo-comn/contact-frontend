@@ -1,20 +1,24 @@
 import { API_BASE_URL } from "../../../shared/config/api";
 
-// Простая конфигурация для CORS прокси
-const CORS_PROXY = "https://corsproxy.io/?";
-
 // Функция для получения user_id по telegram_id через прокси
 const getUserIdByTelegramId = async (
   telegramId: number
 ): Promise<number | null> => {
   try {
     // Запрос через прокси
-    const proxyUrl = `${CORS_PROXY}${encodeURIComponent(
-      `${API_BASE_URL}/users/?telegram_id=${telegramId}`
-    )}`;
-    console.log(`Fetching user data from: ${proxyUrl}`);
+    const proxyUrl = `/api/proxy`;
+    console.log(`Fetching user data through proxy`);
 
-    const response = await fetch(proxyUrl);
+    const response = await fetch(proxyUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        path: `/users/?telegram_id=${telegramId}`,
+        method: "GET",
+      }),
+    });
 
     if (response.ok) {
       const userData = await response.json();
@@ -39,7 +43,6 @@ const getUserIdByTelegramId = async (
   }
 
   // Хардкод ID для нашего пользователя, если запрос не сработал
-  // (на основе скриншота, который вы предоставили)
   console.log("Using hardcoded user ID 2 as fallback");
   return 2;
 };
@@ -94,18 +97,21 @@ export const fetchUpdateUser = async (
     console.log("Request payload:", requestBody);
 
     try {
-      // Делаем запрос через CORS прокси
-      const proxyUrl = `${CORS_PROXY}${encodeURIComponent(
-        `${API_BASE_URL}/contacts/`
-      )}`;
-      console.log(`Sending POST to: ${proxyUrl}`);
+      // Делаем запрос через Netlify Functions proxy
+      const proxyUrl = `/api/proxy`;
+      console.log(`Sending POST through proxy`);
 
       const response = await fetch(proxyUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `tma ${initData}`,
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({
+          path: "/contacts/",
+          method: "POST",
+          body: requestBody,
+        }),
       });
 
       console.log("Response status:", response.status);
