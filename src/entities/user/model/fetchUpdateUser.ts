@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../../../shared/config/api";
+// import { API_BASE_URL } from "../../../shared/config/api";
 
 // Функция для получения user_id по telegram_id через прокси
 const getUserIdByTelegramId = async (
