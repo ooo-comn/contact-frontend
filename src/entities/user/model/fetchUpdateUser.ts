@@ -1,24 +1,21 @@
-// import { API_BASE_URL } from "../../../shared/config/api";
+import { API_BASE_URL } from "../../../shared/config/api";
 
-// Функция для получения user_id по telegram_id через прокси
+// Функция для получения user_id по telegram_id напрямую
 const getUserIdByTelegramId = async (
   telegramId: number
 ): Promise<number | null> => {
   try {
-    // Запрос через прокси
-    const proxyUrl = `/api/proxy`;
-    console.log(`Fetching user data through proxy`);
+    console.log(`Fetching user data directly`);
 
-    const response = await fetch(proxyUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        path: `/users/?telegram_id=${telegramId}`,
+    const response = await fetch(
+      `${API_BASE_URL}/users/?telegram_id=${telegramId}`,
+      {
         method: "GET",
-      }),
-    });
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (response.ok) {
       const userData = await response.json();
@@ -97,21 +94,16 @@ export const fetchUpdateUser = async (
     console.log("Request payload:", requestBody);
 
     try {
-      // Делаем запрос через Netlify Functions proxy
-      const proxyUrl = `/api/proxy`;
-      console.log(`Sending POST through proxy`);
+      // Делаем прямой запрос на API
+      console.log(`Sending POST to: ${API_BASE_URL}/contacts/`);
 
-      const response = await fetch(proxyUrl, {
+      const response = await fetch(`${API_BASE_URL}/contacts/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `tma ${initData}`,
         },
-        body: JSON.stringify({
-          path: "/contacts/",
-          method: "POST",
-          body: requestBody,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       console.log("Response status:", response.status);
