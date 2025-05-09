@@ -22,6 +22,8 @@ const Feed = () => {
   const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
   const { userContacts } = useUserContactsData(userId, navigate);
 
+  console.log("userContactsFeed", userContacts);
+
   const {
     inputValue,
     setInputValue,
