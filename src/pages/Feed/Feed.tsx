@@ -23,6 +23,7 @@ const Feed = () => {
   const { userContacts } = useUserContactsData(userId, navigate);
 
   console.log("userContactsFeed", userContacts);
+  console.log("Active filter:", activeFilter);
 
   const {
     inputValue,
@@ -32,8 +33,11 @@ const Feed = () => {
     startTransition,
   } = useFeed(activeFilter, userContacts);
 
-  console.log("userCoursesFeed", userContacts);
-  console.log(activeFilter);
+  console.log(
+    "Filtered contacts:",
+    filteredData ? filteredData.length : 0,
+    "contacts found"
+  );
 
   return (
     <div className={styles["feed"]}>

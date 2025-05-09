@@ -15,21 +15,33 @@ export const useFeed = (
   const [inputValue, setInputValue] = useState("");
   const [isPending, startTransition] = useTransition();
   const [contactsData, setContactsData] = useState<IContact[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getFilteredContacts = useCallback(async () => {
     try {
-      let params = {};
+      setIsLoading(true);
+      let params: {
+        latest?: boolean;
+        purchased?: boolean;
+        favorites?: boolean;
+      } = {};
 
       if (activeFilter === "Недавние") {
         params = { latest: true };
       } else if (activeFilter === "Купленные") {
         params = { purchased: true };
+      } else if (activeFilter === "Все контакты") {
+        params = { favorites: true };
       }
 
+      console.log("Fetching contacts with params:", params);
       const contacts = await fetchContacts(params);
+      console.log("Fetched contacts:", contacts);
       setContactsData(contacts);
     } catch (error) {
       console.error("Error fetching filtered contacts:", error);
+    } finally {
+      setIsLoading(false);
     }
   }, [activeFilter]);
 
@@ -38,7 +50,7 @@ export const useFeed = (
   }, [getFilteredContacts]);
 
   const filteredData = useMemo(() => {
-    if (!contactsData) return [];
+    if (!contactsData || contactsData.length === 0) return [];
 
     return contactsData.filter((contact) => {
       // If there's search input, filter by name or other fields
@@ -63,7 +75,7 @@ export const useFeed = (
     inputValue,
     setInputValue,
     filteredData,
-    isPending,
+    isPending: isPending || isLoading,
     startTransition,
   };
 };
