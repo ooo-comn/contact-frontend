@@ -4,7 +4,10 @@ import NavBar from "../../shared/components/NavBar/NavBar";
 import styles from "./Feed.module.css";
 import FeedFilters from "./ui/FeedFilters";
 import FeedHeader from "./ui/FeedHeader";
+import FeedList from "./ui/FeedList";
+import FeedSearch from "./ui/FeedSearch";
 import useUserContactsData from "src/entities/user/model/useUserContacts";
+import { useFeed } from "src/hooks/useFeed";
 
 const Feed = () => {
   var BackButton = window.Telegram.WebApp.BackButton;
@@ -19,13 +22,13 @@ const Feed = () => {
   const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
   const { userContacts } = useUserContactsData(userId, navigate);
 
-  // const {
-  // 	inputValue,
-  // 	setInputValue,
-  // 	filteredData,
-  // 	isPending,
-  // 	startTransition,
-  // } = useFeed(activeFilter, userCourses)
+  const {
+    inputValue,
+    setInputValue,
+    filteredData,
+    isPending,
+    startTransition,
+  } = useFeed(activeFilter, userContacts);
 
   console.log("userCoursesFeed", userContacts);
   console.log(activeFilter);
@@ -33,12 +36,12 @@ const Feed = () => {
   return (
     <div className={styles["feed"]}>
       <FeedHeader />
-      {/* <FeedSearch
-				inputValue={inputValue}
-				onChange={e => startTransition(() => setInputValue(e.target.value))}
-			/> */}
+      <FeedSearch
+        inputValue={inputValue}
+        onChange={(e) => startTransition(() => setInputValue(e.target.value))}
+      />
       <FeedFilters onFilterChange={setActiveFilter} />
-      {/* <FeedList filteredCourses={filteredData} isPending={isPending} /> */}
+      <FeedList filteredCourses={filteredData} isPending={isPending} />
       <Link
         to="/subscription"
         className={styles["feed__link-create-subscription"]}
