@@ -179,3 +179,26 @@
   line-height: normal;
   margin: 0;
 }
+
+.feed__error {
+  display: flex;
+  width: 91.795vw;
+  padding: 5vw 0;
+  justify-content: center;
+  align-items: center;
+  background: var(--mini-background);
+  border-radius: 1.538vw;
+  margin-top: 2vw;
+}
+
+.feed__error p {
+  color: #ff5757;
+  font-family: "Geologica";
+  font-size: 3.59vw;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0;
+  text-align: center;
+  padding: 0 5vw;
+}

@@ -44,19 +44,29 @@ export const fetchContacts = async (
       }
     }
 
+    // Получаем токен авторизации
+    const initData = window.Telegram.WebApp.initData;
+    console.log("Sending request to:", url);
+    console.log(
+      "Using authorization token:",
+      `tma ${initData.substring(0, 20)}...`
+    );
+
     const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `tma ${window.Telegram.WebApp.initData}`,
+        Authorization: `tma ${initData}`,
       },
     });
 
     if (!response.ok) {
+      console.error("Response not OK:", response.status, response.statusText);
       throw new Error(`Ошибка HTTP: ${response.status}`);
     }
 
     const data = await response.json();
+    console.log("Successfully fetched contacts:", data.length);
     return data;
   } catch (error) {
     console.error("Ошибка при запросе к серверу:", error);

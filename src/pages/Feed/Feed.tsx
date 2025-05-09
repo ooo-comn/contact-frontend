@@ -31,6 +31,7 @@ const Feed = () => {
     filteredData,
     isPending,
     startTransition,
+    error,
   } = useFeed(activeFilter, userContacts);
 
   console.log(
@@ -38,6 +39,9 @@ const Feed = () => {
     filteredData ? filteredData.length : 0,
     "contacts found"
   );
+  if (error) {
+    console.error("Feed error:", error);
+  }
 
   return (
     <div className={styles["feed"]}>
@@ -47,7 +51,13 @@ const Feed = () => {
         onChange={(e) => startTransition(() => setInputValue(e.target.value))}
       />
       <FeedFilters onFilterChange={setActiveFilter} />
-      <FeedList filteredCourses={filteredData} isPending={isPending} />
+      {error ? (
+        <div className={styles["feed__error"]}>
+          <p>Ошибка при загрузке контактов. Пожалуйста, попробуйте позже.</p>
+        </div>
+      ) : (
+        <FeedList filteredCourses={filteredData} isPending={isPending} />
+      )}
       <Link
         to="/subscription"
         className={styles["feed__link-create-subscription"]}

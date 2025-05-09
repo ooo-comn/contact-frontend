@@ -16,22 +16,28 @@ export const useFeed = (
   const [isPending, startTransition] = useTransition();
   const [contactsData, setContactsData] = useState<IContact[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const getFilteredContacts = useCallback(async () => {
     try {
       setIsLoading(true);
+      setError(null);
+
+      // Используем разные параметры в зависимости от выбранного фильтра
       let params: {
         latest?: boolean;
         purchased?: boolean;
         favorites?: boolean;
+        limit?: number;
       } = {};
 
       if (activeFilter === "Недавние") {
-        params = { latest: true };
+        params = { latest: true, limit: 100 };
       } else if (activeFilter === "Купленные") {
-        params = { purchased: true };
+        params = { purchased: true, limit: 100 };
       } else if (activeFilter === "Все контакты") {
-        params = { favorites: true };
+        // Для "Все контакты" не добавляем параметров, чтобы получить все контакты
+        params = { limit: 100 };
       }
 
       console.log("Fetching contacts with params:", params);
@@ -40,6 +46,8 @@ export const useFeed = (
       setContactsData(contacts);
     } catch (error) {
       console.error("Error fetching filtered contacts:", error);
+      setError("Ошибка загрузки контактов");
+      setContactsData([]);
     } finally {
       setIsLoading(false);
     }
@@ -77,5 +85,6 @@ export const useFeed = (
     filteredData,
     isPending: isPending || isLoading,
     startTransition,
+    error,
   };
 };
