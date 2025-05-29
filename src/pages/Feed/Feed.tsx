@@ -10,7 +10,7 @@ import useUserContactsData from "src/entities/user/model/useUserContacts";
 import { useFeed } from "src/hooks/useFeed";
 
 const Feed = () => {
-  var BackButton = window.Telegram.WebApp.BackButton;
+  const BackButton = window.Telegram.WebApp.BackButton;
 
   if (BackButton.isVisible) {
     BackButton.hide();

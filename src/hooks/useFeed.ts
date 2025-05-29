@@ -12,9 +12,6 @@ export const useFeed = (
   activeFilter: string,
   userContacts: ITelegramUser[] = []
 ) => {
-  // Safeguard to ensure userContacts is always an array
-  const safeUserContacts = Array.isArray(userContacts) ? userContacts : [];
-
   const [inputValue, setInputValue] = useState("");
   const [isPending, startTransition] = useTransition();
   const [contactsData, setContactsData] = useState<IContact[]>([]);
@@ -63,6 +60,9 @@ export const useFeed = (
   const filteredData = useMemo(() => {
     if (!contactsData || contactsData.length === 0) return [];
 
+    // Safeguard to ensure userContacts is always an array - moved inside useMemo
+    const safeUserContacts = Array.isArray(userContacts) ? userContacts : [];
+
     return contactsData.filter((contact) => {
       // Additional safety check
       if (!safeUserContacts || typeof safeUserContacts.find !== "function") {
@@ -98,7 +98,7 @@ export const useFeed = (
 
       return true;
     });
-  }, [contactsData, inputValue, safeUserContacts]);
+  }, [contactsData, inputValue, userContacts]);
 
   return {
     inputValue,
