@@ -7,13 +7,11 @@ const useUserContactsData = (
   user_id: number,
   navigate: ReturnType<typeof useNavigate>
 ): {
-  userContacts: ITelegramUser[] | null;
+  userContacts: ITelegramUser[];
   isLoading: boolean;
   error: string | null;
 } => {
-  const [userContacts, setUserContacts] = useState<ITelegramUser[] | null>(
-    null
-  );
+  const [userContacts, setUserContacts] = useState<ITelegramUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -43,7 +41,8 @@ const useUserContactsData = (
         console.log("contacts result:", result);
 
         if (!result || result.length === 0) {
-          sessionStorage.setItem("userContacts", JSON.stringify(result || []));
+          setUserContacts([]);
+          sessionStorage.setItem("userContacts", JSON.stringify([]));
           navigate("/landing");
         } else {
           setUserContacts(result);
@@ -52,6 +51,7 @@ const useUserContactsData = (
       } catch (error) {
         console.error("Ошибка загрузки контактов:", error);
         setError("Ошибка загрузки данных");
+        setUserContacts([]);
         navigate("/landing");
       } finally {
         setIsLoading(false);

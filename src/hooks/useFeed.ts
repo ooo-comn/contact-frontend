@@ -10,7 +10,7 @@ import { fetchContacts } from "src/entities/user/model/fetchContacts";
 
 export const useFeed = (
   activeFilter: string,
-  userContacts: ITelegramUser[] | null
+  userContacts: ITelegramUser[]
 ) => {
   const [inputValue, setInputValue] = useState("");
   const [isPending, startTransition] = useTransition();
@@ -63,13 +63,18 @@ export const useFeed = (
     return contactsData.filter((contact) => {
       // If there's search input, filter by name or other fields
       if (inputValue.trim() !== "") {
+        // Check if userContacts has items before using find
+        if (userContacts.length === 0) {
+          return false;
+        }
+
         // This is a basic example. You might want to check more fields
         const userName =
-          userContacts?.find((user) => user.id === contact.user_id)
+          userContacts.find((user) => user.id === contact.user_id)
             ?.first_name || "";
         const userLastName =
-          userContacts?.find((user) => user.id === contact.user_id)
-            ?.last_name || "";
+          userContacts.find((user) => user.id === contact.user_id)?.last_name ||
+          "";
         const fullName = `${userName} ${userLastName}`.toLowerCase();
 
         return fullName.includes(inputValue.toLowerCase());
