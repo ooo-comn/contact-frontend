@@ -10,8 +10,11 @@ import { fetchContacts } from "src/entities/user/model/fetchContacts";
 
 export const useFeed = (
   activeFilter: string,
-  userContacts: ITelegramUser[]
+  userContacts: ITelegramUser[] = []
 ) => {
+  // Safeguard to ensure userContacts is always an array
+  const safeUserContacts = Array.isArray(userContacts) ? userContacts : [];
+
   const [inputValue, setInputValue] = useState("");
   const [isPending, startTransition] = useTransition();
   const [contactsData, setContactsData] = useState<IContact[]>([]);
@@ -61,20 +64,33 @@ export const useFeed = (
     if (!contactsData || contactsData.length === 0) return [];
 
     return contactsData.filter((contact) => {
+      // Additional safety check
+      if (!safeUserContacts || typeof safeUserContacts.find !== "function") {
+        console.error(
+          "ERROR: safeUserContacts is not a proper array with find method:",
+          safeUserContacts
+        );
+        return true; // Return true to show all contacts if search fails
+      }
+
       // If there's search input, filter by name or other fields
       if (inputValue.trim() !== "") {
         // Check if userContacts has items before using find
-        if (userContacts.length === 0) {
+        if (
+          !safeUserContacts ||
+          !Array.isArray(safeUserContacts) ||
+          safeUserContacts.length === 0
+        ) {
           return false;
         }
 
         // This is a basic example. You might want to check more fields
-        const userName =
-          userContacts.find((user) => user.id === contact.user_id)
-            ?.first_name || "";
-        const userLastName =
-          userContacts.find((user) => user.id === contact.user_id)?.last_name ||
-          "";
+        const foundUser = safeUserContacts.find((user) => {
+          return user.id === contact.user_id;
+        });
+
+        const userName = foundUser?.first_name || "";
+        const userLastName = foundUser?.last_name || "";
         const fullName = `${userName} ${userLastName}`.toLowerCase();
 
         return fullName.includes(inputValue.toLowerCase());
@@ -82,7 +98,7 @@ export const useFeed = (
 
       return true;
     });
-  }, [contactsData, inputValue, userContacts]);
+  }, [contactsData, inputValue, safeUserContacts]);
 
   return {
     inputValue,
