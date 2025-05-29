@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "src/app/providers/store";
 import { IContact } from "src/entities/course/model/types";
-import { useUserCourses } from "src/entities/course/model/useUserCourses";
+// import { useUserCourses } from "src/entities/course/model/useUserCourses";
 import { fetchReviewsByContactId } from "src/entities/feedback/model/fetchReviewsByContactId";
 import { fetchContactById } from "src/entities/user/model/fetchContact";
 import { fetchUser } from "src/entities/user/model/fetchUser";
