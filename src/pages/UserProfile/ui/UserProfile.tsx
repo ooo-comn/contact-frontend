@@ -8,7 +8,6 @@ import MyDataCard from "src/shared/components/MyDataCard/MyDataCard";
 import NavBar from "src/shared/components/NavBar/NavBar";
 import PartnershipCard from "src/shared/components/PartnershipCard/PartnershipCard";
 import Sales from "src/shared/components/Sales/Sales";
-import { BASE_URL } from "src/shared/config/api";
 import useTheme from "src/shared/hooks/useTheme";
 import { useUserProfile } from "../model/useUserProfile";
 import styles from "./UserProfile.module.css";
@@ -29,6 +28,8 @@ const UserProfile: FC = () => {
   const [verifyed, setVerifyed] = useState<string | null>(null);
 
   const { userData, coursesData, feedbacks, contactData } = useUserProfile();
+
+  console.log("userData", userData);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,7 +92,7 @@ const UserProfile: FC = () => {
             <div
               className={styles["user-profile__avatar"]}
               style={{
-                backgroundImage: `url(https://${BASE_URL}.ru${contactData?.image_url})`,
+                backgroundImage: `${contactData?.image_url}`,
               }}
             />
             <p className={styles["user-profile__name"]}>
