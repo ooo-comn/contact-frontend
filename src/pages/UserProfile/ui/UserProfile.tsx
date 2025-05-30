@@ -92,7 +92,7 @@ const UserProfile: FC = () => {
             <div
               className={styles["user-profile__avatar"]}
               style={{
-                backgroundImage: `${contactData?.image_url}`,
+                backgroundImage: `url(${contactData?.image_url})`,
               }}
             />
             <p className={styles["user-profile__name"]}>
