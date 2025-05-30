@@ -33,10 +33,7 @@ export const useFeed = (
 
       if (activeFilter === "Недавние") {
         params = { latest: true, limit: 100 };
-      } else if (activeFilter === "Купленные") {
-        params = { purchased: true, limit: 100 };
       } else if (activeFilter === "Все контакты") {
-        // Для "Все контакты" не добавляем параметров, чтобы получить все контакты
         params = { limit: 100 };
       }
 

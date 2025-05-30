@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../../shared/components/NavBar/NavBar";
 import styles from "./Feed.module.css";
 import FeedFilters from "./ui/FeedFilters";
@@ -58,14 +58,14 @@ const Feed = () => {
       ) : (
         <FeedList filteredCourses={filteredData} isPending={isPending} />
       )}
-      <Link
+      {/* <Link
         to="/subscription"
         className={styles["feed__link-create-subscription"]}
       >
         <button className={styles["feed__create-subscription"]}>
           Оформить подписку
         </button>
-      </Link>
+      </Link> */}
       <NavBar />
     </div>
   );

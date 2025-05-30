@@ -22,7 +22,7 @@ import InputWithVariants from "./ui/InputWithVariants/InputWithVariants";
 import LinksFAQ from "./ui/LinksFAQ/LinksFAQ";
 
 const EditProfile: FC = () => {
-  const { userData, selectedOptionsProfile, uniValueProfile } =
+  const { userData, selectedOptionsProfile, uniValueProfile, contactData } =
     useUserProfile();
 
   const [optionsSubject, setOptionsSubject] = useState<string[]>([]);
@@ -68,7 +68,7 @@ const EditProfile: FC = () => {
   const [inputValueSubject, setInputValueSubject] = useState("");
   const [inputValueUniv, setInputValueUniv] = useState("");
 
-  var BackButton = window.Telegram.WebApp.BackButton;
+  const BackButton = window.Telegram.WebApp.BackButton;
   BackButton.show();
   BackButton.onClick(function () {
     BackButton.hide();
@@ -241,7 +241,7 @@ const EditProfile: FC = () => {
         <div
           className={styles["edit-profile__avatar"]}
           style={{
-            backgroundImage: `url(https://${BASE_URL}.ru${userData?.photo_url})`,
+            backgroundImage: `url(https://${BASE_URL}.ru${contactData?.image_url})`,
           }}
         />
 

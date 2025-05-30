@@ -74,7 +74,7 @@ const RegistrationPage: FC = () => {
   );
   console.log("storedDatadata", data);
 
-  const [imageSrc, setImageSrc] = useState(data.photo_url);
+  const [imageSrc, setImageSrc] = useState(data.image_url);
   const [isNotify, setIsNotify] = useState(true);
   const [bioValue, setBioValue] = useState("");
   const [uniValue, setUniValue] = useState("");
@@ -92,8 +92,8 @@ const RegistrationPage: FC = () => {
   // const userFriendlyAddress = useTonAddress()
 
   useEffect(() => {
-    if (data && data.photo_url) {
-      setImageSrc(data.photo_url);
+    if (data && data.image_url) {
+      setImageSrc(data.image_url);
       setFirstName(data.first_name);
       setLastName(data.last_name);
     }
@@ -146,7 +146,7 @@ const RegistrationPage: FC = () => {
     setBoxIsVisibleUniv(false);
   };
 
-  const handleRemoveOptionUniv = (optionToRemove: string) => {
+  const handleRemoveOptionUniv = () => {
     setUniValue("");
   };
 
@@ -317,7 +317,7 @@ const RegistrationPage: FC = () => {
                 </p>
                 <button
                   className={styles["edit-profile__exist-subject-button"]}
-                  onClick={() => handleRemoveOptionUniv(uniValue)}
+                  onClick={() => handleRemoveOptionUniv()}
                 >
                   <img
                     src={CloseImg}

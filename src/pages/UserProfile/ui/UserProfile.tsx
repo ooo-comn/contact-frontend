@@ -17,7 +17,7 @@ const UserProfile: FC = () => {
   window.scrollTo(0, 0);
   const { id } = window.Telegram.WebApp.initDataUnsafe.user;
 
-  var BackButton = window.Telegram.WebApp.BackButton;
+  const BackButton = window.Telegram.WebApp.BackButton;
   BackButton.show();
   BackButton.onClick(function () {
     BackButton.hide();
@@ -91,7 +91,7 @@ const UserProfile: FC = () => {
             <div
               className={styles["user-profile__avatar"]}
               style={{
-                backgroundImage: `url(https://${BASE_URL}.ru${userData?.photo_url})`,
+                backgroundImage: `url(https://${BASE_URL}.ru${contactData?.image_url})`,
               }}
             />
             <p className={styles["user-profile__name"]}>

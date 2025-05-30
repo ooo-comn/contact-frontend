@@ -1,61 +1,62 @@
 export interface IFeedback {
-	user: ITelegramUser
-	author: number
-	course: number
-	date: string
-	rate: number
-	review: string | null
+  user: ITelegramUser;
+  author: number;
+  course: number;
+  date: string;
+  rate: number;
+  review: string | null;
 }
 
 export interface ITopic {
-	topic: string
-	desc: string
+  topic: string;
+  desc: string;
 }
 
 export interface IReview {
-	id: string
-	created_at: string
-	updated_at: string
-	author_id: number
-	contact_id: number
-	rating: number
-	comment: string
+  id: string;
+  created_at: string;
+  updated_at: string;
+  author_id: number;
+  contact_id: number;
+  rating: number;
+  comment: string;
 }
 
 export interface ITelegramUser {
-	id: number
-	telegram_id: number
-	username: string
-	first_name: string
-	last_name: string
-	university: string
-	description: string
-	notify: boolean
-	photo_url: string
-	registrated: boolean
-	verified: string
-	balance: number
-	is_staff: boolean
-	is_active: boolean
+  id: number;
+  telegram_id: number;
+  username: string;
+  first_name: string;
+  last_name: string;
+  university: string;
+  description: string;
+  notify: boolean;
+  image_url: string;
+  registrated: boolean;
+  verified: string;
+  balance: number;
+  is_staff: boolean;
+  is_active: boolean;
 }
 
 export interface IContact {
-	id: number | null
-	user_id: number
-	subjects: String[]
-	work_types: String[]
-	customer_count: number
+  id: number | null;
+  user_id: number;
+  subjects: string[];
+  work_types: string[];
+  customer_count: number;
+  image_url: string;
 }
 
 export interface IChannel {
-	user: number
-	chat_id: string | null
-	date: string | null
-	name: string | null
-	photo: string | null
-	url: string | null
-	connected: boolean
-	connected_course: number | null
+  user: number;
+  chat_id: string | null;
+  date: string | null;
+  name: string | null;
+  photo: string | null;
+  url: string | null;
+  connected: boolean;
+  connected_course: number | null;
 }
 
 // export interface ITransaction {

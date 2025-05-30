@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { fetchReviewsByContactId } from "src/entities/feedback/model/fetchReviewsByContactId";
 import { fetchUserById } from "src/entities/user/model/fetchUserById";
@@ -94,7 +95,7 @@ const CardList: React.FC<{ contacts: IContact[] }> = ({ contacts }) => {
             <ContactCard
               key={index}
               itemCard={item}
-              userPhoto={user?.photo_url ?? ""}
+              userPhoto={item?.image_url ?? ""}
               amountOfSales={item?.customer_count ?? 0}
               averageRate={averageRate}
               userName={user?.first_name ?? ""}

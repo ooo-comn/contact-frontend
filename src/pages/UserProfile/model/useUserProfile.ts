@@ -4,7 +4,7 @@ import { RootState } from "src/app/providers/store";
 import { IContact } from "src/entities/course/model/types";
 // import { useUserCourses } from "src/entities/course/model/useUserCourses";
 import { fetchReviewsByContactId } from "src/entities/feedback/model/fetchReviewsByContactId";
-import { fetchContactById } from "src/entities/user/model/fetchContact";
+import { fetchContactByTelegramId } from "src/entities/user/model/fetchContact";
 import { fetchUser } from "src/entities/user/model/fetchUser";
 import {
   setLoading,
@@ -41,14 +41,9 @@ export const useUserProfile = () => {
           throw new Error("User data not found");
         }
 
-        const contactId = user.id;
-        if (!contactId) {
-          throw new Error("Contact ID не найден");
-        }
-
-        // Fetch contact data from /contacts/ endpoint
-        const contact = await fetchContactById(contactId);
-        const reviews = await fetchReviewsByContactId(contactId);
+        // Fetch contact data from /contacts/user/{tg_id} endpoint to get image_url
+        const contact = await fetchContactByTelegramId(telegramId);
+        const reviews = await fetchReviewsByContactId(contact.user_id);
 
         setContactData(contact);
 
