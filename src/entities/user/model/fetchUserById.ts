@@ -3,7 +3,7 @@ import { API_BASE_URL } from "../../../shared/config/api";
 
 export const fetchUserById = async (userId: number): Promise<ITelegramUser> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
+    const response = await fetch(`${API_BASE_URL}/users/?user_id=${userId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
