@@ -17,7 +17,7 @@ const ContactCard: FC<IContactCard> = ({
   const fullName = `${userName || ""} ${userSecondName || ""}`.trim();
 
   return (
-    <Link to={`/course/${itemCard.id}`} className={styles["card"]}>
+    <Link to={`/user/${itemCard.user_id}`} className={styles["card"]}>
       <div className={styles["card__user"]}>
         <div className={styles["card__userpic-wrapper"]}>
           <img

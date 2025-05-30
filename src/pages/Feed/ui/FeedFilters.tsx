@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import styles from "../Feed.module.css";
 
-const filterOptions = ["Все контакты", "Недавние"];
+const filterOptions = ["Все контакты", "Недавние", "Избранные"];
 
 interface FeedFiltersProps {
   onFilterChange: (filter: string) => void;
