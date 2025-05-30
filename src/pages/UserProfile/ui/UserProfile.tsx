@@ -29,7 +29,8 @@ const UserProfile: FC = () => {
 
   const { userData, coursesData, feedbacks, contactData } = useUserProfile();
 
-  console.log("userData", userData);
+  console.log("userData:", userData);
+  console.log("contactData:", contactData);
 
   useEffect(() => {
     const fetchData = async () => {
