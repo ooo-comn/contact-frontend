@@ -8,7 +8,7 @@ import {
   ITelegramUser,
 } from "src/entities/course/model/types";
 import { fetchReviewsByContactId } from "src/entities/feedback/model/fetchReviewsByContactId";
-import { fetchContactById } from "src/entities/user/model/fetchContact";
+import { fetchContactByTelegramId } from "src/entities/user/model/fetchContact";
 import { fetchUserById } from "src/entities/user/model/fetchUserById";
 import Feedback from "src/shared/components/Feedback/Feedback";
 import NavBar from "src/shared/components/NavBar/NavBar";
@@ -48,12 +48,14 @@ const SellerProfile: FC = () => {
         console.log("user.telegram_id:", user.telegram_id);
         console.log("user.id:", user.id);
 
-        // Получаем данные контакта по user_id
-        const contact = await fetchContactById(user.id);
+        // Получаем данные контакта по telegram_id пользователя
+        const contact = await fetchContactByTelegramId(
+          String(user.telegram_id)
+        );
         setContactData(contact);
 
-        // Получаем отзывы
-        const reviews = await fetchReviewsByContactId(user.id);
+        // Получаем отзывы по contact.user_id
+        const reviews = await fetchReviewsByContactId(contact.user_id);
         setFeedbacks(reviews || []);
       } catch (error) {
         console.error("Ошибка загрузки данных продавца:", error);
