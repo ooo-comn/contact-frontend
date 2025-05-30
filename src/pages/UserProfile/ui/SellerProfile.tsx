@@ -64,6 +64,9 @@ const SellerProfile: FC = () => {
     loadSellerData();
   }, [id]);
 
+  console.log("userData", userData);
+  console.log("contactData", contactData);
+
   const totalStudents = contactData?.customer_count;
   const averageRate = feedbacks.length > 0 ? calculateRating(feedbacks) : 0;
   const { theme } = useTheme();
@@ -71,7 +74,6 @@ const SellerProfile: FC = () => {
   return (
     <div className={styles["user-profile"]}>
       <header className={styles["user-profile__header"]}>
-        <h2 className={styles["user-profile__title"]}>Профиль</h2>
         {!userData ? (
           <>
             {theme === "dark" ? (
