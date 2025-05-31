@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styles from "./FiltersPage.module.css";
 import FilterItem from "./ui/FilterItem/FilterItem";
 
@@ -150,11 +151,12 @@ const FiltersPage: FC = () => {
               isNotifyFAQ={() => handleFilterChange("workType", "Реферат")}
             />
           </div>
-          <FilterItem
-            filterItemType="link"
-            text="Все типы работ"
-            path="/work-types"
-          />
+          <Link
+            to="/work-types"
+            className={styles["filters-page__show-all-button"]}
+          >
+            Все типы работ
+          </Link>
         </div>
 
         <div className={styles["filters-page__section"]}>
@@ -195,9 +197,12 @@ const FiltersPage: FC = () => {
               isNotifyFAQ={() => handleFilterChange("university", "МФТИ")}
             />
           </div>
-          <button className={styles["filters-page__show-all-button"]}>
+          <Link
+            to="/universities"
+            className={styles["filters-page__show-all-button"]}
+          >
             Все университеты
-          </button>
+          </Link>
         </div>
 
         <div className={styles["filters-page__section"]}>
