@@ -31,7 +31,14 @@ const ContactCard: FC<IContactCard> = ({
         const { id: userId } = window.Telegram.WebApp.initDataUnsafe.user;
 
         const response = await fetch(
-          `${API_BASE_URL}/contacts/favorites/user/${userId}`
+          `${API_BASE_URL}/contacts/favorites/user/${userId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `tma ${window.Telegram.WebApp.initData}`,
+            },
+          }
         );
         if (response.ok) {
           const favoriteContacts: FavoriteContact[] = await response.json();
@@ -70,6 +77,7 @@ const ContactCard: FC<IContactCard> = ({
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `tma ${window.Telegram.WebApp.initData}`,
           },
         }
       );
