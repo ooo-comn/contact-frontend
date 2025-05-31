@@ -113,15 +113,45 @@
 
 .card__tag {
   margin: 0;
-  padding: 0.513vw 1.538vw;
+  padding: 1.28vw 2.05vw;
   border-radius: 1.026vw;
-  background: var(--active-color);
-  color: var(--active-text);
+  background: #e0efff;
+  color: var(--main-text);
   font-family: "Geologica";
   font-size: 3.077vw;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+}
+
+.card__wrapper-user {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card__actions {
+  display: flex;
+  align-items: center;
+  gap: 2.05vw;
+}
+
+.card__action-btn {
+  display: flex;
+  width: 7.18vw;
+  height: 7.18vw;
+  padding: 1.2vw;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  border: none;
+  outline: none;
+  background: var(--stars-background);
+}
+
+.card__action-icon {
+  width: 4.79vw;
+  height: 4.79vw;
+  flex-shrink: 0;
 }
 
 .card__bottom {

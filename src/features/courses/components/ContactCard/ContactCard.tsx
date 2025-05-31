@@ -7,7 +7,6 @@ import styles from "./ContactCard.module.css";
 const ContactCard: FC<IContactCard> = ({
   itemCard,
   userPhoto,
-  amountOfSales,
   userName,
   userSecondName,
   university,
@@ -18,35 +17,56 @@ const ContactCard: FC<IContactCard> = ({
 
   return (
     <Link to={`/user/${itemCard.user_id}`} className={styles["card"]}>
-      <div className={styles["card__user"]}>
-        <div className={styles["card__userpic-wrapper"]}>
-          <img
-            className={styles["card__userpic"]}
-            src={userPhoto || ""}
-            alt="Аватар"
-          />
-        </div>
-        <div className={styles["card__info"]}>
-          <div>
-            <h1 className={styles["card__name"]}>{fullName}</h1>
-            <p className={styles["card__uni"]}>{university}</p>
+      <div className={styles["card__wrapper-user"]}>
+        <div className={styles["card__user"]}>
+          <div className={styles["card__userpic-wrapper"]}>
+            <img
+              className={styles["card__userpic"]}
+              src={userPhoto || ""}
+              alt="Аватар"
+            />
           </div>
-          <div className={styles["card__info-sales"]}>
+          <div className={styles["card__info"]}>
+            <div>
+              <h1 className={styles["card__name"]}>{fullName}</h1>
+              <div className={styles["card__reviews"]}>
+                <img
+                  className={styles["card__reviews-star"]}
+                  src={Star}
+                  alt="Звезда"
+                />
+                <p className={styles["card__reviews-rate"]}>
+                  {averageRate ? averageRate.toFixed(1) : "0.0"}
+                </p>
+                <p className={styles["card__reviews-rate"]}>({count || 0})</p>
+              </div>
+            </div>
+            {/* <div className={styles["card__info-sales"]}>
             <p className={styles["card__info-sales-count"]}>{amountOfSales}</p>
             <p className={styles["card__info-sales-desc"]}>продаж</p>
+          </div> */}
           </div>
         </div>
-      </div>
-      <div className={styles["card__workTypes"]}>
-        <h1 className={styles["card__subtitle"]}>Тип работы:</h1>
-        <div className={styles["card__tags"]}>
-          {itemCard.work_types?.map((workType) => (
-            <p key={String(workType)} className={styles["card__tag"]}>
-              {workType}
-            </p>
-          ))}
+
+        <div className={styles["card__actions"]}>
+          <button className={styles["card__action-btn"]}>
+            <img
+              src="../../../../shared/assets/feed/Heart.svg"
+              alt="Кнопка добавления в избранное"
+              className={styles["card__action-icon"]}
+            />
+          </button>
+          <button className={styles["card__action-btn"]}>
+            <img
+              src="../../../../shared/assets/feed/Link.svg"
+              alt="Отправить контакт"
+              className={styles["card__action-icon"]}
+            />
+          </button>
         </div>
       </div>
+
+      <p className={styles["card__uni"]}>{university}</p>
       <div className={styles["card__subjects"]}>
         <h1 className={styles["card__subtitle"]}>Предметы:</h1>
         <div className={styles["card__tags"]}>
@@ -55,19 +75,6 @@ const ContactCard: FC<IContactCard> = ({
               {subject}
             </p>
           ))}
-        </div>
-      </div>
-      <div className={styles["card__bottom"]}>
-        <div className={styles["card__reviews"]}>
-          <img
-            className={styles["card__reviews-star"]}
-            src={Star}
-            alt="Звезда"
-          />
-          <p className={styles["card__reviews-rate"]}>
-            {averageRate ? averageRate.toFixed(1) : "0.0"}
-          </p>
-          <p className={styles["card__reviews-count"]}>({count || 0})</p>
         </div>
       </div>
     </Link>

@@ -192,6 +192,17 @@ const SellerProfile: FC = () => {
             {userData?.description || "Расскажите о себе"}
           </p>
         </div>
+        <div className={styles["user-profile__line"]} />
+        <div className={styles["user-profile__section"]}>
+          <h3 className={styles["user-profile__section-title"]}>
+            Дата регистрации
+          </h3>
+          <p className={styles["user-profile__section-description"]}>
+            {userData?.created_at
+              ? new Date(userData.created_at).toLocaleDateString("ru-RU")
+              : "Дата не указана"}
+          </p>
+        </div>
       </section>
       <NavBar />
     </div>

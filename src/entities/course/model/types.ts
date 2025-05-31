@@ -37,6 +37,7 @@ export interface ITelegramUser {
   balance: number;
   is_staff: boolean;
   is_active: boolean;
+  created_at: string;
 }
 
 export interface IContact {
