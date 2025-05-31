@@ -171,12 +171,7 @@ const EditProfile: FC = () => {
       userData,
     });
 
-    await fetchUpdateUser(
-      selectedOptions,
-      [],
-      window.Telegram.WebApp.initData,
-      userData?.id || 0
-    );
+    await fetchUpdateUser(selectedOptions, [], window.Telegram.WebApp.initData);
 
     console.log("EditProfile data sent successfully");
 
