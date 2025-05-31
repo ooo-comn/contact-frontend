@@ -28,10 +28,8 @@ const ContactCard: FC<IContactCard> = ({
   useEffect(() => {
     const checkFavoriteStatus = async () => {
       try {
-        const { id: userId } = window.Telegram.WebApp.initDataUnsafe.user;
-
         const response = await fetch(
-          `${API_BASE_URL}/contacts/favorites/user/${userId}`,
+          `${API_BASE_URL}/contacts/?favorites=true`,
           {
             method: "GET",
             headers: {
@@ -137,9 +135,7 @@ const ContactCard: FC<IContactCard> = ({
             disabled={isLoading}
           >
             {isLoading ? (
-              <div style={{ width: "4.79vw", height: "4.79vw" }}>
-                {/* Можете добавить спиннер загрузки здесь */}
-              </div>
+              <div style={{ width: "4.79vw", height: "4.79vw" }}></div>
             ) : isFavorite ? (
               <img
                 src={HeartFill}

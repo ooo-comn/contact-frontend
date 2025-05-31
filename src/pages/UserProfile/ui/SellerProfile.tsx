@@ -14,7 +14,15 @@ import Feedback from "src/shared/components/Feedback/Feedback";
 import NavBar from "src/shared/components/NavBar/NavBar";
 import Sales from "src/shared/components/Sales/Sales";
 import useTheme from "src/shared/hooks/useTheme";
+import { API_BASE_URL } from "src/shared/config/api";
 import styles from "./UserProfile.module.css";
+import Heart from "../../../shared/assets/feed/Heart.svg";
+import HeartFill from "../../../shared/assets/feed/HeartFill.svg";
+import LinkShare from "../../../shared/assets/feed/Link.svg";
+
+interface FavoriteContact {
+  id: number;
+}
 
 const SellerProfile: FC = () => {
   window.scrollTo(0, 0);
@@ -32,6 +40,8 @@ const SellerProfile: FC = () => {
   const [userData, setUserData] = useState<ITelegramUser | null>(null);
   const [contactData, setContactData] = useState<IContact | null>(null);
   const [feedbacks, setFeedbacks] = useState<IReview[]>([]);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -67,6 +77,77 @@ const SellerProfile: FC = () => {
     loadSellerData();
   }, [id]);
 
+  // Проверяем статус избранного при загрузке контакта
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      if (!contactData?.id) return;
+
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/contacts/?favorites=true`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `tma ${window.Telegram.WebApp.initData}`,
+            },
+          }
+        );
+        if (response.ok) {
+          const favoriteContacts: FavoriteContact[] = await response.json();
+          const isFav = favoriteContacts.some(
+            (contact: FavoriteContact) => contact.id === contactData.id
+          );
+          setIsFavorite(isFav);
+        }
+      } catch (error) {
+        console.error("Ошибка при проверке статуса избранного:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkFavoriteStatus();
+  }, [contactData?.id]);
+
+  const toggleFavorite = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    if (!contactData?.id) {
+      console.error("Contact ID не найден");
+      return;
+    }
+
+    try {
+      const { id: userId } = window.Telegram.WebApp.initDataUnsafe.user;
+
+      const response = await fetch(
+        `${API_BASE_URL}/contacts/${contactData.id}/favorite?user_id=${userId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `tma ${window.Telegram.WebApp.initData}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Статус избранного изменен:", result);
+        setIsFavorite(!isFavorite);
+      } else {
+        console.error(
+          "Ошибка при изменении статуса избранного:",
+          response.status
+        );
+      }
+    } catch (error) {
+      console.error("Ошибка при запросе к серверу:", error);
+    }
+  };
+
   console.log("userData", userData);
   console.log("contactData", contactData);
 
@@ -76,6 +157,51 @@ const SellerProfile: FC = () => {
 
   return (
     <div className={styles["user-profile"]}>
+      <div className={styles["card__actions"]}>
+        <button
+          className={styles["card__action-btn"]}
+          onClick={toggleFavorite}
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <div style={{ width: "4.79vw", height: "4.79vw" }}></div>
+          ) : isFavorite ? (
+            <img
+              src={HeartFill}
+              alt="Убрать из избранного"
+              className={styles["card__action-icon"]}
+            />
+          ) : (
+            <img
+              src={Heart}
+              alt="Добавить в избранное"
+              className={styles["card__action-icon"]}
+            />
+          )}
+        </button>
+        <button
+          className={styles["card__action-btn"]}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            const contactLink = `https://t.me/share/url?url=${encodeURIComponent(
+              `https://t.me/ComnContactBot/CoCourseApp?startapp=user_${userData?.id}`
+            )}`;
+
+            if (window.Telegram?.WebApp) {
+              window.Telegram.WebApp.openLink(contactLink);
+            } else {
+              console.error("Telegram WebApp не доступен");
+            }
+          }}
+        >
+          <img
+            src={LinkShare}
+            alt="Отправить контакт"
+            className={styles["card__action-icon"]}
+          />
+        </button>
+      </div>
       <header className={styles["user-profile__header"]}>
         {!userData ? (
           <>
