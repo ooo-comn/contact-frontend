@@ -93,6 +93,7 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
         university: user.university,
         username: user.username,
         verified: user.verified,
+        created_at: user.created_at || new Date().toISOString(),
       });
     }
   }, []);
