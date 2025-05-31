@@ -18,7 +18,7 @@ import Faq from "../../shared/assets/profile/Faq.svg";
 import MarkedExist from "../../shared/assets/profile/MarkedExist.svg";
 import Warning from "../../shared/assets/profile/Warning.svg";
 import CloseImg from "../../shared/assets/wallet/CloseImg.svg";
-import { BASE_URL } from "../../shared/config/api";
+import { API_BASE_URL } from "src/shared/config/api";
 import InputWithVariants from "../EditProfile/ui/InputWithVariants/InputWithVariants";
 import LinksFAQ from "../EditProfile/ui/LinksFAQ/LinksFAQ";
 import styles from "./RegistrationPage.module.css";
@@ -190,18 +190,37 @@ const RegistrationPage: FC = () => {
   );
 
   const handleSave = async () => {
+    const { id: telegramId } = window.Telegram.WebApp.initDataUnsafe.user;
+
     console.log("RegistrationPage handleSave:", {
       selectedOptions,
       selectedWorkTypes,
       university: uniValue,
       description: bioValue,
       notify: isNotify,
-      userId: data.id || 0,
+      telegramId,
     });
 
     try {
+      // Сначала получаем реальный user_id по telegram_id
+      const response = await fetch(
+        `${API_BASE_URL}/users/?telegram_id=${telegramId}`
+      );
+      if (!response.ok) {
+        throw new globalThis.Error("Не удалось получить данные пользователя");
+      }
+
+      const userData = await response.json();
+      const realUserId = userData[0]?.id;
+
+      if (!realUserId) {
+        throw new globalThis.Error("Не найден ID пользователя");
+      }
+
+      console.log("Реальный user_id:", realUserId);
+
       // Обновляем данные пользователя (university, description, notify)
-      await updateUserProfile(data.id || 0, uniValue, bioValue, isNotify);
+      await updateUserProfile(realUserId, uniValue, bioValue, isNotify);
 
       // Обновляем контактные данные (subjects, work_types)
       await fetchUpdateUser(
@@ -291,7 +310,7 @@ const RegistrationPage: FC = () => {
         <div
           className={styles["edit-profile__avatar"]}
           style={{
-            backgroundImage: `url(https://${BASE_URL}.ru${imageSrc})`,
+            backgroundImage: `url(https://${API_BASE_URL}.ru${imageSrc})`,
           }}
         />
 
