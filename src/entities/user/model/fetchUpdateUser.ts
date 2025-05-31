@@ -72,8 +72,7 @@ const extractTelegramId = (initData: string): number => {
 export const fetchUpdateUser = async (
   selectedOptions: string[],
   workTypes: string[],
-  initData: string,
-  userId: number
+  initData: string
 ) => {
   try {
     // Извлекаем Telegram ID
@@ -162,5 +161,41 @@ export const fetchUpdateUser = async (
         fallback: true,
       },
     };
+  }
+};
+
+export const updateUserProfile = async (
+  userId: number,
+  university?: string,
+  description?: string,
+  notify?: boolean
+): Promise<void> => {
+  try {
+    const updateData: {
+      university?: string;
+      description?: string;
+      notify?: boolean;
+    } = {};
+
+    if (university !== undefined) updateData.university = university;
+    if (description !== undefined) updateData.description = description;
+    if (notify !== undefined) updateData.notify = notify;
+
+    const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updateData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Ошибка HTTP: ${response.status}`);
+    }
+
+    console.log("Данные пользователя успешно обновлены");
+  } catch (error) {
+    console.error("Ошибка при обновлении пользователя:", error);
+    throw error;
   }
 };

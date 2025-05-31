@@ -1,10 +1,10 @@
 import { Skeleton } from "@mui/material";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { calculateRating } from "src/entities/course/lib/calculateRating";
-import { fetchUserTransactions } from "src/entities/wallet/model/fetchUserTransactions";
+// import { fetchUserTransactions } from "src/entities/wallet/model/fetchUserTransactions";
 import Feedback from "src/shared/components/Feedback/Feedback";
-import MyDataCard from "src/shared/components/MyDataCard/MyDataCard";
+// import MyDataCard from "src/shared/components/MyDataCard/MyDataCard";
 import NavBar from "src/shared/components/NavBar/NavBar";
 import PartnershipCard from "src/shared/components/PartnershipCard/PartnershipCard";
 import Sales from "src/shared/components/Sales/Sales";
@@ -25,7 +25,7 @@ const UserProfile: FC = () => {
     window.history.back();
   });
 
-  const [verifyed, setVerifyed] = useState<string | null>(null);
+  // const [verifyed, setVerifyed] = useState<string | null>(null);
 
   const { userData, coursesData, feedbacks, contactData } = useUserProfile();
 
@@ -34,10 +34,10 @@ const UserProfile: FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetchUserTransactions(id);
-      if (result) {
-        setVerifyed(result.verifyed);
-      }
+      // const result = await fetchUserTransactions(id);
+      // if (result) {
+      //   setVerifyed(result.verifyed);
+      // }
     };
     fetchData();
   }, [id]);
@@ -120,12 +120,12 @@ const UserProfile: FC = () => {
       </section>
 
       <section className={styles["user-profile__content"]}>
-        <MyDataCard
+        {/* <MyDataCard
           title="Пройдите верификацию"
           description="Пройди верификацию, чтобы создавать объявления и начать зарабатывать на своих знаниях. Проверка занимает 3-4 рабочих дня"
           verifyed={verifyed}
           path="/verification-form"
-        />
+        /> */}
         <PartnershipCard />
       </section>
 

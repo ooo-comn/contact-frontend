@@ -1,6 +1,9 @@
 import React, { FC, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { fetchUpdateUser } from "src/entities/user/model/fetchUpdateUser";
+import {
+  fetchUpdateUser,
+  updateUserProfile,
+} from "src/entities/user/model/fetchUpdateUser";
 import handleBioChangeMinus from "src/features/bio-change/handleBioChangeMinus";
 import { filterOptions } from "src/features/filterOptions";
 import { fetchSubjects } from "src/features/get-subjects/model/fetchWorkTypes";
@@ -190,27 +193,28 @@ const RegistrationPage: FC = () => {
     console.log("RegistrationPage handleSave:", {
       selectedOptions,
       selectedWorkTypes,
-      initData: window.Telegram.WebApp.initData ? "present" : "missing",
+      university: uniValue,
+      description: bioValue,
+      notify: isNotify,
       userId: data.id || 0,
-      userData: data,
     });
 
-    await fetchUpdateUser(
-      selectedOptions,
-      selectedWorkTypes,
-      window.Telegram.WebApp.initData,
-      data.id || 0
-    );
+    try {
+      // Обновляем данные пользователя (university, description, notify)
+      await updateUserProfile(data.id || 0, uniValue, bioValue, isNotify);
 
-    console.log("selectedOptions send");
+      // Обновляем контактные данные (subjects, work_types)
+      await fetchUpdateUser(
+        selectedOptions,
+        selectedWorkTypes,
+        window.Telegram.WebApp.initData
+      );
 
-    navigate(`/`);
-
-    // if (userFriendlyAddress) {
-    // 	navigate(`/verification`)
-    // } else {
-    // 	navigate(`/connect-wallet`)
-    // }
+      console.log("Данные успешно сохранены");
+      navigate(`/`);
+    } catch (error) {
+      console.error("Ошибка при сохранении данных:", error);
+    }
   };
 
   const varsSubject = filteredOptionsSubject.map(
