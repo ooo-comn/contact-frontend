@@ -65,9 +65,7 @@ const SubjectsPage: FC = () => {
 
   const handleApply = () => {
     if (selectedSubject) {
-      // Здесь можно передать выбранный предмет обратно
       console.log("Выбранный предмет:", selectedSubject);
-      // Возвращаемся на предыдущую страницу с выбранным предметом
       navigate(-1);
     }
   };

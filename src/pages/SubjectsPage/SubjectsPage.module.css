@@ -3,8 +3,8 @@
   flex-direction: column;
   min-height: 100vh;
   background: var(--background-color);
-  padding: 2.05vw;
-  padding-bottom: calc(2.05vw + 70px); /* Добавляем место для кнопки */
+  padding: 0 4.1vw;
+  padding-bottom: calc(2.05vw + 70px);
 }
 
 .subjects-page__header {
@@ -17,9 +17,9 @@
 .subjects-page__title {
   color: var(--main-text);
   font-family: "Geologica";
-  font-size: 4.87vw;
+  font-size: 4.62vw;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   line-height: normal;
   margin: 0;
 }
@@ -27,18 +27,18 @@
 .subjects-page__reset-button {
   background: none;
   border: none;
-  color: var(--active-color);
+  color: var(--second-text);
   font-family: "Geologica";
-  font-size: 3.59vw;
+  font-size: 4.1vw;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   line-height: normal;
   cursor: pointer;
   padding: 0;
 }
 
 .subjects-page__search {
-  margin-bottom: 4.1vw;
+  margin-bottom: 2.05vw;
 }
 
 .subjects-page__search-container {
@@ -50,13 +50,14 @@
 .subjects-page__search-input {
   width: 100%;
   padding: 3.08vw;
-  padding-left: 10vw; /* Место для иконки */
-  border: 1px solid var(--border-color, #e0e0e0);
-  border-radius: 2.05vw;
-  background: var(--input-background, #f5f5f5);
+  padding-left: 8.72vw;
+  border: none;
+  border-radius: 1.54vw;
+  background: var(--mini-background);
   color: var(--main-text);
   font-family: "Geologica";
   font-size: 3.59vw;
+  outline: none;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -75,20 +76,15 @@
   color: var(--second-text);
 }
 
-.subjects-page__search-input:focus {
-  outline: none;
-  border-color: var(--active-color);
-}
-
 .subjects-page__content {
   flex: 1;
-  margin-bottom: 4.1vw;
+  margin-bottom: 7.69vw;
 }
 
 .subjects-page__list {
   display: flex;
   flex-direction: column;
-  gap: 0.5vw;
+  gap: 1.28vw;
 }
 
 .subjects-page__loading {
@@ -106,9 +102,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 2.05vw;
-  background: var(--background-color);
-  border-top: 1px solid var(--border-color, #e0e0e0);
+  padding: 2.05vw auto 4.1vw auto;
+  background-color: var(--mini-background);
 }
 
 .subjects-page__apply-button {
