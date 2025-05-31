@@ -1,14 +1,14 @@
-import { FC } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import styles from './NavBar.module.css'
+import { FC } from "react";
+import { Link, useLocation } from "react-router-dom";
+import styles from "./NavBar.module.css";
 
 const NavBar: FC = () => {
-	const location = useLocation()
+  const location = useLocation();
 
-	return (
-		<nav className={styles['navbar']}>
-			<ul className={styles['navbar__list']}>
-				<li className={styles['navbar__item']}>
+  return (
+    <nav className={styles["navbar"]}>
+      <ul className={styles["navbar__list"]}>
+        {/* <li className={styles['navbar__item']}>
 					<Link to='/wallet' className={styles['navbar__link']}>
 						<svg
 							xmlns='http://www.w3.org/2000/svg'
@@ -32,70 +32,70 @@ const NavBar: FC = () => {
 							Кошелёк
 						</h2>
 					</Link>
-				</li>
-				<li className={styles['navbar__item']}>
-					<Link to='/' className={styles['navbar__link']}>
-						<svg
-							xmlns='http://www.w3.org/2000/svg'
-							width='25'
-							height='25'
-							viewBox='0 0 25 25'
-							fill='none'
-						>
-							<path
-								d='M10.0025 4.75722C9.69873 3.9979 8.96332 3.5 8.14551 3.5H5.39474C4.3483 3.5 3.5 4.3481 3.5 5.39453C3.5 14.2892 10.7108 21.5 19.6055 21.5C20.6519 21.5 21.5 20.6516 21.5 19.6052L21.5005 16.854C21.5005 16.0361 21.0027 15.3009 20.2434 14.9971L17.6069 13.9429C16.9249 13.6701 16.1483 13.7929 15.5839 14.2632L14.9035 14.8307C14.1089 15.4929 12.9396 15.4402 12.2082 14.7088L10.2922 12.7911C9.56079 12.0596 9.50673 10.8913 10.1689 10.0967L10.7363 9.4163C11.2066 8.85195 11.3305 8.07516 11.0577 7.39309L10.0025 4.75722Z'
-								stroke={location.pathname === '/' ? '#007AFF' : '#959595'}
-								stroke-width='2'
-								stroke-linecap='round'
-								stroke-linejoin='round'
-							/>
-						</svg>
-						<h2
-							className={styles['navbar__title']}
-							style={{
-								color: location.pathname === '/' ? '#007AFF' : '#959595',
-							}}
-						>
-							Контакты
-						</h2>
-					</Link>
-				</li>
-				<li className={styles['navbar__item']}>
-					<Link to='/profile' className={styles['navbar__link']}>
-						<svg
-							xmlns='http://www.w3.org/2000/svg'
-							width='24'
-							height='25'
-							viewBox='0 0 24 25'
-							fill='none'
-							className={styles['navbar__link-img']}
-						>
-							<path
-								fill-rule='evenodd'
-								clip-rule='evenodd'
-								d='M19.5806 17.21L19.8206 18.35C20.048 19.3356 19.8235 20.3713 19.2082 21.1742C18.593 21.9771 17.6514 22.4633 16.6406 22.5H7.36058C6.34976 22.4633 5.40815 21.9771 4.79293 21.1742C4.17771 20.3713 3.95315 19.3356 4.18058 18.35L4.42058 17.21C4.69662 15.6668 6.0232 14.5327 7.59058 14.5H16.4106C17.978 14.5327 19.3045 15.6668 19.5806 17.21ZM16.6406 20.99C17.1484 20.9841 17.6263 20.7489 17.9406 20.35V20.36C18.3263 19.8762 18.4765 19.2458 18.3506 18.64L18.1106 17.5C17.9774 16.6552 17.2652 16.0226 16.4106 15.99H7.59059C6.73595 16.0226 6.02375 16.6552 5.89059 17.5L5.65059 18.64C5.52774 19.2426 5.67785 19.8687 6.06059 20.35C6.37492 20.7489 6.8528 20.9841 7.36059 20.99H16.6406Z'
-								fill={location.pathname === '/profile' ? '#007AFF' : '#959595'}
-							/>
-							<path
-								fill-rule='evenodd'
-								clip-rule='evenodd'
-								d='M12.5006 12.5H11.5006C9.29143 12.5 7.50057 10.7092 7.50057 8.50001V5.86001C7.4979 4.96807 7.85104 4.11189 8.48175 3.48119C9.11245 2.85049 9.96863 2.49735 10.8606 2.50001H13.1406C14.0325 2.49735 14.8887 2.85049 15.5194 3.48119C16.1501 4.11189 16.5032 4.96807 16.5006 5.86001V8.50001C16.5006 10.7092 14.7097 12.5 12.5006 12.5ZM10.8606 4.00002C9.83332 4.00002 9.00057 4.83277 9.00057 5.86001V8.50001C9.00057 9.88073 10.1199 11 11.5006 11H12.5006C13.8813 11 15.0006 9.88073 15.0006 8.50001V5.86001C15.0006 5.36671 14.8046 4.89361 14.4558 4.5448C14.107 4.19598 13.6339 4.00002 13.1406 4.00002H10.8606Z'
-								fill={location.pathname === '/profile' ? '#007AFF' : '#959595'}
-							/>
-						</svg>
-						<h2
-							className={styles['navbar__title']}
-							style={{
-								color: location.pathname === '/profile' ? '#007AFF' : '#959595',
-							}}
-						>
-							Профиль
-						</h2>
-					</Link>
-				</li>
-			</ul>
-		</nav>
-	)
-}
+				</li> */}
+        <li className={styles["navbar__item"]}>
+          <Link to="/" className={styles["navbar__link"]}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              viewBox="0 0 25 25"
+              fill="none"
+            >
+              <path
+                d="M10.0025 4.75722C9.69873 3.9979 8.96332 3.5 8.14551 3.5H5.39474C4.3483 3.5 3.5 4.3481 3.5 5.39453C3.5 14.2892 10.7108 21.5 19.6055 21.5C20.6519 21.5 21.5 20.6516 21.5 19.6052L21.5005 16.854C21.5005 16.0361 21.0027 15.3009 20.2434 14.9971L17.6069 13.9429C16.9249 13.6701 16.1483 13.7929 15.5839 14.2632L14.9035 14.8307C14.1089 15.4929 12.9396 15.4402 12.2082 14.7088L10.2922 12.7911C9.56079 12.0596 9.50673 10.8913 10.1689 10.0967L10.7363 9.4163C11.2066 8.85195 11.3305 8.07516 11.0577 7.39309L10.0025 4.75722Z"
+                stroke={location.pathname === "/" ? "#007AFF" : "#959595"}
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <h2
+              className={styles["navbar__title"]}
+              style={{
+                color: location.pathname === "/" ? "#007AFF" : "#959595",
+              }}
+            >
+              Контакты
+            </h2>
+          </Link>
+        </li>
+        <li className={styles["navbar__item"]}>
+          <Link to="/profile" className={styles["navbar__link"]}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="25"
+              viewBox="0 0 24 25"
+              fill="none"
+              className={styles["navbar__link-img"]}
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M19.5806 17.21L19.8206 18.35C20.048 19.3356 19.8235 20.3713 19.2082 21.1742C18.593 21.9771 17.6514 22.4633 16.6406 22.5H7.36058C6.34976 22.4633 5.40815 21.9771 4.79293 21.1742C4.17771 20.3713 3.95315 19.3356 4.18058 18.35L4.42058 17.21C4.69662 15.6668 6.0232 14.5327 7.59058 14.5H16.4106C17.978 14.5327 19.3045 15.6668 19.5806 17.21ZM16.6406 20.99C17.1484 20.9841 17.6263 20.7489 17.9406 20.35V20.36C18.3263 19.8762 18.4765 19.2458 18.3506 18.64L18.1106 17.5C17.9774 16.6552 17.2652 16.0226 16.4106 15.99H7.59059C6.73595 16.0226 6.02375 16.6552 5.89059 17.5L5.65059 18.64C5.52774 19.2426 5.67785 19.8687 6.06059 20.35C6.37492 20.7489 6.8528 20.9841 7.36059 20.99H16.6406Z"
+                fill={location.pathname === "/profile" ? "#007AFF" : "#959595"}
+              />
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M12.5006 12.5H11.5006C9.29143 12.5 7.50057 10.7092 7.50057 8.50001V5.86001C7.4979 4.96807 7.85104 4.11189 8.48175 3.48119C9.11245 2.85049 9.96863 2.49735 10.8606 2.50001H13.1406C14.0325 2.49735 14.8887 2.85049 15.5194 3.48119C16.1501 4.11189 16.5032 4.96807 16.5006 5.86001V8.50001C16.5006 10.7092 14.7097 12.5 12.5006 12.5ZM10.8606 4.00002C9.83332 4.00002 9.00057 4.83277 9.00057 5.86001V8.50001C9.00057 9.88073 10.1199 11 11.5006 11H12.5006C13.8813 11 15.0006 9.88073 15.0006 8.50001V5.86001C15.0006 5.36671 14.8046 4.89361 14.4558 4.5448C14.107 4.19598 13.6339 4.00002 13.1406 4.00002H10.8606Z"
+                fill={location.pathname === "/profile" ? "#007AFF" : "#959595"}
+              />
+            </svg>
+            <h2
+              className={styles["navbar__title"]}
+              style={{
+                color: location.pathname === "/profile" ? "#007AFF" : "#959595",
+              }}
+            >
+              Профиль
+            </h2>
+          </Link>
+        </li>
+      </ul>
+    </nav>
+  );
+};
 
-export default NavBar
+export default NavBar;

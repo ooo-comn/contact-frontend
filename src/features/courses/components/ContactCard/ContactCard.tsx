@@ -1,10 +1,16 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { API_BASE_URL } from "src/shared/config/api";
 import Star from "../../../../shared/assets/course/StarFeedback.svg";
 import Heart from "../../../../shared/assets/feed/Heart.svg";
+import HeartFill from "../../../../shared/assets/feed/HeartFill.svg";
 import LinkShare from "../../../../shared/assets/feed/Link.svg";
 import { IContactCard } from "../../../courses/types/IContactCard";
 import styles from "./ContactCard.module.css";
+
+interface FavoriteContact {
+  id: number;
+}
 
 const ContactCard: FC<IContactCard> = ({
   itemCard,
@@ -16,6 +22,71 @@ const ContactCard: FC<IContactCard> = ({
   count,
 }) => {
   const fullName = `${userName || ""} ${userSecondName || ""}`.trim();
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      try {
+        const { id: userId } = window.Telegram.WebApp.initDataUnsafe.user;
+
+        const response = await fetch(
+          `${API_BASE_URL}/contacts/favorites/user/${userId}`
+        );
+        if (response.ok) {
+          const favoriteContacts: FavoriteContact[] = await response.json();
+          const isFav = favoriteContacts.some(
+            (contact: FavoriteContact) => contact.id === itemCard.id
+          );
+          setIsFavorite(isFav);
+        }
+      } catch (error) {
+        console.error("Ошибка при проверке статуса избранного:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (itemCard.id) {
+      checkFavoriteStatus();
+    }
+  }, [itemCard.id]);
+
+  const toggleFavorite = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+
+    if (!itemCard.id) {
+      console.error("Contact ID не найден");
+      return;
+    }
+
+    try {
+      const { id: userId } = window.Telegram.WebApp.initDataUnsafe.user;
+
+      const response = await fetch(
+        `${API_BASE_URL}/contacts/${itemCard.id}/favorite?user_id=${userId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Статус избранного изменен:", result);
+        setIsFavorite(!isFavorite);
+      } else {
+        console.error(
+          "Ошибка при изменении статуса избранного:",
+          response.status
+        );
+      }
+    } catch (error) {
+      console.error("Ошибка при запросе к серверу:", error);
+    }
+  };
 
   return (
     <Link to={`/user/${itemCard.user_id}`} className={styles["card"]}>
@@ -51,14 +122,44 @@ const ContactCard: FC<IContactCard> = ({
         </div>
 
         <div className={styles["card__actions"]}>
-          <button className={styles["card__action-btn"]}>
-            <img
-              src={Heart}
-              alt="Кнопка добавления в избранное"
-              className={styles["card__action-icon"]}
-            />
+          <button
+            className={styles["card__action-btn"]}
+            onClick={toggleFavorite}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <div style={{ width: "4.79vw", height: "4.79vw" }}>
+                {/* Можете добавить спиннер загрузки здесь */}
+              </div>
+            ) : isFavorite ? (
+              <img
+                src={HeartFill}
+                alt="Убрать из избранного"
+                className={styles["card__action-icon"]}
+              />
+            ) : (
+              <img
+                src={Heart}
+                alt="Добавить в избранное"
+                className={styles["card__action-icon"]}
+              />
+            )}
           </button>
-          <button className={styles["card__action-btn"]}>
+          <button
+            className={styles["card__action-btn"]}
+            onClick={(e) => {
+              e.stopPropagation();
+              const contactLink = `https://t.me/share/url?url=${encodeURIComponent(
+                `https://t.me/ComnContactBot/CoCourseApp?startapp=user_${itemCard.user_id}`
+              )}`;
+
+              if (window.Telegram?.WebApp) {
+                window.Telegram.WebApp.openLink(contactLink);
+              } else {
+                console.error("Telegram WebApp не доступен");
+              }
+            }}
+          >
             <img
               src={LinkShare}
               alt="Отправить контакт"

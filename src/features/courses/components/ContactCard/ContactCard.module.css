@@ -4,7 +4,7 @@
   padding: 2.05vw;
   flex-direction: column;
   align-items: flex-start;
-  gap: 2.051vw;
+  gap: 4.1vw;
   border-radius: 1.538vw;
   background: var(--mini-background);
   text-decoration: none;
@@ -49,9 +49,9 @@
 }
 
 .card__uni {
-  color: var(--second-text);
+  color: var(--main-text);
   font-family: "Geologica";
-  font-size: 3.077vw;
+  font-size: 3.59vw;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -117,7 +117,7 @@
   padding: 1.28vw 2.05vw;
   border-radius: 1.026vw;
   background: #e0efff;
-  color: var(--main-text);
+  color: #333;
   font-family: "Geologica";
   font-size: 3.077vw;
   font-style: normal;
@@ -154,6 +154,11 @@
   width: 4.79vw;
   height: 4.79vw;
   flex-shrink: 0;
+}
+
+.card__action-icon--filled {
+  filter: brightness(0) saturate(100%) invert(8%) sepia(100%) saturate(7500%)
+    hue-rotate(357deg) brightness(88%) contrast(118%);
 }
 
 .card__bottom {
