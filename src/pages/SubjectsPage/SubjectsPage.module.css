@@ -1,0 +1,137 @@
+.subjects-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--background-color);
+  padding: 2.05vw;
+  padding-bottom: calc(2.05vw + 70px); /* Добавляем место для кнопки */
+}
+
+.subjects-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4.1vw;
+}
+
+.subjects-page__title {
+  color: var(--main-text);
+  font-family: "Geologica";
+  font-size: 4.87vw;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin: 0;
+}
+
+.subjects-page__reset-button {
+  background: none;
+  border: none;
+  color: var(--active-color);
+  font-family: "Geologica";
+  font-size: 3.59vw;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  cursor: pointer;
+  padding: 0;
+}
+
+.subjects-page__search {
+  margin-bottom: 4.1vw;
+}
+
+.subjects-page__search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.subjects-page__search-input {
+  width: 100%;
+  padding: 3.08vw;
+  padding-left: 10vw; /* Место для иконки */
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 2.05vw;
+  background: var(--input-background, #f5f5f5);
+  color: var(--main-text);
+  font-family: "Geologica";
+  font-size: 3.59vw;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  box-sizing: border-box;
+}
+
+.subjects-page__search-icon {
+  position: absolute;
+  left: 3.08vw;
+  width: 3.59vw;
+  height: 3.59vw;
+  pointer-events: none;
+}
+
+.subjects-page__search-input::placeholder {
+  color: var(--second-text);
+}
+
+.subjects-page__search-input:focus {
+  outline: none;
+  border-color: var(--active-color);
+}
+
+.subjects-page__content {
+  flex: 1;
+  margin-bottom: 4.1vw;
+}
+
+.subjects-page__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5vw;
+}
+
+.subjects-page__loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  color: var(--second-text);
+  font-family: "Geologica";
+  font-size: 3.59vw;
+}
+
+.subjects-page__footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2.05vw;
+  background: var(--background-color);
+  border-top: 1px solid var(--border-color, #e0e0e0);
+}
+
+.subjects-page__apply-button {
+  width: 100%;
+  padding: 3.59vw;
+  border: none;
+  border-radius: 2.56vw;
+  background: var(--active-color);
+  color: white;
+  font-family: "Geologica";
+  font-size: 4.1vw;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.subjects-page__apply-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.subjects-page__apply-button:not(:disabled):hover {
+  opacity: 0.9;
+}
