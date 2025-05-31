@@ -54,6 +54,7 @@ const ContactCard: FC<IContactCard> = ({
 
   const toggleFavorite = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
+    e.preventDefault();
 
     if (!itemCard.id) {
       console.error("Contact ID не найден");
@@ -149,6 +150,7 @@ const ContactCard: FC<IContactCard> = ({
             className={styles["card__action-btn"]}
             onClick={(e) => {
               e.stopPropagation();
+              e.preventDefault();
               const contactLink = `https://t.me/share/url?url=${encodeURIComponent(
                 `https://t.me/ComnContactBot/CoCourseApp?startapp=user_${itemCard.user_id}`
               )}`;
