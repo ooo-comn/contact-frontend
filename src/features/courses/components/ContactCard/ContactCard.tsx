@@ -1,6 +1,8 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import Star from "../../../../shared/assets/course/StarFeedback.svg";
+import Heart from "../../../../shared/assets/feed/Heart.svg";
+import LinkShare from "../../../../shared/assets/feed/Link.svg";
 import { IContactCard } from "../../../courses/types/IContactCard";
 import styles from "./ContactCard.module.css";
 
@@ -51,14 +53,14 @@ const ContactCard: FC<IContactCard> = ({
         <div className={styles["card__actions"]}>
           <button className={styles["card__action-btn"]}>
             <img
-              src="../../../../shared/assets/feed/Heart.svg"
+              src={Heart}
               alt="Кнопка добавления в избранное"
               className={styles["card__action-icon"]}
             />
           </button>
           <button className={styles["card__action-btn"]}>
             <img
-              src="../../../../shared/assets/feed/Link.svg"
+              src={LinkShare}
               alt="Отправить контакт"
               className={styles["card__action-icon"]}
             />
@@ -68,7 +70,7 @@ const ContactCard: FC<IContactCard> = ({
 
       <p className={styles["card__uni"]}>{university}</p>
       <div className={styles["card__subjects"]}>
-        <h1 className={styles["card__subtitle"]}>Предметы:</h1>
+        <h1 className={styles["card__subtitle"]}>Предметы</h1>
         <div className={styles["card__tags"]}>
           {itemCard.subjects?.map((subject) => (
             <p key={String(subject)} className={styles["card__tag"]}>

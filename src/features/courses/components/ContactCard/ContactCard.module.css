@@ -1,7 +1,7 @@
 .card {
   display: flex;
   width: 91.795vw;
-  padding: 2.564vw 2.051vw;
+  padding: 2.05vw;
   flex-direction: column;
   align-items: flex-start;
   gap: 2.051vw;
@@ -18,10 +18,11 @@
 }
 
 .card__userpic-wrapper {
-  width: 15.385vw;
-  height: 15.385vw;
+  width: 11.79vw;
+  height: 11.79vw;
   border-radius: 50%;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .card__userpic {
@@ -40,7 +41,7 @@
 .card__name {
   color: var(--main-text);
   font-family: "Geologica";
-  font-size: 3.846vw;
+  font-size: 3.59vw;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
@@ -88,11 +89,11 @@
 }
 
 .card__subtitle {
-  color: var(--main-text);
+  color: var(--second-text);
   font-family: "Geologica";
-  font-size: 3.59vw;
+  font-size: 3.08vw;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   line-height: normal;
   margin: 0;
 }
@@ -101,7 +102,7 @@
 .card__subjects {
   display: flex;
   flex-direction: column;
-  gap: 1.282vw;
+  gap: 2.05vw;
   width: 100%;
 }
 
@@ -127,11 +128,12 @@
 .card__wrapper-user {
   display: flex;
   justify-content: space-between;
+  width: 100%;
 }
 
 .card__actions {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 2.05vw;
 }
 
@@ -174,7 +176,7 @@
 .card__reviews-rate {
   color: var(--main-text);
   font-family: "Geologica";
-  font-size: 3.59vw;
+  font-size: 2.56vw;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
