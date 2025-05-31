@@ -1,4 +1,4 @@
-.subjects-page {
+.work-types-page {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -7,14 +7,14 @@
   padding-bottom: calc(2.05vw + 70px);
 }
 
-.subjects-page__header {
+.work-types-page__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 4.1vw;
 }
 
-.subjects-page__title {
+.work-types-page__title {
   color: var(--main-text);
   font-family: "Geologica";
   font-size: 4.62vw;
@@ -24,7 +24,7 @@
   margin: 0;
 }
 
-.subjects-page__reset-button {
+.work-types-page__reset-button {
   background: none;
   border: none;
   color: var(--second-text);
@@ -37,17 +37,17 @@
   padding: 0;
 }
 
-.subjects-page__search {
+.work-types-page__search {
   margin-bottom: 2.05vw;
 }
 
-.subjects-page__search-container {
+.work-types-page__search-container {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.subjects-page__search-input {
+.work-types-page__search-input {
   width: 100%;
   padding: 3.08vw;
   padding-left: 8.72vw;
@@ -64,7 +64,7 @@
   box-sizing: border-box;
 }
 
-.subjects-page__search-icon {
+.work-types-page__search-icon {
   position: absolute;
   left: 3.08vw;
   width: 3.59vw;
@@ -72,22 +72,22 @@
   pointer-events: none;
 }
 
-.subjects-page__search-input::placeholder {
+.work-types-page__search-input::placeholder {
   color: var(--second-text);
 }
 
-.subjects-page__content {
+.work-types-page__content {
   flex: 1;
   margin-bottom: 7.69vw;
 }
 
-.subjects-page__list {
+.work-types-page__list {
   display: flex;
   flex-direction: column;
   gap: 1.28vw;
 }
 
-.subjects-page__loading {
+.work-types-page__loading {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -97,7 +97,7 @@
   font-size: 3.59vw;
 }
 
-.subjects-page__footer {
+.work-types-page__footer {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -106,7 +106,7 @@
   background-color: var(--mini-background);
 }
 
-.subjects-page__apply-button {
+.work-types-page__apply-button {
   width: 100%;
   padding: 3.59vw;
   border: none;
@@ -122,11 +122,11 @@
   transition: opacity 0.2s ease;
 }
 
-.subjects-page__apply-button:disabled {
+.work-types-page__apply-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.subjects-page__apply-button:not(:disabled):hover {
+.work-types-page__apply-button:not(:disabled):hover {
   opacity: 0.9;
 }

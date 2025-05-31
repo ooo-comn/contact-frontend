@@ -31,6 +31,7 @@ import ReturnForm from "../pages/Wallet/ReturnForm";
 import VerificationN from "../pages/Wallet/VerificationN";
 // import Wallet from '../pages/Wallet/Wallet'
 import useTheme from "../shared/hooks/useTheme";
+import WorkTypesPage from "src/pages/WorkTypesPage/WorkTypesPage";
 import "./App.css";
 
 function App() {
@@ -162,6 +163,7 @@ function App() {
               <Route path={"connect-walletN"} element={<ConnectWalletN />} />
               <Route path={"legal"} element={<LegalPage />} />
               <Route path={"subjects"} element={<SubjectsPage />} />
+              <Route path={"work-types"} element={<WorkTypesPage />} />
               <Route
                 path={"verification-form"}
                 element={<VerificationForm />}
