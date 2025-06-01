@@ -10,6 +10,7 @@ import {
 import { fetchReviewsByContactId } from "src/entities/feedback/model/fetchReviewsByContactId";
 import { fetchContactByTelegramId } from "src/entities/user/model/fetchContact";
 import { fetchUserById } from "src/entities/user/model/fetchUserById";
+import { fetchContacts } from "src/entities/user/model/fetchContacts";
 import Feedback from "src/shared/components/Feedback/Feedback";
 import NavBar from "src/shared/components/NavBar/NavBar";
 import Sales from "src/shared/components/Sales/Sales";
@@ -19,10 +20,6 @@ import styles from "./UserProfile.module.css";
 import Heart from "../../../shared/assets/feed/Heart.svg";
 import HeartFill from "../../../shared/assets/feed/HeartFill.svg";
 import LinkShare from "../../../shared/assets/feed/Link.svg";
-
-interface FavoriteContact {
-  id: number;
-}
 
 const SellerProfile: FC = () => {
   window.scrollTo(0, 0);
@@ -83,23 +80,16 @@ const SellerProfile: FC = () => {
       if (!contactData?.id) return;
 
       try {
-        const response = await fetch(
-          `${API_BASE_URL}/contacts/?favorites=true`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `tma ${window.Telegram.WebApp.initData}`,
-            },
-          }
+        console.log("Checking favorite status for contact:", contactData.id);
+
+        const favoriteContacts = await fetchContacts({ favorites: true });
+        console.log("Favorite contacts response:", favoriteContacts);
+
+        const isFav = favoriteContacts.some(
+          (contact) => contact.id === contactData.id
         );
-        if (response.ok) {
-          const favoriteContacts: FavoriteContact[] = await response.json();
-          const isFav = favoriteContacts.some(
-            (contact: FavoriteContact) => contact.id === contactData.id
-          );
-          setIsFavorite(isFav);
-        }
+        console.log("Is favorite:", isFav);
+        setIsFavorite(isFav);
       } catch (error) {
         console.error("Ошибка при проверке статуса избранного:", error);
       } finally {
@@ -185,7 +175,7 @@ const SellerProfile: FC = () => {
             e.stopPropagation();
             e.preventDefault();
             const contactLink = `https://t.me/share/url?url=${encodeURIComponent(
-              `https://t.me/ComnContactBot/CoCourseApp?startapp=user_${userData?.id}`
+              `https://t.me/ComnContactBot/ComnContactApp?startapp=user_${userData?.id}`
             )}`;
 
             if (window.Telegram?.WebApp) {

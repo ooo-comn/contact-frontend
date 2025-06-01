@@ -33,6 +33,8 @@ export const useFeed = (
 
       if (activeFilter === "Недавние") {
         params = { latest: true, limit: 100 };
+      } else if (activeFilter === "Избранные") {
+        params = { favorites: true, limit: 100 };
       } else if (activeFilter === "Все контакты") {
         params = { limit: 100 };
       }

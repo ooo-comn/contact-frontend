@@ -230,7 +230,7 @@ const FiltersPage: FC = () => {
               isNotify={sortFilters["По дате"]}
               isNotifyFAQ={() => handleFilterChange("sort", "По дате")}
             />
-            <FilterItem
+            {/* <FilterItem
               filterItemType="checkbox"
               text="Дешевле"
               isNotify={sortFilters["Дешевле"]}
@@ -241,7 +241,7 @@ const FiltersPage: FC = () => {
               text="Дороже"
               isNotify={sortFilters["Дороже"]}
               isNotifyFAQ={() => handleFilterChange("sort", "Дороже")}
-            />
+            /> */}
           </div>
         </div>
       </div>

@@ -1,16 +1,13 @@
 import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { API_BASE_URL } from "src/shared/config/api";
+import { fetchContacts } from "src/entities/user/model/fetchContacts";
 import Star from "../../../../shared/assets/course/StarFeedback.svg";
 import Heart from "../../../../shared/assets/feed/Heart.svg";
 import HeartFill from "../../../../shared/assets/feed/HeartFill.svg";
 import LinkShare from "../../../../shared/assets/feed/Link.svg";
 import { IContactCard } from "../../../courses/types/IContactCard";
 import styles from "./ContactCard.module.css";
-
-interface FavoriteContact {
-  id: number;
-}
 
 const ContactCard: FC<IContactCard> = ({
   itemCard,
@@ -28,23 +25,17 @@ const ContactCard: FC<IContactCard> = ({
   useEffect(() => {
     const checkFavoriteStatus = async () => {
       try {
-        const response = await fetch(
-          `${API_BASE_URL}/contacts/?favorites=true`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `tma ${window.Telegram.WebApp.initData}`,
-            },
-          }
+        console.log("Checking favorite status for contact:", itemCard.id);
+
+        const favoriteContacts = await fetchContacts({ favorites: true });
+        console.log("Favorite contacts response:", favoriteContacts);
+        console.log("Looking for contact with ID:", itemCard.id);
+
+        const isFav = favoriteContacts.some(
+          (contact) => contact.id === itemCard.id
         );
-        if (response.ok) {
-          const favoriteContacts: FavoriteContact[] = await response.json();
-          const isFav = favoriteContacts.some(
-            (contact: FavoriteContact) => contact.id === itemCard.id
-          );
-          setIsFavorite(isFav);
-        }
+        console.log("Is favorite:", isFav);
+        setIsFavorite(isFav);
       } catch (error) {
         console.error("Ошибка при проверке статуса избранного:", error);
       } finally {
@@ -69,6 +60,15 @@ const ContactCard: FC<IContactCard> = ({
     try {
       const { id: userId } = window.Telegram.WebApp.initDataUnsafe.user;
 
+      console.log(
+        "Toggling favorite for contact:",
+        itemCard.id,
+        "by user:",
+        userId,
+        "current status:",
+        isFavorite
+      );
+
       const response = await fetch(
         `${API_BASE_URL}/contacts/${itemCard.id}/favorite?user_id=${userId}`,
         {
@@ -80,14 +80,18 @@ const ContactCard: FC<IContactCard> = ({
         }
       );
 
+      console.log("Toggle favorite response status:", response.status);
+
       if (response.ok) {
         const result = await response.json();
         console.log("Статус избранного изменен:", result);
+        console.log("Setting favorite to:", !isFavorite);
         setIsFavorite(!isFavorite);
       } else {
         console.error(
           "Ошибка при изменении статуса избранного:",
-          response.status
+          response.status,
+          await response.text()
         );
       }
     } catch (error) {
@@ -156,7 +160,7 @@ const ContactCard: FC<IContactCard> = ({
               e.stopPropagation();
               e.preventDefault();
               const contactLink = `https://t.me/share/url?url=${encodeURIComponent(
-                `https://t.me/ComnContactBot/CoCourseApp?startapp=user_${itemCard.user_id}`
+                `https://t.me/ComnContactBot/ComnContactApp?startapp=user_${itemCard.user_id}`
               )}`;
 
               if (window.Telegram?.WebApp) {

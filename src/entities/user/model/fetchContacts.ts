@@ -38,6 +38,12 @@ export const fetchContacts = async (
         queryParams.append("limit", params.limit.toString());
       }
 
+      // Добавляем user_id для корректной работы API
+      const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+      if (userId) {
+        queryParams.append("user_id", userId.toString());
+      }
+
       const queryString = queryParams.toString();
       if (queryString) {
         url += `?${queryString}`;
