@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { API_BASE_URL } from "src/shared/config/api";
-import { fetchContacts } from "src/entities/user/model/fetchContacts";
+import { checkContactIsFavorite } from "src/entities/user/model/fetchContacts";
 import Star from "../../../../shared/assets/course/StarFeedback.svg";
 import Heart from "../../../../shared/assets/feed/Heart.svg";
 import HeartFill from "../../../../shared/assets/feed/HeartFill.svg";
@@ -27,15 +27,10 @@ const ContactCard: FC<IContactCard> = ({
       try {
         console.log("Checking favorite status for contact:", itemCard.id);
 
-        const favoriteContacts = await fetchContacts({ favorites: true });
-        console.log("Favorite contacts response:", favoriteContacts);
-        console.log("Looking for contact with ID:", itemCard.id);
-
-        const isFav = favoriteContacts.some(
-          (contact) => contact.id === itemCard.id
-        );
-        console.log("Is favorite:", isFav);
-        setIsFavorite(isFav);
+        if (itemCard.id !== null) {
+          const isFav = await checkContactIsFavorite(itemCard.id);
+          setIsFavorite(isFav);
+        }
       } catch (error) {
         console.error("Ошибка при проверке статуса избранного:", error);
       } finally {
@@ -85,8 +80,10 @@ const ContactCard: FC<IContactCard> = ({
       if (response.ok) {
         const result = await response.json();
         console.log("Статус избранного изменен:", result);
-        console.log("Setting favorite to:", !isFavorite);
-        setIsFavorite(!isFavorite);
+
+        const newFavoriteStatus = result.is_favorite;
+        console.log("Setting favorite to:", newFavoriteStatus);
+        setIsFavorite(newFavoriteStatus);
       } else {
         console.error(
           "Ошибка при изменении статуса избранного:",

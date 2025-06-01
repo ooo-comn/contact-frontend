@@ -10,7 +10,7 @@ import {
 import { fetchReviewsByContactId } from "src/entities/feedback/model/fetchReviewsByContactId";
 import { fetchContactByTelegramId } from "src/entities/user/model/fetchContact";
 import { fetchUserById } from "src/entities/user/model/fetchUserById";
-import { fetchContacts } from "src/entities/user/model/fetchContacts";
+import { checkContactIsFavorite } from "src/entities/user/model/fetchContacts";
 import Feedback from "src/shared/components/Feedback/Feedback";
 import NavBar from "src/shared/components/NavBar/NavBar";
 import Sales from "src/shared/components/Sales/Sales";
@@ -82,12 +82,7 @@ const SellerProfile: FC = () => {
       try {
         console.log("Checking favorite status for contact:", contactData.id);
 
-        const favoriteContacts = await fetchContacts({ favorites: true });
-        console.log("Favorite contacts response:", favoriteContacts);
-
-        const isFav = favoriteContacts.some(
-          (contact) => contact.id === contactData.id
-        );
+        const isFav = await checkContactIsFavorite(contactData.id);
         console.log("Is favorite:", isFav);
         setIsFavorite(isFav);
       } catch (error) {
@@ -112,6 +107,15 @@ const SellerProfile: FC = () => {
     try {
       const { id: userId } = window.Telegram.WebApp.initDataUnsafe.user;
 
+      console.log(
+        "Toggling favorite for contact:",
+        contactData.id,
+        "by user:",
+        userId,
+        "current status:",
+        isFavorite
+      );
+
       const response = await fetch(
         `${API_BASE_URL}/contacts/${contactData.id}/favorite?user_id=${userId}`,
         {
@@ -123,14 +127,21 @@ const SellerProfile: FC = () => {
         }
       );
 
+      console.log("Toggle favorite response status:", response.status);
+
       if (response.ok) {
         const result = await response.json();
         console.log("Статус избранного изменен:", result);
-        setIsFavorite(!isFavorite);
+
+        // Устанавливаем статус из ответа API, а не инвертируем текущий
+        const newFavoriteStatus = result.is_favorite;
+        console.log("Setting favorite to:", newFavoriteStatus);
+        setIsFavorite(newFavoriteStatus);
       } else {
         console.error(
           "Ошибка при изменении статуса избранного:",
-          response.status
+          response.status,
+          await response.text()
         );
       }
     } catch (error) {

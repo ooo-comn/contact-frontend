@@ -9,18 +9,50 @@ interface ContactsParams {
   limit?: number;
 }
 
+// Функция для получения избранных контактов пользователя
+export const fetchUserFavoriteContacts = async (): Promise<IContact[]> => {
+  try {
+    const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+    const url = `${API_BASE_URL}/contacts/favorites/user/${userId}`;
+
+    const initData = window.Telegram.WebApp.initData;
+    console.log("Fetching user favorites from:", url);
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `tma ${initData}`,
+      },
+    });
+
+    if (!response.ok) {
+      console.error("Response not OK:", response.status, response.statusText);
+      throw new Error(`Ошибка HTTP: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("Successfully fetched user favorite contacts:", data.length);
+    return data;
+  } catch (error) {
+    console.error("Ошибка при запросе избранных контактов:", error);
+    throw error;
+  }
+};
+
 export const fetchContacts = async (
   params?: ContactsParams
 ): Promise<IContact[]> => {
   try {
+    // Если запрашиваются избранные, используем специальный эндпоинт
+    if (params?.favorites) {
+      return await fetchUserFavoriteContacts();
+    }
+
     let url = `${API_BASE_URL}/contacts/`;
 
     if (params) {
       const queryParams = new URLSearchParams();
-
-      if (params.favorites !== undefined) {
-        queryParams.append("favorites", params.favorites.toString());
-      }
 
       if (params.latest !== undefined) {
         queryParams.append("latest", params.latest.toString());
@@ -77,5 +109,22 @@ export const fetchContacts = async (
   } catch (error) {
     console.error("Ошибка при запросе к серверу:", error);
     throw error;
+  }
+};
+
+// Функция для проверки, находится ли контакт в избранном у пользователя
+export const checkContactIsFavorite = async (
+  contactId: number
+): Promise<boolean> => {
+  try {
+    const favoriteContacts = await fetchUserFavoriteContacts();
+    const isFavorite = favoriteContacts.some(
+      (contact) => contact.id === contactId
+    );
+    console.log(`Contact ${contactId} is favorite:`, isFavorite);
+    return isFavorite;
+  } catch (error) {
+    console.error("Ошибка при проверке статуса избранного:", error);
+    return false;
   }
 };
