@@ -16,7 +16,7 @@ const LandingPage: FC = () => {
           <img src={LogoConnect} alt="Картинка логотипа" />
           <h1 className={styles["landing__title"]}>Common Connect</h1>
           <p className={styles["landing__subtitle"]}>
-            Контакты тех, кто поможет с учебными задачами
+            Контакты тех, кто поможет с&nbsp;учебными задачами
           </p>
         </div>
 
