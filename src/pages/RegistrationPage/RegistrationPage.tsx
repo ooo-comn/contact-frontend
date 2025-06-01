@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   fetchUpdateUser,
@@ -29,6 +29,76 @@ const RegistrationPage: FC = () => {
   const [optionsSubject, setOptionsSubject] = useState<string[]>([]);
   const [optionsUniv, setOptionsUniv] = useState<string[]>([]);
   const [optionsWorkTypes, setOptionsWorkTypes] = useState<string[]>([]);
+
+  // Получаем данные пользователя из Telegram WebApp
+  const telegramUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+
+  console.log("Telegram user data:", telegramUser);
+
+  const [imageSrc, setImageSrc] = useState("");
+  const [isNotify, setIsNotify] = useState(true);
+  const [bioValue, setBioValue] = useState("");
+  const [uniValue, setUniValue] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [selectedWorkTypes, setSelectedWorkTypes] = useState<string[]>([]);
+  const [boxIsVisibleSubject, setBoxIsVisibleSubject] = useState(false);
+  const [inputValueSubject, setInputValueSubject] = useState("");
+  const [boxIsVisibleUniv, setBoxIsVisibleUniv] = useState(false);
+  const [inputValueUniv, setInputValueUniv] = useState("");
+  const [boxIsVisibleWorkTypes, setBoxIsVisibleWorkTypes] = useState(false);
+  const [inputValueWorkTypes, setInputValueWorkTypes] = useState("");
+
+  // Инициализируем данные из Telegram
+  useEffect(() => {
+    if (telegramUser) {
+      console.log("Setting user data from Telegram:", telegramUser);
+      setFirstName(telegramUser.first_name || "");
+      setLastName(telegramUser.last_name || "");
+    }
+  }, [telegramUser]);
+
+  // Получаем фото пользователя из API
+  useEffect(() => {
+    const fetchUserPhoto = async () => {
+      if (telegramUser?.id) {
+        try {
+          console.log("Fetching user photo for:", telegramUser.id);
+          const response = await fetch(
+            `${API_BASE_URL}/contacts/user/${telegramUser.id}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `tma ${window.Telegram.WebApp.initData}`,
+              },
+            }
+          );
+
+          if (response.ok) {
+            const contactData = await response.json();
+            console.log("Contact data for photo:", contactData);
+
+            // API возвращает массив, берем первый элемент
+            const contact = Array.isArray(contactData)
+              ? contactData[0]
+              : contactData;
+
+            if (contact?.image_url) {
+              const photoUrl = `https://${API_BASE_URL}.ru${contact.image_url}`;
+              console.log("Setting photo URL:", photoUrl);
+              setImageSrc(photoUrl);
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching user photo:", error);
+        }
+      }
+    };
+
+    fetchUserPhoto();
+  }, [telegramUser?.id]);
 
   useEffect(() => {
     const loadSubjects = async () => {
@@ -68,39 +138,6 @@ const RegistrationPage: FC = () => {
 
     loadWorkTypes();
   }, []);
-
-  const storedData = sessionStorage.getItem("userCourses");
-  console.log("storedData", storedData);
-  const data = useMemo(
-    () => (storedData ? JSON.parse(storedData) : {}),
-    [storedData]
-  );
-  console.log("storedDatadata", data);
-
-  const [imageSrc, setImageSrc] = useState(data.image_url);
-  const [isNotify, setIsNotify] = useState(true);
-  const [bioValue, setBioValue] = useState("");
-  const [uniValue, setUniValue] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  const [selectedWorkTypes, setSelectedWorkTypes] = useState<string[]>([]);
-  const [boxIsVisibleSubject, setBoxIsVisibleSubject] = useState(false);
-  const [inputValueSubject, setInputValueSubject] = useState("");
-  const [boxIsVisibleUniv, setBoxIsVisibleUniv] = useState(false);
-  const [inputValueUniv, setInputValueUniv] = useState("");
-  const [boxIsVisibleWorkTypes, setBoxIsVisibleWorkTypes] = useState(false);
-  const [inputValueWorkTypes, setInputValueWorkTypes] = useState("");
-
-  // const userFriendlyAddress = useTonAddress()
-
-  useEffect(() => {
-    if (data && data.image_url) {
-      setImageSrc(data.image_url);
-      setFirstName(data.first_name);
-      setLastName(data.last_name);
-    }
-  }, [data]);
 
   const handleNotify = () => {
     setIsNotify(!isNotify);
@@ -310,7 +347,7 @@ const RegistrationPage: FC = () => {
         <div
           className={styles["edit-profile__avatar"]}
           style={{
-            backgroundImage: `url(https://${API_BASE_URL}.ru${imageSrc})`,
+            backgroundImage: `url(${imageSrc})`,
           }}
         />
 
