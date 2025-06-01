@@ -108,9 +108,16 @@ function App() {
     const urlParams = new URLSearchParams(window.Telegram.WebApp.initData);
     const startParam = urlParams.get("start_param");
 
+    console.log("Start param received:", startParam);
+
     if (startParam && startParam.startsWith("course_")) {
       const courseId = startParam.split("_")[1];
       navigate(`/course/${courseId}`);
+      setHasRedirected(true);
+    } else if (startParam && startParam.startsWith("user_")) {
+      const userId = startParam.split("_")[1];
+      console.log("Navigating to user profile:", userId);
+      navigate(`/user/${userId}`);
       setHasRedirected(true);
     } else if (startParam && startParam === "profile") {
       navigate("/profile");

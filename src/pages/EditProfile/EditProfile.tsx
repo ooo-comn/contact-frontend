@@ -1,7 +1,10 @@
 import React, { FC, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserCourses } from "src/entities/course/model/useUserCourses";
-import { fetchUpdateUser } from "src/entities/user/model/fetchUpdateUser";
+import {
+  updateUserProfile,
+  updateContactData,
+} from "src/entities/user/model/fetchUpdateUser";
 import handleBioChangeMinus from "src/features/bio-change/handleBioChangeMinus";
 import { filterOptions } from "src/features/filterOptions";
 import { fetchSubjects } from "src/features/get-subjects/model/fetchWorkTypes";
@@ -9,14 +12,15 @@ import { fetchUniversities } from "src/features/get-universities/model/fetchUniv
 import { useUserProfile } from "src/pages/UserProfile/model/useUserProfile";
 import MainButton from "src/shared/components/MainButton/MainButton";
 import VerificationInput from "src/shared/components/VerificationInput/VerificationInput";
-import Bell from "../../shared/assets/profile/Bell.svg";
-import Bulb from "../../shared/assets/profile/Bulb.svg";
-import Error from "../../shared/assets/profile/Error.svg";
-import Faq from "../../shared/assets/profile/Faq.svg";
-import MarkedExist from "../../shared/assets/profile/MarkedExist.svg";
-import Warning from "../../shared/assets/profile/Warning.svg";
-import CloseImg from "../../shared/assets/wallet/CloseImg.svg";
-import { BASE_URL } from "../../shared/config/api";
+import { API_BASE_URL } from "src/shared/config/api";
+import CloseImg from "src/shared/assets/edit-profile/close-icon.svg";
+import MarkedExist from "src/shared/assets/edit-profile/marked-exist.svg";
+// import SearchIcon from "src/shared/assets/edit-profile/search-icon.svg";
+import Bell from "src/shared/assets/profile/Bell.svg";
+import Error from "src/shared/assets/profile/Error.svg";
+import Bulb from "src/shared/assets/profile/Bulb.svg";
+import Faq from "src/shared/assets/profile/Faq.svg";
+import Warning from "src/shared/assets/profile/Warning.svg";
 import styles from "./EditProfile.module.css";
 import InputWithVariants from "./ui/InputWithVariants/InputWithVariants";
 import LinksFAQ from "./ui/LinksFAQ/LinksFAQ";
@@ -169,13 +173,36 @@ const EditProfile: FC = () => {
       initData: window.Telegram.WebApp.initData ? "present" : "missing",
       userId: userData?.id || 0,
       userData,
+      bioValue,
+      uniValue,
+      isNotify,
     });
 
-    await fetchUpdateUser(selectedOptions, [], window.Telegram.WebApp.initData);
+    try {
+      // 1. Обновляем данные пользователя (университет, описание, уведомления)
+      if (userData?.id) {
+        await updateUserProfile(userData.id, uniValue, bioValue, isNotify);
+        console.log("User profile updated successfully");
+      }
 
-    console.log("EditProfile data sent successfully");
+      // 2. Обновляем контактные данные (subjects, work_types) через updateContactData
+      if (contactData?.id) {
+        await updateContactData(
+          contactData.id,
+          selectedOptions,
+          [],
+          window.Telegram.WebApp.initData
+        );
+        console.log("Contact data updated successfully");
+      }
 
-    navigate(`/profile`);
+      console.log("EditProfile data sent successfully");
+      navigate(`/profile`);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      // Показываем пользователю, что произошла ошибка
+      // window.Telegram.WebApp.showAlert("Произошла ошибка при сохранении. Попробуйте еще раз.");
+    }
   };
 
   const varsSubject = filteredOptionsSubject.map(
@@ -236,7 +263,7 @@ const EditProfile: FC = () => {
         <div
           className={styles["edit-profile__avatar"]}
           style={{
-            backgroundImage: `url(https://${BASE_URL}.ru${contactData?.image_url})`,
+            backgroundImage: `url(https://${API_BASE_URL}.ru${contactData?.image_url})`,
           }}
         />
 

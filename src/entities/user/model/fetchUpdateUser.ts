@@ -199,3 +199,39 @@ export const updateUserProfile = async (
     throw error;
   }
 };
+
+export const updateContactData = async (
+  contactId: number,
+  subjects: string[],
+  workTypes: string[],
+  initData: string
+): Promise<void> => {
+  try {
+    const requestBody = {
+      subjects,
+      work_types: workTypes,
+    };
+
+    console.log(`Updating contact ${contactId} with:`, requestBody);
+
+    const response = await fetch(`${API_BASE_URL}/contacts/${contactId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `tma ${initData}`,
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    console.log("Update contact response status:", response.status);
+
+    if (!response.ok) {
+      throw new Error(`Ошибка HTTP: ${response.status}`);
+    }
+
+    console.log("Contact data updated successfully");
+  } catch (error) {
+    console.error("Error updating contact data:", error);
+    throw error;
+  }
+};
