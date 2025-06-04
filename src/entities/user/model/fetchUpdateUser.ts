@@ -181,18 +181,29 @@ export const updateUserProfile = async (
     if (description !== undefined) updateData.description = description;
     if (notify !== undefined) updateData.notify = notify;
 
+    console.log(`Updating user ${userId} with data:`, updateData);
+    console.log(`Making PATCH request to: ${API_BASE_URL}/users/${userId}`);
+
     const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `tma ${window.Telegram.WebApp.initData}`,
       },
       body: JSON.stringify(updateData),
     });
 
+    console.log("Update user response status:", response.status);
+    console.log("Update user response headers:", response.headers);
+
     if (!response.ok) {
-      throw new Error(`Ошибка HTTP: ${response.status}`);
+      const errorText = await response.text();
+      console.error("Update user error response:", errorText);
+      throw new Error(`Ошибка HTTP: ${response.status} - ${errorText}`);
     }
 
+    const responseData = await response.json();
+    console.log("Update user response data:", responseData);
     console.log("Данные пользователя успешно обновлены");
   } catch (error) {
     console.error("Ошибка при обновлении пользователя:", error);

@@ -259,10 +259,13 @@ const RegistrationPage: FC = () => {
     // Определяем университет для сохранения: если есть введенное значение, используем его, иначе выбранное
     const universityToSave = inputValueUniv.trim() || uniValue;
 
+    console.log("=== НАЧАЛО СОХРАНЕНИЯ ===");
     console.log("RegistrationPage handleSave:", {
       selectedOptions,
       selectedWorkTypes,
       university: universityToSave,
+      universityField: uniValue,
+      inputUniversity: inputValueUniv,
       description: bioValue,
       notify: isNotify,
       telegramId,
@@ -270,6 +273,7 @@ const RegistrationPage: FC = () => {
 
     try {
       // Сначала получаем реальный user_id по telegram_id
+      console.log("Получаем user_id по telegram_id:", telegramId);
       const response = await fetch(
         `${API_BASE_URL}/users/?telegram_id=${telegramId}`
       );
@@ -278,6 +282,7 @@ const RegistrationPage: FC = () => {
       }
 
       const userData = await response.json();
+      console.log("Получен ответ пользователя:", userData);
       const realUserId = userData[0]?.id;
 
       if (!realUserId) {
@@ -285,20 +290,36 @@ const RegistrationPage: FC = () => {
       }
 
       console.log("Реальный user_id:", realUserId);
+      console.log("Вызываем updateUserProfile с параметрами:", {
+        userId: realUserId,
+        university: universityToSave,
+        description: bioValue,
+        notify: isNotify,
+      });
 
       // Обновляем данные пользователя (university, description, notify)
       await updateUserProfile(realUserId, universityToSave, bioValue, isNotify);
 
+      console.log("updateUserProfile выполнен успешно");
+
       // Обновляем контактные данные (subjects, work_types)
+      console.log("Вызываем fetchUpdateUser с параметрами:", {
+        selectedOptions,
+        selectedWorkTypes,
+        initData: window.Telegram.WebApp.initData,
+      });
+
       await fetchUpdateUser(
         selectedOptions,
         selectedWorkTypes,
         window.Telegram.WebApp.initData
       );
 
-      console.log("Данные успешно сохранены");
+      console.log("fetchUpdateUser выполнен успешно");
+      console.log("=== ВСЕ ДАННЫЕ УСПЕШНО СОХРАНЕНЫ ===");
       navigate(`/`);
     } catch (error) {
+      console.error("=== ОШИБКА ПРИ СОХРАНЕНИИ ===");
       console.error("Ошибка при сохранении данных:", error);
     }
   };
