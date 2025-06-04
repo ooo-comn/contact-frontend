@@ -111,9 +111,19 @@ export const fetchUpdateUser = async (
         let data;
         try {
           data = await response.json();
+          console.log("Response data from contacts API:", data);
         } catch (e) {
           console.log("No JSON in response, using empty object");
           data = {};
+        }
+
+        // Если в ответе есть user_id, добавляем его в результат
+        if (data && data.user_id) {
+          console.log("Found user_id in response:", data.user_id);
+        } else if (actualUserId) {
+          // Если user_id нет в ответе, используем тот который мы передавали
+          data.user_id = actualUserId;
+          console.log("Added user_id to response data:", actualUserId);
         }
 
         return {

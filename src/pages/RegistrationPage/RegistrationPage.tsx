@@ -272,24 +272,52 @@ const RegistrationPage: FC = () => {
     });
 
     try {
-      // Сначала получаем реальный user_id по telegram_id
-      console.log("Получаем user_id по telegram_id:", telegramId);
-      const response = await fetch(
-        `${API_BASE_URL}/users/?telegram_id=${telegramId}`
+      // Сначала обновляем контактные данные (subjects, work_types) и получаем правильный user_id
+      console.log("Вызываем fetchUpdateUser с параметрами:", {
+        selectedOptions,
+        selectedWorkTypes,
+        initData: window.Telegram.WebApp.initData,
+      });
+
+      const contactResult = await fetchUpdateUser(
+        selectedOptions,
+        selectedWorkTypes,
+        window.Telegram.WebApp.initData
       );
-      if (!response.ok) {
-        throw new globalThis.Error("Не удалось получить данные пользователя");
+
+      console.log(
+        "fetchUpdateUser выполнен успешно, результат:",
+        contactResult
+      );
+
+      // Получаем user_id из первого запроса или делаем fallback запрос
+      let realUserId;
+      if (contactResult && contactResult.data && contactResult.data.user_id) {
+        realUserId = contactResult.data.user_id;
+        console.log(
+          "Получен user_id из результата создания контакта:",
+          realUserId
+        );
+      } else {
+        // Fallback: получаем user_id по telegram_id
+        console.log("Fallback: получаем user_id по telegram_id:", telegramId);
+        const response = await fetch(
+          `${API_BASE_URL}/users/?telegram_id=${telegramId}`
+        );
+        if (!response.ok) {
+          throw new globalThis.Error("Не удалось получить данные пользователя");
+        }
+
+        const userData = await response.json();
+        console.log("Получен ответ пользователя:", userData);
+        realUserId = userData[0]?.id;
+
+        if (!realUserId) {
+          throw new globalThis.Error("Не найден ID пользователя");
+        }
       }
 
-      const userData = await response.json();
-      console.log("Получен ответ пользователя:", userData);
-      const realUserId = userData[0]?.id;
-
-      if (!realUserId) {
-        throw new globalThis.Error("Не найден ID пользователя");
-      }
-
-      console.log("Реальный user_id:", realUserId);
+      console.log("Используем user_id для обновления профиля:", realUserId);
       console.log("Вызываем updateUserProfile с параметрами:", {
         userId: realUserId,
         university: universityToSave,
@@ -297,25 +325,10 @@ const RegistrationPage: FC = () => {
         notify: isNotify,
       });
 
-      // Обновляем данные пользователя (university, description, notify)
+      // Теперь обновляем данные пользователя (university, description, notify) с правильным user_id
       await updateUserProfile(realUserId, universityToSave, bioValue, isNotify);
 
       console.log("updateUserProfile выполнен успешно");
-
-      // Обновляем контактные данные (subjects, work_types)
-      console.log("Вызываем fetchUpdateUser с параметрами:", {
-        selectedOptions,
-        selectedWorkTypes,
-        initData: window.Telegram.WebApp.initData,
-      });
-
-      await fetchUpdateUser(
-        selectedOptions,
-        selectedWorkTypes,
-        window.Telegram.WebApp.initData
-      );
-
-      console.log("fetchUpdateUser выполнен успешно");
       console.log("=== ВСЕ ДАННЫЕ УСПЕШНО СОХРАНЕНЫ ===");
       navigate(`/`);
     } catch (error) {
