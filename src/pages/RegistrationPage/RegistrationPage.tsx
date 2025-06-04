@@ -86,19 +86,46 @@ const RegistrationPage: FC = () => {
               : contactData;
 
             if (contact?.image_url) {
-              const photoUrl = `https://${API_BASE_URL}.ru${contact.image_url}`;
-              console.log("Setting photo URL:", photoUrl);
+              const photoUrl = `${API_BASE_URL}${contact.image_url}`;
+              console.log("Setting photo URL from API:", photoUrl);
               setImageSrc(photoUrl);
+            } else {
+              // Если нет image_url в API, используем фото из Telegram
+              if (telegramUser.photo_url) {
+                console.log(
+                  "Using Telegram photo as fallback:",
+                  telegramUser.photo_url
+                );
+                setImageSrc(telegramUser.photo_url);
+              }
+            }
+          } else {
+            // Если API возвращает ошибку (например, 404), используем фото из Telegram
+            console.log("API error, using Telegram photo:", response.status);
+            if (telegramUser.photo_url) {
+              console.log(
+                "Setting photo URL from Telegram:",
+                telegramUser.photo_url
+              );
+              setImageSrc(telegramUser.photo_url);
             }
           }
         } catch (error) {
           console.error("Error fetching user photo:", error);
+          // В случае ошибки также используем фото из Telegram
+          if (telegramUser.photo_url) {
+            console.log(
+              "Error fallback - using Telegram photo:",
+              telegramUser.photo_url
+            );
+            setImageSrc(telegramUser.photo_url);
+          }
         }
       }
     };
 
     fetchUserPhoto();
-  }, [telegramUser?.id]);
+  }, [telegramUser?.id, telegramUser?.photo_url]);
 
   useEffect(() => {
     const loadSubjects = async () => {
@@ -229,10 +256,13 @@ const RegistrationPage: FC = () => {
   const handleSave = async () => {
     const { id: telegramId } = window.Telegram.WebApp.initDataUnsafe.user;
 
+    // Определяем университет для сохранения: если есть введенное значение, используем его, иначе выбранное
+    const universityToSave = inputValueUniv.trim() || uniValue;
+
     console.log("RegistrationPage handleSave:", {
       selectedOptions,
       selectedWorkTypes,
-      university: uniValue,
+      university: universityToSave,
       description: bioValue,
       notify: isNotify,
       telegramId,
@@ -257,7 +287,7 @@ const RegistrationPage: FC = () => {
       console.log("Реальный user_id:", realUserId);
 
       // Обновляем данные пользователя (university, description, notify)
-      await updateUserProfile(realUserId, uniValue, bioValue, isNotify);
+      await updateUserProfile(realUserId, universityToSave, bioValue, isNotify);
 
       // Обновляем контактные данные (subjects, work_types)
       await fetchUpdateUser(
