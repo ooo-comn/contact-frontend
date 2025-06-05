@@ -355,8 +355,8 @@ const EditProfile: FC = () => {
             onChange={handleUniChange}
             isValue={boxIsVisibleUniv ? true : false}
             onClick={() => {
-              setBoxIsVisibleSubject(true);
-              setBoxIsVisibleUniv(false);
+              setBoxIsVisibleUniv(true);
+              setBoxIsVisibleSubject(false);
               setBoxIsVisibleWorkTypes(false);
             }}
           >
@@ -409,6 +409,7 @@ const EditProfile: FC = () => {
             onClick={() => {
               setBoxIsVisibleSubject(true);
               setBoxIsVisibleUniv(false);
+              setBoxIsVisibleWorkTypes(false);
             }}
           >
             {selectedOptions ? (
