@@ -1,5 +1,5 @@
 import { Skeleton } from "@mui/material";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { calculateRating } from "src/entities/course/lib/calculateRating";
 // import { fetchUserTransactions } from "src/entities/wallet/model/fetchUserTransactions";
@@ -9,6 +9,7 @@ import NavBar from "src/shared/components/NavBar/NavBar";
 import PartnershipCard from "src/shared/components/PartnershipCard/PartnershipCard";
 import Sales from "src/shared/components/Sales/Sales";
 import useTheme from "src/shared/hooks/useTheme";
+import { API_BASE_URL } from "src/shared/config/api";
 import { useUserProfile } from "../model/useUserProfile";
 import styles from "./UserProfile.module.css";
 
@@ -26,11 +27,13 @@ const UserProfile: FC = () => {
   });
 
   // const [verifyed, setVerifyed] = useState<string | null>(null);
+  const [isPublishing, setIsPublishing] = useState(false);
 
   const { userData, coursesData, feedbacks, contactData } = useUserProfile();
 
   console.log("userData:", userData);
   console.log("contactData:", contactData);
+  console.log("contactData.is_visible:", contactData?.is_visible);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,6 +48,60 @@ const UserProfile: FC = () => {
   const totalStudents = coursesData?.customer_count;
 
   const averageRate = feedbacks.length > 0 ? calculateRating(feedbacks) : 0;
+
+  const handlePublishContact = async () => {
+    if (!contactData?.id) {
+      console.error("Contact ID не найден");
+      return;
+    }
+
+    try {
+      setIsPublishing(true);
+      console.log("Publishing contact:", contactData.id);
+
+      const response = await fetch(
+        `${API_BASE_URL}/contacts/${contactData.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `tma ${window.Telegram.WebApp.initData}`,
+          },
+          body: JSON.stringify({
+            is_visible: true,
+          }),
+        }
+      );
+
+      console.log("Publish contact response status:", response.status);
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Контакт успешно опубликован:", result);
+
+        // Можно показать уведомление пользователю
+        window.Telegram?.WebApp?.showAlert("Контакт успешно опубликован!");
+
+        // Перезагружаем страницу или обновляем состояние
+        window.location.reload();
+      } else {
+        const errorText = await response.text();
+        console.error(
+          "Ошибка при публикации контакта:",
+          response.status,
+          errorText
+        );
+        window.Telegram?.WebApp?.showAlert(
+          "Ошибка при публикации контакта. Попробуйте еще раз."
+        );
+      }
+    } catch (error) {
+      console.error("Ошибка при запросе:", error);
+      window.Telegram?.WebApp?.showAlert("Ошибка сети. Попробуйте еще раз.");
+    } finally {
+      setIsPublishing(false);
+    }
+  };
 
   const { theme } = useTheme();
 
@@ -184,9 +241,15 @@ const UserProfile: FC = () => {
           </p>
         </div>
       </section>
-      <button className={styles["user-profile__button-publish"]}>
-        Опубликовать свой контакт
-      </button>
+      {contactData?.is_visible === false && (
+        <button
+          className={styles["user-profile__button-publish"]}
+          onClick={handlePublishContact}
+          disabled={isPublishing}
+        >
+          {isPublishing ? "Публикуем..." : "Опубликовать свой контакт"}
+        </button>
+      )}
       <NavBar />
     </div>
   );

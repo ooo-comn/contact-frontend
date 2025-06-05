@@ -47,6 +47,7 @@ export interface IContact {
   work_types: string[];
   customer_count: number;
   image_url: string;
+  is_visible?: boolean;
 }
 
 export interface IChannel {

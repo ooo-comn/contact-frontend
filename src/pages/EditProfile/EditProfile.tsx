@@ -13,7 +13,6 @@ import { fetchWorkTypes } from "src/features/get-work-types/model/fetchWorkTypes
 import { useUserProfile } from "src/pages/UserProfile/model/useUserProfile";
 import MainButton from "src/shared/components/MainButton/MainButton";
 import VerificationInput from "src/shared/components/VerificationInput/VerificationInput";
-import { API_BASE_URL } from "src/shared/config/api";
 import MarkedExist from "../../shared/assets/profile/MarkedExist.svg";
 import CloseImg from "../../shared/assets/wallet/CloseImg.svg";
 // import SearchIcon from "src/shared/assets/edit-profile/search-icon.svg";
@@ -336,7 +335,7 @@ const EditProfile: FC = () => {
         <div
           className={styles["edit-profile__avatar"]}
           style={{
-            backgroundImage: `url(${API_BASE_URL}${contactData?.image_url})`,
+            backgroundImage: `url(${contactData?.image_url})`,
           }}
         />
 
