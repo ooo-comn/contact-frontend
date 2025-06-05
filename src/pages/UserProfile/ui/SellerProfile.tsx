@@ -55,10 +55,8 @@ const SellerProfile: FC = () => {
         console.log("user.telegram_id:", user.telegram_id);
         console.log("user.id:", user.id);
 
-        // Получаем данные контакта по telegram_id пользователя
-        const contact = await fetchContactByTelegramId(
-          String(user.telegram_id)
-        );
+        // Получаем данные контакта по user_id (который теперь равен telegram_id)
+        const contact = await fetchContactByTelegramId(String(user.id));
         setContactData(contact);
 
         // Получаем отзывы по contact.user_id

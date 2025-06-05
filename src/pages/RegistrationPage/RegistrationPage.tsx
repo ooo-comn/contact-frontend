@@ -80,10 +80,8 @@ const RegistrationPage: FC = () => {
             const contactData = await response.json();
             console.log("Contact data for photo:", contactData);
 
-            // API возвращает массив, берем первый элемент
-            const contact = Array.isArray(contactData)
-              ? contactData[0]
-              : contactData;
+            // API возвращает объект контакта
+            const contact = contactData;
 
             if (contact?.image_url) {
               const photoUrl = `${API_BASE_URL}${contact.image_url}`;
