@@ -5,7 +5,7 @@ import { IContact } from "src/entities/course/model/types";
 // import { useUserCourses } from "src/entities/course/model/useUserCourses";
 import { fetchReviewsByContactId } from "src/entities/feedback/model/fetchReviewsByContactId";
 import { fetchContactByTelegramId } from "src/entities/user/model/fetchContact";
-import { fetchUser } from "src/entities/user/model/fetchUser";
+import { fetchUserByUserId } from "src/entities/user/model/fetchUser";
 import {
   setLoading,
   setUserProfile,
@@ -27,22 +27,24 @@ export const useUserProfile = () => {
   } = useSelector((state: RootState) => state.userProfile);
 
   const { id } = window.Telegram.WebApp.initDataUnsafe.user;
-  const telegramId = String(id);
+  const userId = id; // Теперь telegram_id и user_id одинаковые
 
   useEffect(() => {
     const loadData = async () => {
       try {
         dispatch(setLoading(true));
 
-        // Fetch user data from /users/ endpoint
-        const user = await fetchUser(telegramId);
+        console.log("Loading user profile for user_id:", userId);
+
+        // Fetch user data directly by user_id (which is same as telegram_id now)
+        const user = await fetchUserByUserId(userId);
 
         if (!user) {
           throw new Error("User data not found");
         }
 
-        // Fetch contact data from /contacts/user/{tg_id} endpoint to get image_url
-        const contact = await fetchContactByTelegramId(telegramId);
+        // Fetch contact data from /contacts/user/{user_id} endpoint to get image_url
+        const contact = await fetchContactByTelegramId(String(userId));
         const reviews = await fetchReviewsByContactId(contact.user_id);
 
         setContactData(contact);
@@ -65,7 +67,7 @@ export const useUserProfile = () => {
     };
 
     loadData();
-  }, [dispatch, telegramId]);
+  }, [dispatch, userId]);
 
   return {
     userData,

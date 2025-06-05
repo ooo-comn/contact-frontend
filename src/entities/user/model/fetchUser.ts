@@ -26,3 +26,26 @@ export const fetchUser = async (
     throw error;
   }
 };
+
+export const fetchUserByUserId = async (
+  user_id: number
+): Promise<ITelegramUser> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/users/?user_id=${user_id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Ошибка HTTP: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data[0];
+  } catch (error) {
+    console.error("Ошибка при запросе к серверу:", error);
+    throw error;
+  }
+};
