@@ -9,6 +9,7 @@ import handleBioChangeMinus from "src/features/bio-change/handleBioChangeMinus";
 import { filterOptions } from "src/features/filterOptions";
 import { fetchSubjects } from "src/features/get-subjects/model/fetchWorkTypes";
 import { fetchUniversities } from "src/features/get-universities/model/fetchUniversities";
+import { fetchWorkTypes } from "src/features/get-work-types/model/fetchWorkTypes";
 import { useUserProfile } from "src/pages/UserProfile/model/useUserProfile";
 import MainButton from "src/shared/components/MainButton/MainButton";
 import VerificationInput from "src/shared/components/VerificationInput/VerificationInput";
@@ -31,6 +32,7 @@ const EditProfile: FC = () => {
 
   const [optionsSubject, setOptionsSubject] = useState<string[]>([]);
   const [optionsUniv, setOptionsUniv] = useState<string[]>([]);
+  const [optionsWorkTypes, setOptionsWorkTypes] = useState<string[]>([]);
 
   useEffect(() => {
     const loadSubjects = async () => {
@@ -51,11 +53,24 @@ const EditProfile: FC = () => {
         const universities = await fetchUniversities();
         setOptionsUniv(universities);
       } catch (error) {
-        console.log("Не удалось загрузить список предметов");
+        console.log("Не удалось загрузить список университетов");
       }
     };
 
     loadUniversities();
+  }, []);
+
+  useEffect(() => {
+    const loadWorkTypes = async () => {
+      try {
+        const workTypes = await fetchWorkTypes();
+        setOptionsWorkTypes(workTypes);
+      } catch (error) {
+        console.log("Не удалось загрузить список типов работ");
+      }
+    };
+
+    loadWorkTypes();
   }, []);
 
   const userCourses = useUserCourses(window.Telegram.WebApp.initData);
@@ -64,13 +79,16 @@ const EditProfile: FC = () => {
   const navigate = useNavigate();
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [selectedWorkTypes, setSelectedWorkTypes] = useState<string[]>([]);
   const [uniValue, setUniValue] = useState("");
   const [bioValue, setBioValue] = useState("");
   const [isNotify, setIsNotify] = useState(true);
   const [boxIsVisibleSubject, setBoxIsVisibleSubject] = useState(false);
   const [boxIsVisibleUniv, setBoxIsVisibleUniv] = useState(false);
+  const [boxIsVisibleWorkTypes, setBoxIsVisibleWorkTypes] = useState(false);
   const [inputValueSubject, setInputValueSubject] = useState("");
   const [inputValueUniv, setInputValueUniv] = useState("");
+  const [inputValueWorkTypes, setInputValueWorkTypes] = useState("");
 
   const BackButton = window.Telegram.WebApp.BackButton;
   BackButton.show();
@@ -112,6 +130,10 @@ const EditProfile: FC = () => {
   useEffect(() => {
     setSelectedOptions(selectedOptionsProfile);
   }, [selectedOptionsProfile]);
+
+  useEffect(() => {
+    setSelectedWorkTypes(contactData?.work_types || []);
+  }, [contactData?.work_types]);
 
   useEffect(() => {
     setUniValue(uniValueProfile);
@@ -159,6 +181,29 @@ const EditProfile: FC = () => {
     setUniValue("");
   };
 
+  const handleSelectChangeWorkTypes = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = event.target.value;
+    setInputValueWorkTypes(value);
+    setBoxIsVisibleWorkTypes(true);
+  };
+
+  const handleOptionClickWorkType = (option: string) => {
+    if (!selectedWorkTypes.includes(option)) {
+      setSelectedWorkTypes([...selectedWorkTypes, option]);
+    }
+    setInputValueWorkTypes("");
+    setBoxIsVisibleWorkTypes(false);
+  };
+
+  const handleRemoveOptionWorkType = (optionToRemove: string) => {
+    const updatedOptions = selectedWorkTypes.filter(
+      (option) => option !== optionToRemove
+    );
+    setSelectedWorkTypes(updatedOptions);
+  };
+
   const filteredOptionsSubject = filterOptions(
     optionsSubject,
     inputValueSubject
@@ -166,10 +211,15 @@ const EditProfile: FC = () => {
 
   const filteredOptionsUniv = filterOptions(optionsUniv, inputValueUniv);
 
+  const filteredOptionsWorkTypes = filterOptions(
+    optionsWorkTypes,
+    inputValueWorkTypes
+  );
+
   const handleSave = async () => {
     console.log("EditProfile handleSave:", {
       selectedOptions,
-      workTypes: [], // Empty array since this page doesn't have work types selection
+      selectedWorkTypes,
       initData: window.Telegram.WebApp.initData ? "present" : "missing",
       userId: userData?.id || 0,
       userData,
@@ -190,7 +240,7 @@ const EditProfile: FC = () => {
         await updateContactData(
           contactData.id,
           selectedOptions,
-          [],
+          selectedWorkTypes,
           window.Telegram.WebApp.initData
         );
         console.log("Contact data updated successfully");
@@ -248,6 +298,29 @@ const EditProfile: FC = () => {
     );
   });
 
+  const varsWorkTypes = filteredOptionsWorkTypes.map(
+    (item: string, index: number) => {
+      const isSelected = selectedWorkTypes.includes(item);
+
+      return (
+        <div
+          className={styles["edit-profile__ubject-variant"]}
+          key={index}
+          onClick={() => handleOptionClickWorkType(item)}
+        >
+          <p className={styles["edit-profile__ubject-variant-text"]}>{item}</p>
+          {isSelected && (
+            <img
+              src={MarkedExist}
+              alt="Уже выбранный тип работы"
+              className={styles["edit-profile__ubject-variant-img"]}
+            />
+          )}
+        </div>
+      );
+    }
+  );
+
   const handleBioChangeWrapper = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -263,7 +336,7 @@ const EditProfile: FC = () => {
         <div
           className={styles["edit-profile__avatar"]}
           style={{
-            backgroundImage: `url(https://${API_BASE_URL}.ru${contactData?.image_url})`,
+            backgroundImage: `url(${API_BASE_URL}${contactData?.image_url})`,
           }}
         />
 
@@ -282,8 +355,9 @@ const EditProfile: FC = () => {
             onChange={handleUniChange}
             isValue={boxIsVisibleUniv ? true : false}
             onClick={() => {
-              setBoxIsVisibleUniv(true);
-              setBoxIsVisibleSubject(false);
+              setBoxIsVisibleSubject(true);
+              setBoxIsVisibleUniv(false);
+              setBoxIsVisibleWorkTypes(false);
             }}
           >
             {uniValue ? (
@@ -365,6 +439,63 @@ const EditProfile: FC = () => {
           {boxIsVisibleSubject ? (
             <div className={styles["edit-profile__all-subjects"]}>
               {varsSubject.map((item, index) => (
+                <React.Fragment key={index}>
+                  {index > 0 && (
+                    <div
+                      className={styles["edit-course__all-subjects-divider"]}
+                    />
+                  )}
+                  {item}
+                </React.Fragment>
+              ))}
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
+
+        <div className={styles["edit-profile__section"]}>
+          <h3 className={styles["edit-profile__subtitle"]}>Типы работ</h3>
+          <InputWithVariants
+            text="Выбери типы работ"
+            inputValueSubjectComponent={inputValueWorkTypes}
+            onClickImg={() => setBoxIsVisibleWorkTypes(false)}
+            onChange={handleSelectChangeWorkTypes}
+            isValue={boxIsVisibleWorkTypes ? true : false}
+            onClick={() => {
+              setBoxIsVisibleWorkTypes(true);
+              setBoxIsVisibleSubject(false);
+              setBoxIsVisibleUniv(false);
+            }}
+          >
+            {selectedWorkTypes ? (
+              selectedWorkTypes.map((option) => (
+                <div
+                  className={styles["edit-profile__exist-subject"]}
+                  key={option}
+                >
+                  <p className={styles["edit-profile__exist-subject-text"]}>
+                    {option}
+                  </p>
+                  <button
+                    className={styles["edit-profile__exist-subject-button"]}
+                    onClick={() => handleRemoveOptionWorkType(option)}
+                  >
+                    <img
+                      src={CloseImg}
+                      alt="Удалить тип работы"
+                      className={styles["edit-profile__exist-subject-img"]}
+                    />
+                  </button>
+                </div>
+              ))
+            ) : (
+              <></>
+            )}
+          </InputWithVariants>
+          {boxIsVisibleWorkTypes ? (
+            <div className={styles["edit-profile__all-subjects"]}>
+              {varsWorkTypes.map((item, index) => (
                 <React.Fragment key={index}>
                   {index > 0 && (
                     <div
