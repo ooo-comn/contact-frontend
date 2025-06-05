@@ -186,16 +186,15 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
               </h2>
               {!isUserFeedback && (
                 <p className={styles["feedback-page__empty-text"]}>
-                  Курс пока что без отзывов, и&nbsp;мы&nbsp;будем очень рады,
-                  если ты&nbsp;станешь первым, кто его попробует! Купи сейчас
-                  и&nbsp;поделись своими впечатлениями с&nbsp;нами
+                  Пользователь пока что без отзывов, и&nbsp;мы&nbsp;будем очень
+                  рады, если ты&nbsp;станешь первым, кто его оценит!
                 </p>
               )}
             </div>
           </div>
         )}
       </div>
-      {!isUserFeedback && (
+      {isUserFeedback && (
         <div className={styles["feedback-page__button"]}>
           <MainButton
             onClickEvent={() => setIsOpen(true)}
@@ -204,7 +203,7 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
         </div>
       )}
 
-      {!isFullCourses && (
+      {isFullCourses && (
         <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)}>
           <div className={styles["feedback-page__modal-title-wrapper"]}>
             <h2 className={styles["feedback-page__modal-title"]}>
@@ -268,7 +267,7 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
 
             <div className={styles["feedback-page__modal-rating"]}>
               <h2 className={styles["feedback-page__modal-rating-title"]}>
-                Как вам курс?
+                Как вам пользователь?
               </h2>
 
               <StarRating onRate={(rating) => setUserRating(rating)} />
