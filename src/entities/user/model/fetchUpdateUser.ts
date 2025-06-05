@@ -1,49 +1,5 @@
 import { API_BASE_URL } from "../../../shared/config/api";
 
-// Функция для получения user_id по telegram_id напрямую
-const getUserIdByTelegramId = async (
-  telegramId: number
-): Promise<number | null> => {
-  try {
-    console.log(`Fetching user data directly`);
-
-    const response = await fetch(
-      `${API_BASE_URL}/users/?telegram_id=${telegramId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (response.ok) {
-      const userData = await response.json();
-      console.log("User data response:", userData);
-
-      // API может вернуть массив пользователей
-      if (Array.isArray(userData) && userData.length > 0) {
-        // Возьмем пользователя из результатов
-        const user = userData[0];
-        if (user && user.id) {
-          console.log(
-            `Found user with ID ${user.id} for Telegram ID ${telegramId}`
-          );
-          return user.id;
-        }
-      }
-    } else {
-      console.error(`Error getting user data: ${response.status}`);
-    }
-  } catch (error) {
-    console.error(`Error fetching user data:`, error);
-  }
-
-  // Хардкод ID для нашего пользователя, если запрос не сработал
-  console.log("Using hardcoded user ID 2 as fallback");
-  return 2;
-};
-
 // Функция для извлечения Telegram ID из initData
 const extractTelegramId = (initData: string): number => {
   try {
@@ -79,9 +35,9 @@ export const fetchUpdateUser = async (
     const telegramId = extractTelegramId(initData);
     console.log("Extracted Telegram ID:", telegramId);
 
-    // Получаем реальный user_id
-    const actualUserId = await getUserIdByTelegramId(telegramId);
-    console.log(`Using user_id ${actualUserId} for request`);
+    // Теперь user_id и telegram_id одинаковые, используем telegram_id как user_id
+    const actualUserId = telegramId;
+    console.log(`Using user_id ${actualUserId} (same as telegram_id)`);
 
     // Формируем тело запроса с правильным user_id
     const requestBody = {

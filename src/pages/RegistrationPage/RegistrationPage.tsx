@@ -290,34 +290,10 @@ const RegistrationPage: FC = () => {
         contactResult
       );
 
-      // Получаем user_id из первого запроса или делаем fallback запрос
-      let realUserId;
-      if (contactResult && contactResult.data && contactResult.data.user_id) {
-        realUserId = contactResult.data.user_id;
-        console.log(
-          "Получен user_id из результата создания контакта:",
-          realUserId
-        );
-      } else {
-        // Fallback: получаем user_id по telegram_id
-        console.log("Fallback: получаем user_id по telegram_id:", telegramId);
-        const response = await fetch(
-          `${API_BASE_URL}/users/?telegram_id=${telegramId}`
-        );
-        if (!response.ok) {
-          throw new globalThis.Error("Не удалось получить данные пользователя");
-        }
+      // Теперь user_id и telegram_id одинаковые, используем telegram_id как user_id
+      const realUserId = telegramId;
+      console.log("Используем telegram_id как user_id:", realUserId);
 
-        const userData = await response.json();
-        console.log("Получен ответ пользователя:", userData);
-        realUserId = userData[0]?.id;
-
-        if (!realUserId) {
-          throw new globalThis.Error("Не найден ID пользователя");
-        }
-      }
-
-      console.log("Используем user_id для обновления профиля:", realUserId);
       console.log("Вызываем updateUserProfile с параметрами:", {
         userId: realUserId,
         university: universityToSave,
