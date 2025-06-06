@@ -79,9 +79,6 @@ const UserProfile: FC = () => {
         const result = await response.json();
         console.log("Контакт успешно опубликован:", result);
 
-        // Можно показать уведомление пользователю
-        window.Telegram?.WebApp?.showAlert("Контакт успешно опубликован!");
-
         // Перезагружаем страницу или обновляем состояние
         window.location.reload();
       } else {

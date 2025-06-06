@@ -17,6 +17,13 @@ export const fetchContactById = async (
     }
 
     const data = await response.json();
+
+    // Проверяем, что контакт опубликован (is_visible === true)
+    // Возвращаем контакт независимо от is_visible для совместимости, но логируем
+    if (data && data.is_visible !== true) {
+      console.log("Warning: Fetched contact is not visible:", contactId);
+    }
+
     return data;
   } catch (error) {
     console.error("Ошибка при запросе к серверу:", error);
@@ -43,6 +50,13 @@ export const fetchContactByTelegramId = async (
     }
 
     const data = await response.json();
+
+    // Проверяем, что контакт опубликован (is_visible === true)
+    // Возвращаем контакт независимо от is_visible (нужно для профилей пользователей)
+    if (data && data.is_visible !== true) {
+      console.log("Note: User's contact is not visible:", telegramId);
+    }
+
     return data;
   } catch (error) {
     console.error("Ошибка при запросе к серверу:", error);

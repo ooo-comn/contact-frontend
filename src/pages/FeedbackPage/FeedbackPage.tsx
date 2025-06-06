@@ -214,9 +214,7 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
                 <div className={styles["feedback-page__modal-user"]}>
                   <img
                     src={
-                      currentUser?.image_url
-                        ? `https://${BASE_URL}.ru${currentUser.image_url}`
-                        : ""
+                      currentUser?.image_url ? `${currentUser.image_url}` : ""
                     }
                     alt=""
                   />

@@ -33,7 +33,19 @@ export const fetchUserFavoriteContacts = async (): Promise<IContact[]> => {
 
     const data = await response.json();
     console.log("Successfully fetched user favorite contacts:", data.length);
-    return data;
+
+    // Фильтруем только опубликованные избранные контакты (is_visible === true)
+    const visibleFavorites = data.filter(
+      (contact: IContact) => contact.is_visible === true
+    );
+    console.log(
+      "Filtered visible favorite contacts:",
+      visibleFavorites.length,
+      "out of",
+      data.length
+    );
+
+    return visibleFavorites;
   } catch (error) {
     console.error("Ошибка при запросе избранных контактов:", error);
     throw error;
@@ -105,7 +117,19 @@ export const fetchContacts = async (
 
     const data = await response.json();
     console.log("Successfully fetched contacts:", data.length);
-    return data;
+
+    // Фильтруем только опубликованные контакты (is_visible === true)
+    const visibleContacts = data.filter(
+      (contact: IContact) => contact.is_visible === true
+    );
+    console.log(
+      "Filtered visible contacts:",
+      visibleContacts.length,
+      "out of",
+      data.length
+    );
+
+    return visibleContacts;
   } catch (error) {
     console.error("Ошибка при запросе к серверу:", error);
     throw error;
