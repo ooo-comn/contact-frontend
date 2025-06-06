@@ -134,7 +134,6 @@
   flex-direction: column;
   gap: 2.051vw;
   padding: 2.564vw 2.051vw;
-  width: 55.641vw;
 }
 
 .feedback-page__modal-user {
@@ -275,6 +274,12 @@
   gap: 2.051vw;
 }
 
+.feedback-page__modal-user-image {
+  width: 6.15vw;
+  height: 6.15vw;
+  border-radius: 100%;
+}
+
 .feedback-page__modal-cancel {
   display: flex;
   padding: 2.564vw 2.051vw;
@@ -327,6 +332,7 @@
   align-items: flex-start;
   gap: 2.051vw;
   border-radius: 1.538vw;
+  width: 91.026vw;
   background: var(--background);
 }
 

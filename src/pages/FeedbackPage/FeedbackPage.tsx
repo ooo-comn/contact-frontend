@@ -10,7 +10,6 @@ import { fetchFeedbacks } from "src/entities/feedback/model/fetchFeedback";
 import handlePublish from "src/entities/feedback/model/handlePublish";
 import { fetchContactByTelegramId } from "src/entities/user/model/fetchContact";
 import { fetchUserById } from "src/entities/user/model/fetchUserById";
-import { API_BASE_URL } from "src/shared/config/api";
 import StarFeedbackIcon from "src/shared/assets/course/StarFeedback.svg";
 import BottomSheet from "src/shared/components/BottomSheet/BottomSheet";
 import MainButton from "src/shared/components/MainButton/MainButton";
@@ -217,9 +216,10 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
                   <img
                     src={
                       currentContact?.image_url
-                        ? `${API_BASE_URL}${currentContact.image_url}`
+                        ? `${currentContact.image_url}`
                         : ""
                     }
+                    className={styles["feedback-page__modal-user-image"]}
                     alt=""
                   />
                   <h3 className={styles["feedback-page__modal-name"]}>
