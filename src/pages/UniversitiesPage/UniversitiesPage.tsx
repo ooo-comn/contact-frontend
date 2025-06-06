@@ -1,16 +1,20 @@
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchUniversities } from "src/features/get-universities/model/fetchUniversities";
+import { useFilters } from "src/shared/contexts/FiltersContext";
 import FilterItem from "../FiltersPage/ui/FilterItem/FilterItem";
 import styles from "./UniversitiesPage.module.css";
 
 const UniversitiesPage: FC = () => {
   const navigate = useNavigate();
-  const [universities, setUniversities] = useState<string[]>([]);
+  const { filters, setUniversities } = useFilters();
+  const [universities, setUniversitiesList] = useState<string[]>([]);
   const [filteredUniversities, setFilteredUniversities] = useState<string[]>(
     []
   );
-  const [selectedUniversity, setSelectedUniversity] = useState<string>("");
+  const [selectedUniversities, setSelectedUniversities] = useState<string[]>(
+    filters.universities
+  );
   const [searchValue, setSearchValue] = useState<string>("");
   const [loading, setLoading] = useState(true);
 
@@ -37,7 +41,7 @@ const UniversitiesPage: FC = () => {
       try {
         setLoading(true);
         const universitiesList = await fetchUniversities();
-        setUniversities(universitiesList);
+        setUniversitiesList(universitiesList);
         setFilteredUniversities(universitiesList);
       } catch (error) {
         console.error("Ошибка загрузки университетов:", error);
@@ -57,26 +61,31 @@ const UniversitiesPage: FC = () => {
   }, [searchValue, universities]);
 
   const handleUniversitySelect = (university: string) => {
-    setSelectedUniversity(selectedUniversity === university ? "" : university);
+    setSelectedUniversities((prev) => {
+      if (prev.includes(university)) {
+        return prev.filter((u) => u !== university);
+      } else {
+        return [...prev, university];
+      }
+    });
   };
 
   const handleReset = () => {
-    setSelectedUniversity("");
+    setSelectedUniversities([]);
     setSearchValue("");
   };
 
   const handleApply = () => {
-    if (selectedUniversity) {
-      console.log("Выбранный университет:", selectedUniversity);
-      navigate(-1);
-    }
+    console.log("Выбранные университеты:", selectedUniversities);
+    setUniversities(selectedUniversities);
+    navigate(-1);
   };
 
   if (loading) {
     return (
       <div className={styles["universities-page"]}>
         <div className={styles["universities-page__header"]}>
-          <h1 className={styles["universities-page__title"]}>Университет</h1>
+          <h1 className={styles["universities-page__title"]}>Университеты</h1>
         </div>
         <div className={styles["universities-page__loading"]}>Загрузка...</div>
       </div>
@@ -86,7 +95,7 @@ const UniversitiesPage: FC = () => {
   return (
     <div className={styles["universities-page"]}>
       <div className={styles["universities-page__header"]}>
-        <h1 className={styles["universities-page__title"]}>Университет</h1>
+        <h1 className={styles["universities-page__title"]}>Университеты</h1>
         <button
           className={styles["universities-page__reset-button"]}
           onClick={handleReset}
@@ -127,7 +136,7 @@ const UniversitiesPage: FC = () => {
               key={university}
               filterItemType="checkbox"
               text={university}
-              isNotify={selectedUniversity === university}
+              isNotify={selectedUniversities.includes(university)}
               isNotifyFAQ={() => handleUniversitySelect(university)}
             />
           ))}
@@ -138,9 +147,10 @@ const UniversitiesPage: FC = () => {
         <button
           className={styles["universities-page__apply-button"]}
           onClick={handleApply}
-          disabled={!selectedUniversity}
         >
-          Применить
+          Применить{" "}
+          {selectedUniversities.length > 0 &&
+            `(${selectedUniversities.length})`}
         </button>
       </div>
     </div>

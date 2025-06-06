@@ -1,13 +1,76 @@
 import { IContact } from "src/entities/course/model/types";
 import { API_BASE_URL } from "../../../shared/config/api";
 
-interface ContactsParams {
+export interface ContactsParams {
   favorites?: boolean;
   latest?: boolean;
   purchased?: boolean;
   skip?: number;
   limit?: number;
+  // Параметры фильтрации
+  subjects?: string[];
+  workTypes?: string[];
+  universities?: string[];
+  rating?: boolean;
+  sortBy?: string;
 }
+
+// Функция для фильтрации контактов на клиенте
+const filterContactsOnClient = (
+  contacts: IContact[],
+  params: ContactsParams
+): IContact[] => {
+  let filtered = [...contacts];
+
+  // Фильтр по предметам
+  if (params.subjects && params.subjects.length > 0) {
+    filtered = filtered.filter(
+      (contact) =>
+        contact.subjects &&
+        contact.subjects.some((subject) => params.subjects!.includes(subject))
+    );
+  }
+
+  // Фильтр по типам работ
+  if (params.workTypes && params.workTypes.length > 0) {
+    filtered = filtered.filter(
+      (contact) =>
+        contact.work_types &&
+        contact.work_types.some((workType) =>
+          params.workTypes!.includes(workType)
+        )
+    );
+  }
+
+  // Фильтр по университетам (нужно получить данные пользователя)
+  if (params.universities && params.universities.length > 0) {
+    // Этот фильтр будет применен в useFeed где есть доступ к userContacts
+    // Пока пропускаем его здесь
+  }
+
+  // Фильтр по рейтингу (4-5 звезд)
+  // Это будет реализовано позже с учетом отзывов
+
+  // Сортировка
+  if (params.sortBy) {
+    switch (params.sortBy) {
+      case "По дате":
+        // Поле created_at не существует в IContact, пока оставляем как есть
+        // В будущем можно добавить это поле в API или использовать другое поле для сортировки
+        console.log("Сортировка по дате пока не реализована для контактов");
+        break;
+      case "По умолчанию":
+      default:
+        // Оставляем как есть
+        break;
+    }
+  }
+
+  console.log(
+    `Filtered contacts: ${filtered.length} out of ${contacts.length}`
+  );
+  return filtered;
+};
 
 // Функция для получения избранных контактов пользователя
 export const fetchUserFavoriteContacts = async (): Promise<IContact[]> => {
@@ -129,7 +192,12 @@ export const fetchContacts = async (
       data.length
     );
 
-    return visibleContacts;
+    // Применяем дополнительную фильтрацию на клиенте
+    const finalContacts = params
+      ? filterContactsOnClient(visibleContacts, params)
+      : visibleContacts;
+
+    return finalContacts;
   } catch (error) {
     console.error("Ошибка при запросе к серверу:", error);
     throw error;

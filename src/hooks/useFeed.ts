@@ -6,12 +6,17 @@ import {
   useTransition,
 } from "react";
 import { IContact, ITelegramUser } from "src/entities/course/model/types";
-import { fetchContacts } from "src/entities/user/model/fetchContacts";
+import {
+  fetchContacts,
+  ContactsParams,
+} from "src/entities/user/model/fetchContacts";
+import { useFilters } from "src/shared/contexts/FiltersContext";
 
 export const useFeed = (
   activeFilter: string,
   userContacts: ITelegramUser[] = []
 ) => {
+  const { filters } = useFilters();
   const [inputValue, setInputValue] = useState("");
   const [isPending, startTransition] = useTransition();
   const [contactsData, setContactsData] = useState<IContact[]>([]);
@@ -24,19 +29,21 @@ export const useFeed = (
       setError(null);
 
       // Используем разные параметры в зависимости от выбранного фильтра
-      let params: {
-        latest?: boolean;
-        purchased?: boolean;
-        favorites?: boolean;
-        limit?: number;
-      } = {};
+      let params: ContactsParams = {
+        limit: 100,
+        // Добавляем фильтры из контекста
+        subjects: filters.subjects.length > 0 ? filters.subjects : undefined,
+        workTypes: filters.workTypes.length > 0 ? filters.workTypes : undefined,
+        universities:
+          filters.universities.length > 0 ? filters.universities : undefined,
+        rating: filters.rating,
+        sortBy: filters.sortBy !== "По умолчанию" ? filters.sortBy : undefined,
+      };
 
       if (activeFilter === "Недавние") {
-        params = { latest: true, limit: 100 };
+        params.latest = true;
       } else if (activeFilter === "Избранные") {
-        params = { favorites: true, limit: 100 };
-      } else if (activeFilter === "Все контакты") {
-        params = { limit: 100 };
+        params.favorites = true;
       }
 
       console.log("Fetching contacts with params:", params);
@@ -50,7 +57,7 @@ export const useFeed = (
     } finally {
       setIsLoading(false);
     }
-  }, [activeFilter]);
+  }, [activeFilter, filters]);
 
   useEffect(() => {
     getFilteredContacts();
@@ -63,6 +70,19 @@ export const useFeed = (
     const safeUserContacts = Array.isArray(userContacts) ? userContacts : [];
 
     return contactsData.filter((contact) => {
+      // Фильтр по университетам (применяем здесь, так как нужны данные пользователей)
+      if (filters.universities.length > 0) {
+        const foundUser = safeUserContacts.find(
+          (user) => user.id === contact.user_id
+        );
+        if (
+          !foundUser ||
+          !filters.universities.includes(foundUser.university)
+        ) {
+          return false;
+        }
+      }
+
       // Additional safety check
       if (!safeUserContacts || typeof safeUserContacts.find !== "function") {
         console.error(
@@ -97,7 +117,7 @@ export const useFeed = (
 
       return true;
     });
-  }, [contactsData, inputValue, userContacts]);
+  }, [contactsData, inputValue, userContacts, filters.universities]);
 
   return {
     inputValue,

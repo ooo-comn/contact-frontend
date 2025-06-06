@@ -1,14 +1,18 @@
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchSubjects } from "src/features/get-subjects/model/fetchWorkTypes";
+import { useFilters } from "src/shared/contexts/FiltersContext";
 import FilterItem from "../FiltersPage/ui/FilterItem/FilterItem";
 import styles from "./SubjectsPage.module.css";
 
 const SubjectsPage: FC = () => {
   const navigate = useNavigate();
-  const [subjects, setSubjects] = useState<string[]>([]);
+  const { filters, setSubjects } = useFilters();
+  const [subjects, setSubjectsList] = useState<string[]>([]);
   const [filteredSubjects, setFilteredSubjects] = useState<string[]>([]);
-  const [selectedSubject, setSelectedSubject] = useState<string>("");
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>(
+    filters.subjects
+  );
   const [searchValue, setSearchValue] = useState<string>("");
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +39,7 @@ const SubjectsPage: FC = () => {
       try {
         setLoading(true);
         const subjectsList = await fetchSubjects();
-        setSubjects(subjectsList);
+        setSubjectsList(subjectsList);
         setFilteredSubjects(subjectsList);
       } catch (error) {
         console.error("Ошибка загрузки предметов:", error);
@@ -55,19 +59,24 @@ const SubjectsPage: FC = () => {
   }, [searchValue, subjects]);
 
   const handleSubjectSelect = (subject: string) => {
-    setSelectedSubject(selectedSubject === subject ? "" : subject);
+    setSelectedSubjects((prev) => {
+      if (prev.includes(subject)) {
+        return prev.filter((s) => s !== subject);
+      } else {
+        return [...prev, subject];
+      }
+    });
   };
 
   const handleReset = () => {
-    setSelectedSubject("");
+    setSelectedSubjects([]);
     setSearchValue("");
   };
 
   const handleApply = () => {
-    if (selectedSubject) {
-      console.log("Выбранный предмет:", selectedSubject);
-      navigate(-1);
-    }
+    console.log("Выбранные предметы:", selectedSubjects);
+    setSubjects(selectedSubjects);
+    navigate(-1);
   };
 
   if (loading) {
@@ -125,7 +134,7 @@ const SubjectsPage: FC = () => {
               key={subject}
               filterItemType="checkbox"
               text={subject}
-              isNotify={selectedSubject === subject}
+              isNotify={selectedSubjects.includes(subject)}
               isNotifyFAQ={() => handleSubjectSelect(subject)}
             />
           ))}
@@ -136,9 +145,9 @@ const SubjectsPage: FC = () => {
         <button
           className={styles["subjects-page__apply-button"]}
           onClick={handleApply}
-          disabled={!selectedSubject}
         >
-          Применить
+          Применить{" "}
+          {selectedSubjects.length > 0 && `(${selectedSubjects.length})`}
         </button>
       </div>
     </div>

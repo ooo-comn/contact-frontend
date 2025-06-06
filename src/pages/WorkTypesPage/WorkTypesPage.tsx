@@ -1,14 +1,18 @@
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchWorkTypes } from "src/features/get-work-types/model/fetchWorkTypes";
+import { useFilters } from "src/shared/contexts/FiltersContext";
 import FilterItem from "../FiltersPage/ui/FilterItem/FilterItem";
 import styles from "./WorkTypesPage.module.css";
 
 const WorkTypesPage: FC = () => {
   const navigate = useNavigate();
-  const [workTypes, setWorkTypes] = useState<string[]>([]);
+  const { filters, setWorkTypes } = useFilters();
+  const [workTypes, setWorkTypesList] = useState<string[]>([]);
   const [filteredWorkTypes, setFilteredWorkTypes] = useState<string[]>([]);
-  const [selectedWorkType, setSelectedWorkType] = useState<string>("");
+  const [selectedWorkTypes, setSelectedWorkTypes] = useState<string[]>(
+    filters.workTypes
+  );
   const [searchValue, setSearchValue] = useState<string>("");
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +39,7 @@ const WorkTypesPage: FC = () => {
       try {
         setLoading(true);
         const workTypesList = await fetchWorkTypes();
-        setWorkTypes(workTypesList);
+        setWorkTypesList(workTypesList);
         setFilteredWorkTypes(workTypesList);
       } catch (error) {
         console.error("Ошибка загрузки типов работ:", error);
@@ -55,19 +59,24 @@ const WorkTypesPage: FC = () => {
   }, [searchValue, workTypes]);
 
   const handleWorkTypeSelect = (workType: string) => {
-    setSelectedWorkType(selectedWorkType === workType ? "" : workType);
+    setSelectedWorkTypes((prev) => {
+      if (prev.includes(workType)) {
+        return prev.filter((wt) => wt !== workType);
+      } else {
+        return [...prev, workType];
+      }
+    });
   };
 
   const handleReset = () => {
-    setSelectedWorkType("");
+    setSelectedWorkTypes([]);
     setSearchValue("");
   };
 
   const handleApply = () => {
-    if (selectedWorkType) {
-      console.log("Выбранный тип работы:", selectedWorkType);
-      navigate(-1);
-    }
+    console.log("Выбранные типы работ:", selectedWorkTypes);
+    setWorkTypes(selectedWorkTypes);
+    navigate(-1);
   };
 
   if (loading) {
@@ -125,7 +134,7 @@ const WorkTypesPage: FC = () => {
               key={workType}
               filterItemType="checkbox"
               text={workType}
-              isNotify={selectedWorkType === workType}
+              isNotify={selectedWorkTypes.includes(workType)}
               isNotifyFAQ={() => handleWorkTypeSelect(workType)}
             />
           ))}
@@ -136,9 +145,9 @@ const WorkTypesPage: FC = () => {
         <button
           className={styles["work-types-page__apply-button"]}
           onClick={handleApply}
-          disabled={!selectedWorkType}
         >
-          Применить
+          Применить{" "}
+          {selectedWorkTypes.length > 0 && `(${selectedWorkTypes.length})`}
         </button>
       </div>
     </div>

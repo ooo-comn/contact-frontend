@@ -1,9 +1,19 @@
 import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useFilters } from "src/shared/contexts/FiltersContext";
 import styles from "./FiltersPage.module.css";
 import FilterItem from "./ui/FilterItem/FilterItem";
 
 const FiltersPage: FC = () => {
+  const {
+    filters,
+    setWorkTypes,
+    setUniversities,
+    setRating,
+    setSortBy,
+    resetFilters,
+  } = useFilters();
+
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -24,15 +34,35 @@ const FiltersPage: FC = () => {
 
   const [workTypeFilters, setWorkTypeFilters] = useState<{
     [key: string]: boolean;
-  }>({});
+  }>(() => {
+    // Инициализируем состояние на основе контекста
+    const initialState: { [key: string]: boolean } = {};
+    filters.workTypes.forEach((workType) => {
+      initialState[workType] = true;
+    });
+    return initialState;
+  });
+
   const [universityFilters, setUniversityFilters] = useState<{
     [key: string]: boolean;
-  }>({});
+  }>(() => {
+    // Инициализируем состояние на основе контекста
+    const initialState: { [key: string]: boolean } = {};
+    filters.universities.forEach((university) => {
+      initialState[university] = true;
+    });
+    return initialState;
+  });
+
   const [sortFilters, setSortFilters] = useState<{ [key: string]: boolean }>(
-    {}
+    () => {
+      return {
+        [filters.sortBy]: true,
+      };
+    }
   );
 
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(filters.rating);
 
   const handleCheckboxChange = () => {
     setChecked((prev) => !prev);
@@ -65,26 +95,41 @@ const FiltersPage: FC = () => {
     }
   };
 
-  // const handleApplyFilters = () => {
-  // 	const appliedFilters = {
-  // 		workType: Object.keys(workTypeFilters).filter(
-  // 			key => workTypeFilters[key]
-  // 		),
-  // 		university: Object.keys(universityFilters).filter(
-  // 			key => universityFilters[key]
-  // 		),
-  // 		sort: Object.keys(sortFilters).find(key => sortFilters[key]) || '',
-  // 		rating: checked,
-  // 	}
+  const handleApplyFilters = () => {
+    // Обновляем контекст фильтров
+    const selectedWorkTypes = Object.keys(workTypeFilters).filter(
+      (key) => workTypeFilters[key]
+    );
+    const selectedUniversities = Object.keys(universityFilters).filter(
+      (key) => universityFilters[key]
+    );
+    const selectedSort =
+      Object.keys(sortFilters).find((key) => sortFilters[key]) ||
+      "По умолчанию";
 
-  // 	console.log('Applied filters:', appliedFilters)
-  // }
+    setWorkTypes(selectedWorkTypes);
+    setUniversities(selectedUniversities);
+    setRating(checked);
+    setSortBy(selectedSort);
+
+    console.log("Applied filters:", {
+      subjects: filters.subjects, // берем из контекста
+      workTypes: selectedWorkTypes,
+      universities: selectedUniversities,
+      rating: checked,
+      sortBy: selectedSort,
+    });
+
+    // Возвращаемся на предыдущую страницу
+    window.history.back();
+  };
 
   const handleReset = () => {
     setWorkTypeFilters({});
     setUniversityFilters({});
-    setSortFilters({});
+    setSortFilters({ "По умолчанию": true });
     setChecked(false);
+    resetFilters();
   };
 
   return (
@@ -101,7 +146,10 @@ const FiltersPage: FC = () => {
 
       <div className={styles["filters-page__content"]}>
         <div className={styles["filters-page__section"]}>
-          <p className={styles["filters-page__section-title"]}>Предмет</p>
+          <p className={styles["filters-page__section-title"]}>
+            Предмет{" "}
+            {filters.subjects.length > 0 && `(${filters.subjects.length})`}
+          </p>
           <FilterItem
             filterItemType="link"
             text="Все предметы"
@@ -230,23 +278,16 @@ const FiltersPage: FC = () => {
               isNotify={sortFilters["По дате"]}
               isNotifyFAQ={() => handleFilterChange("sort", "По дате")}
             />
-            {/* <FilterItem
-              filterItemType="checkbox"
-              text="Дешевле"
-              isNotify={sortFilters["Дешевле"]}
-              isNotifyFAQ={() => handleFilterChange("sort", "Дешевле")}
-            />
-            <FilterItem
-              filterItemType="checkbox"
-              text="Дороже"
-              isNotify={sortFilters["Дороже"]}
-              isNotifyFAQ={() => handleFilterChange("sort", "Дороже")}
-            /> */}
           </div>
         </div>
       </div>
 
-      <button className={styles["filters-page__button-save"]}>Применить</button>
+      <button
+        className={styles["filters-page__button-save"]}
+        onClick={handleApplyFilters}
+      >
+        Применить
+      </button>
     </div>
   );
 };
