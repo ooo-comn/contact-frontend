@@ -75,6 +75,7 @@ export const useFeed = (
         const foundUser = safeUserContacts.find(
           (user) => user.id === contact.user_id
         );
+
         if (
           !foundUser ||
           !filters.universities.includes(foundUser.university)

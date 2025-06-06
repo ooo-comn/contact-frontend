@@ -158,7 +158,10 @@ const FiltersPage: FC = () => {
         </div>
 
         <div className={styles["filters-page__section"]}>
-          <p className={styles["filters-page__section-title"]}>Тип работы</p>
+          <p className={styles["filters-page__section-title"]}>
+            Тип работы{" "}
+            {filters.workTypes.length > 0 && `(${filters.workTypes.length})`}
+          </p>
           <div className={styles["filters-page__checkbox-group"]}>
             <FilterItem
               filterItemType="checkbox"
@@ -208,7 +211,11 @@ const FiltersPage: FC = () => {
         </div>
 
         <div className={styles["filters-page__section"]}>
-          <p className={styles["filters-page__section-title"]}>Университет</p>
+          <p className={styles["filters-page__section-title"]}>
+            Университет{" "}
+            {filters.universities.length > 0 &&
+              `(${filters.universities.length})`}
+          </p>
           <div className={styles["filters-page__checkbox-group"]}>
             <FilterItem
               filterItemType="checkbox"

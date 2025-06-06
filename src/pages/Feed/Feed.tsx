@@ -7,6 +7,7 @@ import FeedHeader from "./ui/FeedHeader";
 import FeedList from "./ui/FeedList";
 import FeedSearch from "./ui/FeedSearch";
 import useUserContactsData from "src/entities/user/model/useUserContacts";
+import { useAllUsers } from "src/hooks/useAllUsers";
 import { useFeed } from "src/hooks/useFeed";
 
 const Feed = () => {
@@ -21,8 +22,10 @@ const Feed = () => {
 
   const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
   const { userContacts } = useUserContactsData(userId, navigate);
+  const { users: allUsers, isLoading: usersLoading } = useAllUsers();
 
   console.log("userContactsFeed", userContacts);
+  console.log("allUsers", allUsers.length);
   console.log("Active filter:", activeFilter);
 
   const {
@@ -32,7 +35,7 @@ const Feed = () => {
     isPending,
     startTransition,
     error,
-  } = useFeed(activeFilter, userContacts);
+  } = useFeed(activeFilter, allUsers);
 
   console.log(
     "Filtered contacts:",
@@ -56,7 +59,10 @@ const Feed = () => {
           <p>Ошибка при загрузке контактов. Пожалуйста, попробуйте позже.</p>
         </div>
       ) : (
-        <FeedList filteredCourses={filteredData} isPending={isPending} />
+        <FeedList
+          filteredCourses={filteredData}
+          isPending={isPending || usersLoading}
+        />
       )}
       {/* <Link
         to="/subscription"

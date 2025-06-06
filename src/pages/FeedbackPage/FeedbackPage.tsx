@@ -10,7 +10,6 @@ import BottomSheet from "src/shared/components/BottomSheet/BottomSheet";
 import MainButton from "src/shared/components/MainButton/MainButton";
 import ModalNotification from "src/shared/components/ModalNotification/ModalNotification";
 import StarRating from "src/shared/components/StarRating/StarRating";
-import Camera from "../../shared/assets/feedback/Camera.svg";
 import EmptyStar from "../../shared/assets/feedback/EmptyStar.svg";
 import FillStar from "../../shared/assets/feedback/FillStar.svg";
 import { BASE_URL } from "../../shared/config/api";
@@ -225,41 +224,9 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
                 </div>
                 <div className={styles["feedback-page__modal-course"]}>
                   <p className={styles["feedback-page__modal-course-name"]}>
-                    {currentUser?.last_name || "Не указано"}
-                  </p>
-                  <p
-                    className={styles["feedback-page__modal-course-university"]}
-                  >
-                    {currentUser?.university || "Не указано"}
+                    {currentUser?.university || "Университет не указан"}
                   </p>
                 </div>
-              </div>
-
-              <div className={styles["feedback-page__modal-image"]}>
-                {currentUser?.image_url ? (
-                  <img
-                    src={`https://${BASE_URL}.ru${
-                      currentUser?.image_url || ""
-                    }`}
-                    alt="Аватар курса"
-                    className={styles["feedback-page__modal-image-img"]}
-                  />
-                ) : (
-                  <div className={styles["feedback-page__modal-placeholder"]}>
-                    <img
-                      src={Camera}
-                      alt=""
-                      className={styles["feedback-page__modal-placeholder-img"]}
-                    />
-                    <p
-                      className={
-                        styles["feedback-page__modal-placeholder-text"]
-                      }
-                    >
-                      Обложка отсутствует
-                    </p>
-                  </div>
-                )}
               </div>
             </div>
 
@@ -281,6 +248,7 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
                 id=""
                 value={revValue}
                 onChange={handleRevChange}
+                placeholder="Поделитесь своим мнением"
               ></textarea>
             </div>
 
