@@ -156,52 +156,52 @@ const SellerProfile: FC = () => {
 
   return (
     <div className={styles["user-profile"]}>
-      <div className={styles["card__actions"]}>
-        <button
-          className={styles["card__action-btn"]}
-          onClick={toggleFavorite}
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <div style={{ width: "4.79vw", height: "4.79vw" }}></div>
-          ) : isFavorite ? (
-            <img
-              src={HeartFill}
-              alt="Убрать из избранного"
-              className={styles["card__action-icon"]}
-            />
-          ) : (
-            <img
-              src={Heart}
-              alt="Добавить в избранное"
-              className={styles["card__action-icon"]}
-            />
-          )}
-        </button>
-        <button
-          className={styles["card__action-btn"]}
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            const contactLink = `https://t.me/share/url?url=${encodeURIComponent(
-              `https://t.me/ComnContactBot/ComnContactApp?startapp=user_${userData?.id}`
-            )}`;
-
-            if (window.Telegram?.WebApp) {
-              window.Telegram.WebApp.openLink(contactLink);
-            } else {
-              console.error("Telegram WebApp не доступен");
-            }
-          }}
-        >
-          <img
-            src={LinkShare}
-            alt="Отправить контакт"
-            className={styles["card__action-icon"]}
-          />
-        </button>
-      </div>
       <header className={styles["user-profile__header"]}>
+        <div className={styles["card__actions"]}>
+          <button
+            className={styles["card__action-btn"]}
+            onClick={toggleFavorite}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <div style={{ width: "4.79vw", height: "4.79vw" }}></div>
+            ) : isFavorite ? (
+              <img
+                src={HeartFill}
+                alt="Убрать из избранного"
+                className={styles["card__action-icon"]}
+              />
+            ) : (
+              <img
+                src={Heart}
+                alt="Добавить в избранное"
+                className={styles["card__action-icon"]}
+              />
+            )}
+          </button>
+          <button
+            className={styles["card__action-btn"]}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              const contactLink = `https://t.me/share/url?url=${encodeURIComponent(
+                `https://t.me/ComnContactBot/ComnContactApp?startapp=user_${userData?.id}`
+              )}`;
+
+              if (window.Telegram?.WebApp) {
+                window.Telegram.WebApp.openLink(contactLink);
+              } else {
+                console.error("Telegram WebApp не доступен");
+              }
+            }}
+          >
+            <img
+              src={LinkShare}
+              alt="Отправить контакт"
+              className={styles["card__action-icon"]}
+            />
+          </button>
+        </div>
         {!userData ? (
           <>
             {theme === "dark" ? (
