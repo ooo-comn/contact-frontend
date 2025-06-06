@@ -1,10 +1,16 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { calculateRating } from "src/entities/course/lib/calculateRating";
-import { IReview, ITelegramUser } from "src/entities/course/model/types";
+import {
+  IContact,
+  IReview,
+  ITelegramUser,
+} from "src/entities/course/model/types";
 import { fetchFeedbacks } from "src/entities/feedback/model/fetchFeedback";
 import handlePublish from "src/entities/feedback/model/handlePublish";
+import { fetchContactByTelegramId } from "src/entities/user/model/fetchContact";
 import { fetchUserById } from "src/entities/user/model/fetchUserById";
+import { API_BASE_URL } from "src/shared/config/api";
 import StarFeedbackIcon from "src/shared/assets/course/StarFeedback.svg";
 import BottomSheet from "src/shared/components/BottomSheet/BottomSheet";
 import MainButton from "src/shared/components/MainButton/MainButton";
@@ -31,6 +37,7 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
   const [revValue, setRevValue] = useState("");
   const [modalFillOpen, setModalFillOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<ITelegramUser | null>(null);
+  const [currentContact, setCurrentContact] = useState<IContact | null>(null);
 
   console.log("userRating", userRating);
   const BackButton = window.Telegram.WebApp.BackButton;
@@ -74,28 +81,24 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
   }, [id, isFullCourses]);
 
   useEffect(() => {
-    const tg = window.Telegram.WebApp;
-    const user = tg.initDataUnsafe?.user;
-    if (user) {
-      setCurrentUser({
-        id: user.id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        image_url: user.image_url,
-        balance: user.balance,
-        description: user.description,
-        is_active: user.is_active,
-        is_staff: user.is_staff,
-        notify: user.notify,
-        registrated: user.registrated,
-        telegram_id: user.telegram_id,
-        university: user.university,
-        username: user.username,
-        verified: user.verified,
-        created_at: user.created_at || new Date().toISOString(),
-      });
-    }
-  }, []);
+    const loadCurrentUserData = async () => {
+      try {
+        if (id) {
+          // Загружаем данные пользователя по id из параметров URL
+          const user = await fetchUserById(Number(id));
+          setCurrentUser(user);
+
+          // Загружаем данные контакта пользователя
+          const contact = await fetchContactByTelegramId(String(user.id));
+          setCurrentContact(contact);
+        }
+      } catch (error) {
+        console.error("Error loading current user data:", error);
+      }
+    };
+
+    loadCurrentUserData();
+  }, [id]);
 
   const averageRate = useMemo(() => {
     return feedbacks.length > 0 ? calculateRating(feedbacks) : 0;
@@ -213,7 +216,9 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
                 <div className={styles["feedback-page__modal-user"]}>
                   <img
                     src={
-                      currentUser?.image_url ? `${currentUser.image_url}` : ""
+                      currentContact?.image_url
+                        ? `${API_BASE_URL}${currentContact.image_url}`
+                        : ""
                     }
                     alt=""
                   />

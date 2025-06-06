@@ -10,6 +10,7 @@ import {
   fetchContacts,
   ContactsParams,
 } from "src/entities/user/model/fetchContacts";
+import { checkContactHasHighRating } from "src/entities/feedback/model/checkContactRating";
 import { useFilters } from "src/shared/contexts/FiltersContext";
 
 export const useFeed = (
@@ -29,7 +30,7 @@ export const useFeed = (
       setError(null);
 
       // Используем разные параметры в зависимости от выбранного фильтра
-      let params: ContactsParams = {
+      const params: ContactsParams = {
         limit: 100,
         // Добавляем фильтры из контекста
         subjects: filters.subjects.length > 0 ? filters.subjects : undefined,
@@ -47,8 +48,26 @@ export const useFeed = (
       }
 
       console.log("Fetching contacts with params:", params);
-      const contacts = await fetchContacts(params);
+      let contacts = await fetchContacts(params);
       console.log("Fetched contacts:", contacts);
+
+      // Применяем фильтрацию по рейтингу на клиенте
+      if (filters.rating) {
+        console.log("Applying rating filter (4-5 stars)...");
+        const ratingPromises = contacts.map(async (contact) => {
+          if (contact.id === null) return false;
+          const hasHighRating = await checkContactHasHighRating(contact.id);
+          return hasHighRating;
+        });
+
+        const ratingResults = await Promise.all(ratingPromises);
+        contacts = contacts.filter((_, index) => ratingResults[index]);
+
+        console.log(
+          `Filtered by rating: ${contacts.length} contacts with 4-5 star reviews`
+        );
+      }
+
       setContactsData(contacts);
     } catch (error) {
       console.error("Error fetching filtered contacts:", error);
