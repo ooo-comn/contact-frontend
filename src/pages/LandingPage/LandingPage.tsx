@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import useTheme from "src/shared/hooks/useTheme";
-import LogoConnect from "src/shared/assets/landing/LogoConnect.svg";
 import styles from "./LandingPage.module.css";
 
 const LandingPage: FC = () => {
@@ -13,7 +12,6 @@ const LandingPage: FC = () => {
     <div className={styles["landing"]}>
       <div className={styles["landing__wrapper"]}>
         <div className={styles["landing__content"]}>
-          <img src={LogoConnect} alt="Картинка логотипа" />
           <h1 className={styles["landing__title"]}>Common Connect</h1>
           <p className={styles["landing__subtitle"]}>
             Контакты тех, кто поможет с&nbsp;учебными задачами

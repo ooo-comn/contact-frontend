@@ -6,7 +6,7 @@ import { calculateRating } from "src/entities/course/lib/calculateRating";
 import Feedback from "src/shared/components/Feedback/Feedback";
 // import MyDataCard from "src/shared/components/MyDataCard/MyDataCard";
 import NavBar from "src/shared/components/NavBar/NavBar";
-import PartnershipCard from "src/shared/components/PartnershipCard/PartnershipCard";
+// import PartnershipCard from "src/shared/components/PartnershipCard/PartnershipCard";
 import Sales from "src/shared/components/Sales/Sales";
 import useTheme from "src/shared/hooks/useTheme";
 import { API_BASE_URL } from "src/shared/config/api";
@@ -191,15 +191,15 @@ const UserProfile: FC = () => {
         />
       </section>
 
-      <section className={styles["user-profile__content"]}>
-        {/* <MyDataCard
+      {/* <section className={styles["user-profile__content"]}>
+        <MyDataCard
           title="Пройдите верификацию"
           description="Пройди верификацию, чтобы создавать объявления и начать зарабатывать на своих знаниях. Проверка занимает 3-4 рабочих дня"
           verifyed={verifyed}
           path="/verification-form"
-        /> */}
+        />
         <PartnershipCard />
-      </section>
+      </section> */}
 
       <section className={styles["user-profile__content"]}>
         <div className={styles["user-profile__section"]}>
