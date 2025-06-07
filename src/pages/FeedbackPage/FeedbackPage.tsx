@@ -39,6 +39,16 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
   const [currentContact, setCurrentContact] = useState<IContact | null>(null);
 
   console.log("userRating", userRating);
+
+  // Получаем ID текущего пользователя
+  const currentLoggedUserId = window.Telegram.WebApp.initDataUnsafe.user?.id;
+
+  // Проверяем, является ли текущий пользователь владельцем страницы
+  const isOwnProfile =
+    currentLoggedUserId &&
+    currentUser &&
+    currentLoggedUserId === currentUser.id;
+
   const BackButton = window.Telegram.WebApp.BackButton;
   BackButton.show();
   BackButton.onClick(function () {
@@ -195,7 +205,7 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
           </div>
         )}
       </div>
-      {isUserFeedback && (
+      {isUserFeedback && !isOwnProfile && (
         <div className={styles["feedback-page__button"]}>
           <MainButton
             onClickEvent={() => setIsOpen(true)}

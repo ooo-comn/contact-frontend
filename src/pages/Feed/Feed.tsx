@@ -35,7 +35,7 @@ const Feed = () => {
     isPending,
     startTransition,
     error,
-  } = useFeed(activeFilter, allUsers);
+  } = useFeed(activeFilter, allUsers, userId);
 
   console.log(
     "Filtered contacts:",

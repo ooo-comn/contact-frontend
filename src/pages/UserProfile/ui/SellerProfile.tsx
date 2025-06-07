@@ -329,6 +329,26 @@ const SellerProfile: FC = () => {
           </p>
         </div>
       </section>
+
+      <button
+        className={styles["user-profile__button-publish"]}
+        onClick={() => {
+          if (userData?.username) {
+            const telegramLink = `https://t.me/${userData.username}`;
+            if (window.Telegram?.WebApp) {
+              window.Telegram.WebApp.openTelegramLink(telegramLink);
+            } else {
+              window.open(telegramLink, "_blank");
+            }
+          } else {
+            console.error("Username пользователя не найден");
+          }
+        }}
+        disabled={!userData?.username}
+      >
+        Написать в Telegram
+      </button>
+
       <NavBar />
     </div>
   );

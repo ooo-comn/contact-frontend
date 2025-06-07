@@ -15,7 +15,8 @@ import { useFilters } from "src/shared/contexts/FiltersContext";
 
 export const useFeed = (
   activeFilter: string,
-  userContacts: ITelegramUser[] = []
+  userContacts: ITelegramUser[] = [],
+  currentUserId?: number
 ) => {
   const { filters } = useFilters();
   const [inputValue, setInputValue] = useState("");
@@ -89,6 +90,11 @@ export const useFeed = (
     const safeUserContacts = Array.isArray(userContacts) ? userContacts : [];
 
     return contactsData.filter((contact) => {
+      // Исключаем собственный контакт пользователя
+      if (currentUserId && contact.user_id === currentUserId) {
+        return false;
+      }
+
       // Фильтр по университетам (применяем здесь, так как нужны данные пользователей)
       if (filters.universities.length > 0) {
         const foundUser = safeUserContacts.find(
@@ -137,7 +143,13 @@ export const useFeed = (
 
       return true;
     });
-  }, [contactsData, inputValue, userContacts, filters.universities]);
+  }, [
+    contactsData,
+    inputValue,
+    userContacts,
+    filters.universities,
+    currentUserId,
+  ]);
 
   return {
     inputValue,

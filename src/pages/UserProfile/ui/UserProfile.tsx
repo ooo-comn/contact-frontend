@@ -49,15 +49,21 @@ const UserProfile: FC = () => {
 
   const averageRate = feedbacks.length > 0 ? calculateRating(feedbacks) : 0;
 
-  const handlePublishContact = async () => {
+  const handleToggleContactVisibility = async () => {
     if (!contactData?.id) {
       console.error("Contact ID не найден");
       return;
     }
 
+    const isCurrentlyVisible = contactData.is_visible;
+    const newVisibilityStatus = !isCurrentlyVisible;
+
     try {
       setIsPublishing(true);
-      console.log("Publishing contact:", contactData.id);
+      console.log(
+        `${newVisibilityStatus ? "Publishing" : "Unpublishing"} contact:`,
+        contactData.id
+      );
 
       const response = await fetch(
         `${API_BASE_URL}/contacts/${contactData.id}`,
@@ -68,28 +74,40 @@ const UserProfile: FC = () => {
             Authorization: `tma ${window.Telegram.WebApp.initData}`,
           },
           body: JSON.stringify({
-            is_visible: true,
+            is_visible: newVisibilityStatus,
           }),
         }
       );
 
-      console.log("Publish contact response status:", response.status);
+      console.log(
+        "Toggle contact visibility response status:",
+        response.status
+      );
 
       if (response.ok) {
         const result = await response.json();
-        console.log("Контакт успешно опубликован:", result);
+        console.log(
+          `Контакт успешно ${
+            newVisibilityStatus ? "опубликован" : "снят с публикации"
+          }:`,
+          result
+        );
 
         // Перезагружаем страницу или обновляем состояние
         window.location.reload();
       } else {
         const errorText = await response.text();
         console.error(
-          "Ошибка при публикации контакта:",
+          `Ошибка при ${
+            newVisibilityStatus ? "публикации" : "снятии с публикации"
+          } контакта:`,
           response.status,
           errorText
         );
         window.Telegram?.WebApp?.showAlert(
-          "Ошибка при публикации контакта. Попробуйте еще раз."
+          `Ошибка при ${
+            newVisibilityStatus ? "публикации" : "снятии с публикации"
+          } контакта. Попробуйте еще раз.`
         );
       }
     } catch (error) {
@@ -238,15 +256,19 @@ const UserProfile: FC = () => {
           </p>
         </div>
       </section>
-      {contactData?.is_visible === false && (
-        <button
-          className={styles["user-profile__button-publish"]}
-          onClick={handlePublishContact}
-          disabled={isPublishing}
-        >
-          {isPublishing ? "Публикуем..." : "Опубликовать свой контакт"}
-        </button>
-      )}
+      <button
+        className={styles["user-profile__button-publish"]}
+        onClick={handleToggleContactVisibility}
+        disabled={isPublishing}
+      >
+        {isPublishing
+          ? contactData?.is_visible
+            ? "Снимаем с публикации..."
+            : "Публикуем..."
+          : contactData?.is_visible
+          ? "Снять с публикации"
+          : "Опубликовать свой контакт"}
+      </button>
       <NavBar />
     </div>
   );
