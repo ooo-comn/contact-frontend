@@ -12,7 +12,7 @@ const LandingPage: FC = () => {
     <div className={styles["landing"]}>
       <div className={styles["landing__wrapper"]}>
         <div className={styles["landing__content"]}>
-          <h1 className={styles["landing__title"]}>Common Connect</h1>
+          <h1 className={styles["landing__title"]}>Common Contact</h1>
           <p className={styles["landing__subtitle"]}>
             Контакты тех, кто поможет с&nbsp;учебными задачами
           </p>
