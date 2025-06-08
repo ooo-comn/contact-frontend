@@ -53,6 +53,41 @@
   letter-spacing: 0.092vw;
 }
 
+.user-profile__rating {
+  display: flex;
+  align-items: center;
+  gap: 1.282vw;
+}
+
+.user-profile__rating-value {
+  color: var(--main-text);
+  font-family: "Geologica";
+  font-size: 4.103vw;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.user-profile__rating-stars {
+  display: flex;
+  align-items: center;
+  gap: 0.513vw;
+}
+
+.user-profile__rating-star {
+  width: 4.103vw;
+  height: 4.103vw;
+}
+
+.user-profile__rating-count {
+  color: #007aff;
+  font-family: "Geologica";
+  font-size: 3.59vw;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
 .user-profile__settings {
   cursor: pointer;
   border: none;

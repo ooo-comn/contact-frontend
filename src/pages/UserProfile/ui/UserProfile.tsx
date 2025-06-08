@@ -1,16 +1,19 @@
 import { Skeleton } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { calculateRating } from "src/entities/course/lib/calculateRating";
+// import { calculateRating } from "src/entities/course/lib/calculateRating";
 // import { fetchUserTransactions } from "src/entities/wallet/model/fetchUserTransactions";
-import Feedback from "src/shared/components/Feedback/Feedback";
+// import Feedback from "src/shared/components/Feedback/Feedback";
 // import MyDataCard from "src/shared/components/MyDataCard/MyDataCard";
 import NavBar from "src/shared/components/NavBar/NavBar";
 // import PartnershipCard from "src/shared/components/PartnershipCard/PartnershipCard";
-import Sales from "src/shared/components/Sales/Sales";
+// import Sales from "src/shared/components/Sales/Sales";
 import useTheme from "src/shared/hooks/useTheme";
 import { API_BASE_URL } from "src/shared/config/api";
 import { useUserProfile } from "../model/useUserProfile";
+import FillStar from "src/shared/assets/feedback/FillStar.svg";
+import EmptyStar from "src/shared/assets/feedback/EmptyStar.svg";
+import { calculateRating } from "src/entities/course/lib/calculateRating";
 import styles from "./UserProfile.module.css";
 
 const UserProfile: FC = () => {
@@ -29,7 +32,7 @@ const UserProfile: FC = () => {
   // const [verifyed, setVerifyed] = useState<string | null>(null);
   const [isPublishing, setIsPublishing] = useState(false);
 
-  const { userData, coursesData, feedbacks, contactData } = useUserProfile();
+  const { userData, feedbacks, contactData } = useUserProfile();
 
   console.log("userData:", userData);
   console.log("contactData:", contactData);
@@ -45,9 +48,34 @@ const UserProfile: FC = () => {
     fetchData();
   }, [id]);
 
-  const totalStudents = coursesData?.customer_count;
+  // const totalStudents = coursesData?.customer_count;
 
-  const averageRate = feedbacks.length > 0 ? calculateRating(feedbacks) : 0;
+  const averageRate = feedbacks.length > 0 ? calculateRating(feedbacks) : 5.0;
+
+  // Создаем массив звезд для отображения рейтинга
+  const stars = Array.from({ length: 5 }, (_, i) =>
+    i < Math.floor(averageRate) ? FillStar : EmptyStar
+  );
+
+  // Функция для склонения слова "отзыв"
+  const getReviewsText = (count: number) => {
+    const lastDigit = count % 10;
+    const lastTwoDigits = count % 100;
+
+    if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+      return `${count} отзывов`;
+    }
+
+    if (lastDigit === 1) {
+      return `${count} отзыв`;
+    }
+
+    if (lastDigit >= 2 && lastDigit <= 4) {
+      return `${count} отзыва`;
+    }
+
+    return `${count} отзывов`;
+  };
 
   const handleToggleContactVisibility = async () => {
     if (!contactData?.id) {
@@ -171,6 +199,24 @@ const UserProfile: FC = () => {
             <p className={styles["user-profile__name"]}>
               {userData?.first_name} {userData?.last_name}
             </p>
+            <div className={styles["user-profile__rating"]}>
+              <span className={styles["user-profile__rating-value"]}>
+                {averageRate.toFixed(1)}
+              </span>
+              <div className={styles["user-profile__rating-stars"]}>
+                {stars.map((star, index) => (
+                  <img
+                    key={index}
+                    className={styles["user-profile__rating-star"]}
+                    src={star}
+                    alt="Рейтинг звезда"
+                  />
+                ))}
+              </div>
+              <span className={styles["user-profile__rating-count"]}>
+                {getReviewsText(feedbacks.length)}
+              </span>
+            </div>
           </>
         )}
 
@@ -181,7 +227,7 @@ const UserProfile: FC = () => {
         </Link>
       </header>
 
-      <section className={styles["user-profile__stats"]}>
+      {/* <section className={styles["user-profile__stats"]}>
         <Sales count={totalStudents || 0} />
         <Feedback
           averageRate={averageRate}
@@ -189,7 +235,7 @@ const UserProfile: FC = () => {
           path={`/user-feedback/${userData?.id}`}
           count={feedbacks.length}
         />
-      </section>
+      </section> */}
 
       {/* <section className={styles["user-profile__content"]}>
         <MyDataCard
