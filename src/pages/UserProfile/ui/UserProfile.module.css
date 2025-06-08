@@ -53,10 +53,16 @@
   letter-spacing: 0.092vw;
 }
 
+.user-profile__rating-link {
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .user-profile__rating {
   display: flex;
   align-items: center;
-  gap: 1.282vw;
+  gap: 2.05vw;
+  margin-bottom: 2.31vw;
 }
 
 .user-profile__rating-value {
@@ -94,7 +100,7 @@
   outline: none;
   display: flex;
   width: 47.949vw;
-  padding: 2.051vw 2.564vw;
+  padding: 3.85vw;
   justify-content: center;
   align-items: center;
   border-radius: 1.538vw;

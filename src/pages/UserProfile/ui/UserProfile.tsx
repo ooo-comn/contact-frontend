@@ -50,7 +50,7 @@ const UserProfile: FC = () => {
 
   // const totalStudents = coursesData?.customer_count;
 
-  const averageRate = feedbacks.length > 0 ? calculateRating(feedbacks) : 5.0;
+  const averageRate = feedbacks.length > 0 ? calculateRating(feedbacks) : 0.0;
 
   // Создаем массив звезд для отображения рейтинга
   const stars = Array.from({ length: 5 }, (_, i) =>
@@ -199,24 +199,29 @@ const UserProfile: FC = () => {
             <p className={styles["user-profile__name"]}>
               {userData?.first_name} {userData?.last_name}
             </p>
-            <div className={styles["user-profile__rating"]}>
-              <span className={styles["user-profile__rating-value"]}>
-                {averageRate.toFixed(1)}
-              </span>
-              <div className={styles["user-profile__rating-stars"]}>
-                {stars.map((star, index) => (
-                  <img
-                    key={index}
-                    className={styles["user-profile__rating-star"]}
-                    src={star}
-                    alt="Рейтинг звезда"
-                  />
-                ))}
+            <Link
+              to={`/user-feedback/${userData?.id}`}
+              className={styles["user-profile__rating-link"]}
+            >
+              <div className={styles["user-profile__rating"]}>
+                <span className={styles["user-profile__rating-value"]}>
+                  {averageRate.toFixed(1)}
+                </span>
+                <div className={styles["user-profile__rating-stars"]}>
+                  {stars.map((star, index) => (
+                    <img
+                      key={index}
+                      className={styles["user-profile__rating-star"]}
+                      src={star}
+                      alt="Рейтинг звезда"
+                    />
+                  ))}
+                </div>
+                <span className={styles["user-profile__rating-count"]}>
+                  {getReviewsText(feedbacks.length)}
+                </span>
               </div>
-              <span className={styles["user-profile__rating-count"]}>
-                {getReviewsText(feedbacks.length)}
-              </span>
-            </div>
+            </Link>
           </>
         )}
 
