@@ -11,9 +11,9 @@ import { fetchReviewsByContactId } from "src/entities/feedback/model/fetchReview
 import { fetchContactByTelegramId } from "src/entities/user/model/fetchContact";
 import { fetchUserById } from "src/entities/user/model/fetchUserById";
 import { checkContactIsFavorite } from "src/entities/user/model/fetchContacts";
-import Feedback from "src/shared/components/Feedback/Feedback";
+// import Feedback from "src/shared/components/Feedback/Feedback";
 import NavBar from "src/shared/components/NavBar/NavBar";
-import Sales from "src/shared/components/Sales/Sales";
+// import Sales from "src/shared/components/Sales/Sales";
 import useTheme from "src/shared/hooks/useTheme";
 import { API_BASE_URL } from "src/shared/config/api";
 import styles from "./UserProfile.module.css";
@@ -152,7 +152,7 @@ const SellerProfile: FC = () => {
   console.log("userData", userData);
   console.log("contactData", contactData);
 
-  const totalStudents = contactData?.customer_count;
+  // const totalStudents = contactData?.customer_count;
   const averageRate = feedbacks.length > 0 ? calculateRating(feedbacks) : 0.0;
   const { theme } = useTheme();
 
@@ -303,7 +303,7 @@ const SellerProfile: FC = () => {
         )}
       </header>
 
-      <section className={styles["user-profile__stats"]}>
+      {/* <section className={styles["user-profile__stats"]}>
         <Sales count={totalStudents || 0} />
         <Feedback
           averageRate={averageRate}
@@ -311,7 +311,7 @@ const SellerProfile: FC = () => {
           path={`/user-feedback/${userData?.id}`}
           count={feedbacks.length}
         />
-      </section>
+      </section> */}
 
       <section className={styles["user-profile__content"]}>
         <div className={styles["user-profile__section"]}>
