@@ -264,7 +264,7 @@ const FiltersPage: FC = () => {
           <p className={styles["filters-page__section-title"]}>Отзывы</p>
           <FilterItem
             filterItemType="button"
-            text="Курсы с рейтингом 4 и 5 звёзд"
+            text="Контакты с рейтингом 4 и 5 звёзд"
             checked={checked}
             handleCheckboxChange={handleCheckboxChange}
           />
