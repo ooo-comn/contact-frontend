@@ -5,7 +5,7 @@ import { checkContactIsFavorite } from "src/entities/user/model/fetchContacts";
 import Star from "../../../../shared/assets/course/StarFeedback.svg";
 import Heart from "../../../../shared/assets/feed/Heart.svg";
 import HeartFill from "../../../../shared/assets/feed/HeartFill.svg";
-import LinkShare from "../../../../shared/assets/feed/Link.svg";
+// import LinkShare from "../../../../shared/assets/feed/Link.svg";
 import { IContactCard } from "../../../courses/types/IContactCard";
 import styles from "./ContactCard.module.css";
 
@@ -151,7 +151,7 @@ const ContactCard: FC<IContactCard> = ({
               />
             )}
           </button>
-          <button
+          {/* <button
             className={styles["card__action-btn"]}
             onClick={(e) => {
               e.stopPropagation();
@@ -172,7 +172,7 @@ const ContactCard: FC<IContactCard> = ({
               alt="Отправить контакт"
               className={styles["card__action-icon"]}
             />
-          </button>
+          </button> */}
         </div>
       </div>
 

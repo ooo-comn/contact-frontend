@@ -19,7 +19,7 @@ import { API_BASE_URL } from "src/shared/config/api";
 import styles from "./UserProfile.module.css";
 import Heart from "../../../shared/assets/feed/Heart.svg";
 import HeartFill from "../../../shared/assets/feed/HeartFill.svg";
-import LinkShare from "../../../shared/assets/feed/Link.svg";
+// import LinkShare from "../../../shared/assets/feed/Link.svg";
 import FillStar from "src/shared/assets/feedback/FillStar.svg";
 import EmptyStar from "src/shared/assets/feedback/EmptyStar.svg";
 
@@ -206,7 +206,7 @@ const SellerProfile: FC = () => {
               />
             )}
           </button>
-          <button
+          {/* <button
             className={styles["card__action-btn"]}
             onClick={(e) => {
               e.stopPropagation();
@@ -227,7 +227,7 @@ const SellerProfile: FC = () => {
               alt="Отправить контакт"
               className={styles["card__action-icon"]}
             />
-          </button>
+          </button> */}
         </div>
         {!userData ? (
           <>
