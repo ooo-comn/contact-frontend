@@ -130,7 +130,15 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
   };
 
   const handlePublishClick = () => {
-    handlePublish(revValue, userRating, id, setModalFillOpen, navigate);
+    const contactId = currentContact?.id?.toString();
+    handlePublish(
+      revValue,
+      userRating,
+      contactId,
+      setModalFillOpen,
+      navigate,
+      id
+    );
     window.document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
   };

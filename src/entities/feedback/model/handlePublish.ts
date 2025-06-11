@@ -4,9 +4,10 @@ import { API_BASE_URL } from "../../../shared/config/api";
 const handlePublish = (
   revValue: string,
   sliderValue: number,
-  id: string | undefined,
+  contactId: string | undefined,
   setModalFillOpen: (open: boolean) => void,
-  navigate: ReturnType<typeof useNavigate>
+  navigate: ReturnType<typeof useNavigate>,
+  userId?: string
 ) => {
   if (revValue === "" || sliderValue === 0) {
     setModalFillOpen(true);
@@ -17,7 +18,7 @@ const handlePublish = (
     // Подготавливаем данные для отправки
     const reviewData = {
       author_id: authorId,
-      contact_id: Number(id), // ID контакта кому ставят отзыв
+      contact_id: Number(contactId), // ID контакта кому ставят отзыв
       rating: sliderValue,
       comment: revValue,
     };
@@ -40,7 +41,7 @@ const handlePublish = (
       })
       .then((data) => {
         console.log("Review sent successfully:", data);
-        navigate(`/user/${id}`); // Возвращаемся к профилю пользователя
+        navigate(`/user/${userId}`); // Возвращаемся к профилю пользователя
       })
       .catch((error) => {
         console.error("Error sending review:", error);
