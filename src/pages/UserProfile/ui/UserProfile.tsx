@@ -50,7 +50,7 @@ const UserProfile: FC = () => {
 
   // const totalStudents = coursesData?.customer_count;
 
-  const averageRate = feedbacks.length > 0 ? calculateRating(feedbacks) : 0.0;
+  const averageRate = feedbacks?.length > 0 ? calculateRating(feedbacks) : 0.0;
 
   // Создаем массив звезд для отображения рейтинга
   const stars = Array.from({ length: 5 }, (_, i) =>
@@ -218,7 +218,7 @@ const UserProfile: FC = () => {
                   ))}
                 </div>
                 <span className={styles["user-profile__rating-count"]}>
-                  {getReviewsText(feedbacks.length)}
+                  {getReviewsText(feedbacks?.length || 0)}
                 </span>
               </div>
             </Link>

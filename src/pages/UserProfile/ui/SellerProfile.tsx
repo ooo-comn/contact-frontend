@@ -155,7 +155,7 @@ const SellerProfile: FC = () => {
   console.log("contactData", contactData);
 
   // const totalStudents = contactData?.customer_count;
-  const averageRate = feedbacks.length > 0 ? calculateRating(feedbacks) : 0.0;
+  const averageRate = feedbacks?.length > 0 ? calculateRating(feedbacks) : 0.0;
   const { theme } = useTheme();
 
   // Создаем массив звезд для отображения рейтинга
@@ -297,7 +297,7 @@ const SellerProfile: FC = () => {
                   ))}
                 </div>
                 <span className={styles["user-profile__rating-count"]}>
-                  {getReviewsText(feedbacks.length)}
+                  {getReviewsText(feedbacks?.length || 0)}
                 </span>
               </div>
             </Link>
