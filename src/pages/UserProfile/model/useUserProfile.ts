@@ -45,9 +45,14 @@ export const useUserProfile = () => {
 
         // Fetch contact data from /contacts/user/{user_id} endpoint to get image_url
         const contact = await fetchContactByTelegramId(String(userId));
+        console.log("useUserProfile - Fetched contact:", contact);
+        console.log("useUserProfile - Contact ID for reviews:", contact.id);
+
         const reviews = contact.id
           ? await fetchReviewsByContactId(contact.id)
           : [];
+        console.log("useUserProfile - Fetched reviews:", reviews);
+        console.log("useUserProfile - Reviews count:", reviews?.length || 0);
 
         setContactData(contact);
 

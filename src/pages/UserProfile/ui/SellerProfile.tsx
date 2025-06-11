@@ -59,11 +59,16 @@ const SellerProfile: FC = () => {
 
         // Получаем данные контакта по user_id (который теперь равен telegram_id)
         const contact = await fetchContactByTelegramId(String(user.id));
+        console.log("Fetched contact:", contact);
+        console.log("Contact ID for reviews:", contact.id);
         setContactData(contact);
 
         // Получаем отзывы по contact.id
         if (contact.id) {
+          console.log(`Fetching reviews for contact_id: ${contact.id}`);
           const reviews = await fetchReviewsByContactId(contact.id);
+          console.log("Fetched reviews:", reviews);
+          console.log("Reviews count:", reviews?.length || 0);
           setFeedbacks(reviews || []);
         }
       } catch (error) {
