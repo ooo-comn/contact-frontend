@@ -61,9 +61,11 @@ const SellerProfile: FC = () => {
         const contact = await fetchContactByTelegramId(String(user.id));
         setContactData(contact);
 
-        // Получаем отзывы по contact.user_id
-        const reviews = await fetchReviewsByContactId(contact.user_id);
-        setFeedbacks(reviews || []);
+        // Получаем отзывы по contact.id
+        if (contact.id) {
+          const reviews = await fetchReviewsByContactId(contact.id);
+          setFeedbacks(reviews || []);
+        }
       } catch (error) {
         console.error("Ошибка загрузки данных продавца:", error);
       } finally {
