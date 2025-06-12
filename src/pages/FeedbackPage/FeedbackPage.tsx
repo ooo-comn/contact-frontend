@@ -18,7 +18,7 @@ import ModalNotification from "src/shared/components/ModalNotification/ModalNoti
 import StarRating from "src/shared/components/StarRating/StarRating";
 import EmptyStar from "../../shared/assets/feedback/EmptyStar.svg";
 import FillStar from "../../shared/assets/feedback/FillStar.svg";
-import { BASE_URL } from "../../shared/config/api";
+// import { BASE_URL } from "../../shared/config/api";
 import styles from "./FeedbackPage.module.css";
 import FeedbackCard from "./ui/FeedbackCard/FeedbackCard";
 
@@ -49,6 +49,21 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
     currentLoggedUserId &&
     currentUser &&
     currentLoggedUserId === currentUser.id;
+
+  // Проверяем, оставлял ли текущий пользователь уже отзыв
+  const hasUserAlreadyReviewed = useMemo(() => {
+    const hasReviewed = feedbacks.some(
+      (review) => review.author_id === currentLoggedUserId
+    );
+    console.log(
+      `User ${currentLoggedUserId} has already reviewed: ${hasReviewed}`
+    );
+    console.log(
+      "Reviews authors:",
+      feedbacks.map((r) => r.author_id)
+    );
+    return hasReviewed;
+  }, [feedbacks, currentLoggedUserId]);
 
   const BackButton = window.Telegram.WebApp.BackButton;
   BackButton.show();
@@ -183,7 +198,7 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
               date={item.created_at}
               path={
                 users[item.author_id]?.image_url
-                  ? `https://${BASE_URL}.ru${users[item.author_id]?.image_url}`
+                  ? `${users[item.author_id]?.image_url}`
                   : ""
               }
               text={item.comment || ""}
@@ -218,7 +233,7 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
           </div>
         )}
       </div>
-      {isUserFeedback && !isOwnProfile && (
+      {isUserFeedback && !isOwnProfile && !hasUserAlreadyReviewed && (
         <div className={styles["feedback-page__button"]}>
           <MainButton
             onClickEvent={() => setIsOpen(true)}
