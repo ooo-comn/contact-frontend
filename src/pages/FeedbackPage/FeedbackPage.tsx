@@ -6,7 +6,8 @@ import {
   IReview,
   ITelegramUser,
 } from "src/entities/course/model/types";
-import { fetchFeedbacks } from "src/entities/feedback/model/fetchFeedback";
+// import { fetchFeedbacks } from "src/entities/feedback/model/fetchFeedback";
+import { fetchReviewsByContactId } from "src/entities/feedback/model/fetchReviewsByContactId";
 import handlePublish from "src/entities/feedback/model/handlePublish";
 import { fetchContactByTelegramId } from "src/entities/user/model/fetchContact";
 import { fetchUserById } from "src/entities/user/model/fetchUserById";
@@ -62,8 +63,12 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (isFullCourses) {
-          const feedbackData = await fetchFeedbacks(id || "");
+        if (isFullCourses && currentContact?.id) {
+          console.log(
+            `FeedbackPage: Fetching reviews for contact_id: ${currentContact.id}`
+          );
+          const feedbackData = await fetchReviewsByContactId(currentContact.id);
+          console.log("FeedbackPage: Fetched reviews:", feedbackData);
           setFeedbacks(feedbackData);
 
           const authorIds = feedbackData
@@ -87,7 +92,7 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
     };
 
     fetchData();
-  }, [id, isFullCourses]);
+  }, [id, isFullCourses, currentContact?.id]);
 
   useEffect(() => {
     const loadCurrentUserData = async () => {
