@@ -99,6 +99,8 @@
   display: flex;
   flex-direction: column;
   gap: 2.051vw;
+  overflow: scroll;
+  padding-bottom: 20.51vw;
 }
 
 .feedback-page__button {

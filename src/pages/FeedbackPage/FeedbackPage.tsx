@@ -32,6 +32,7 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
   const { id } = useParams();
   const [feedbacks, setFeedbacks] = useState<IReview[]>([]);
   const [users, setUsers] = useState<Record<number, ITelegramUser>>({});
+  const [contacts, setContacts] = useState<Record<number, IContact>>({});
   const [isOpen, setIsOpen] = useState(false);
   const [userRating, setUserRating] = useState(0);
   const [revValue, setRevValue] = useState("");
@@ -99,7 +100,22 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
             return acc;
           }, {} as Record<number, ITelegramUser>);
 
+          // Загружаем контакты авторов для получения изображений
+          const contactsData = await Promise.all(
+            usersData.map((user) => fetchContactByTelegramId(String(user.id)))
+          );
+
+          const contactsMap = contactsData.reduce((acc, contact, index) => {
+            const userId = usersData[index].id;
+            acc[userId] = contact;
+            return acc;
+          }, {} as Record<number, IContact>);
+
+          console.log("FeedbackPage: Loaded users:", usersMap);
+          console.log("FeedbackPage: Loaded contacts:", contactsMap);
+
           setUsers(usersMap);
+          setContacts(contactsMap);
         }
       } catch (error) {
         console.error("Error loading data:", error);
@@ -196,11 +212,7 @@ const FeedbackPage: FC<{ isFullCourses: boolean }> = ({ isFullCourses }) => {
           feedbacks.map((item, index) => (
             <FeedbackCard
               date={item.created_at}
-              path={
-                users[item.author_id]?.image_url
-                  ? `${users[item.author_id]?.image_url}`
-                  : ""
-              }
+              path={contacts[item.author_id]?.image_url || ""}
               text={item.comment || ""}
               university={users[item.author_id]?.university || ""}
               username={`${users[item.author_id]?.first_name || ""} ${
