@@ -2,6 +2,7 @@ import { postEvent, retrieveLaunchParams } from "@telegram-apps/sdk";
 import { TonConnectUIProvider } from "@tonconnect/ui-react";
 import { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
+import { initializeUser } from "src/entities/user/model/createUser";
 import { VerificationForm } from "src/entities/verification/ui/VerificationForm/VerificationForm";
 import EditProfile from "src/pages/EditProfile/EditProfile";
 import FeedbackPage from "src/pages/FeedbackPage/FeedbackPage";
@@ -37,6 +38,7 @@ import "./App.css";
 
 function App() {
   const [hasRedirected, setHasRedirected] = useState(false);
+  const [userInitialized, setUserInitialized] = useState(false);
   // const [hasReloaded, setHasReloaded] = useState(false)
 
   const { theme } = useTheme();
@@ -79,13 +81,25 @@ function App() {
         }
 
         webApp.enableClosingConfirmation();
+
+        // Инициализируем пользователя после загрузки Telegram WebApp
+        if (!userInitialized) {
+          initializeUser().then((success) => {
+            if (success) {
+              console.log("User initialization successful");
+            } else {
+              console.log("User initialization failed");
+            }
+            setUserInitialized(true);
+          });
+        }
       }
     };
 
     return () => {
       document.body.removeChild(script);
     };
-  }, []);
+  }, [userInitialized]);
 
   useEffect(() => {
     const lp = retrieveLaunchParams();
